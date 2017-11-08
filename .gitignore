@@ -9,5 +9,5 @@ npm-debug.log*
 node_modules
 
 # Webpack Output
-src/public/bundle.js
-src/public/bundle.js.map
+src/client/public/bundle.js
+src/client/public/bundle.js.map
