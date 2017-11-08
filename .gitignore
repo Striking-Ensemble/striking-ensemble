@@ -8,3 +8,6 @@ npm-debug.log*
 # Dependency directories
 node_modules
 
+# Webpack Output
+src/public/bundle.js
+src/public/bundle.js.map
