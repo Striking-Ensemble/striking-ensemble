@@ -19,3 +19,5 @@ influencerRouter.route('api/influencer/:username').put((req, res) => influencerC
 influencerRouter.route('api/influencer/:username').delete((req, res) => influencerController.deleteOne(req, res));
 
 influencerRouter.route('api/influencer').delete((req, res) => influencerController.delete(req, res));
+
+module.exports = influencerRouter;
