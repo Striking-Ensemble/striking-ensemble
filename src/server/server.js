@@ -3,8 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 // missing db import on purpose to check for consistency
-const Influencer = require('./db/Influencer.js');
-const influencerRouter = require('./db/influencerRouter.js');
+// const Influencer = require('./db/Influencer.js');
+const influencers = require('./db/influencerRouter.js');
 
 // Create the Express application
 const app = express();
@@ -15,14 +15,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../client/public/')));
 
-app.get('/', (req, res) => {
-  Influencer.find((err, influencer) => {
-    if (err) {
-      throw err;
-    }
-    console.log('Influencer list!');
-    res.send(influencer);
-  });
-});
+// app.get('/', (req, res) => {
+//   Influencer.find((err, influencer) => {
+//     if (err) {
+//       throw err;
+//     }
+//     console.log('Influencer list!');
+//     res.send(influencer);
+//   });
+// });
+
+app.use('/influencers', influencers);
 
 module.exports = app;

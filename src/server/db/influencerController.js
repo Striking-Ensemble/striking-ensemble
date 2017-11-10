@@ -5,8 +5,8 @@ const app = require('../server.js');
 // Controller methods
 
 exports.createOne = (req, res) => {
-  Influencer.create(req.body.data, (err, data) => {
-    console.log('ON CREATEONE, ADDING:', req.body.data);
+  Influencer.save((err, data) => {
+    console.log('ON CREATEONE, ADDING:', data);
     if (err) {
       throw err;
     }
