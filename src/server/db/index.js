@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const mongoUri = 'mongodb://localhost/influencers'
 
 // Connect Mongoose to our local MongoDB via URI
-mongoose.connect(mongoUri, {useMongoClient: true});
+mongoose.connect(mongoUri, { useMongoClient: true });
 
 const db = mongoose.connection;
 // check our db status
