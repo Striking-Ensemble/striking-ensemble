@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 // missing db import on purpose to check for consistency
 // const Influencer = require('./db/Influencer.js');
-const influencers = require('./db/influencerRouter.js');
+const router = require('./db/influencerRouter.js');
 
 // Create the Express application
 const app = express();
@@ -25,6 +25,6 @@ app.use(express.static(path.join(__dirname, '../client/public/')));
 //   });
 // });
 
-app.use('/influencers', influencers);
+app.use('/api', router);
 
 module.exports = app;
