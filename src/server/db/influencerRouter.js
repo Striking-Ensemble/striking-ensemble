@@ -1,23 +1,44 @@
 const influencerRouter = require('express').Router();
 const influencerController = require('./influencerController.js');
 
-// Route handlers for each of the controllers
-
-influencerRouter.route('/').get((req, res) => res.send('Influencers Page!'));
-
-influencerRouter.route('api/influencer').get((req, res) => {
-  var temp = influencerController.retrieve(req, res);
-  res.send(temp);
+// middleware that is specific to this router
+influencerRouter.use(function timeLog (req, res, next) {
+  console.log('Time: ', Date.now());
+  next();
 });
 
-influencerRouter.route('api/influencer').post((req, res) => influencerController.createOne(req, res));
+// Route handlers for each of the controllers
 
-influencerRouter.route('api/influencer/:username').get((req, res) => influencerController.retrieveOne(req, res));
+influencerRouter.get('/', (req, res) => res.send('Influencers Page!'));
 
-influencerRouter.route('api/influencer/:username').put((req, res) => influencerController.updateOne(req, res));
+influencerRouter.get('/api/influencer', (req, res) => {
+  console.log('CHECKING GET INFLUENCER');
+  influencerController.retrieve(req, res);
+});
 
-influencerRouter.route('api/influencer/:username').delete((req, res) => influencerController.deleteOne(req, res));
+influencerRouter.post('/api/influencer', (req, res) => {
+  console.log('CHECKING POST ADDING INFLUENCER');
+  influencerController.createOne(req, res)
+});
 
-influencerRouter.route('api/influencer').delete((req, res) => influencerController.delete(req, res));
+influencerRouter.get('/api/influencer/:username', (req, res) => { 
+  console.log('CHECKING GET ONE INFLUENCER');
+  influencerController.retrieveOne(req, res)
+});
+
+influencerRouter.put('/api/influencer/:username', (req, res) => { 
+  console.log('CHECKING PUT, UPDATE ONE INFLUENCER');
+  influencerController.updateOne(req, res)
+});
+
+influencerRouter.delete('/api/influencer/:username', (req, res) => { 
+  console.log('CHECKING DELETE ONE INFLUENCER');
+  influencerController.deleteOne(req, res)
+});
+
+influencerRouter.delete('/api/influencer', (req, res) => { 
+  console.log('CHECKING DELETE INFLUENCER COLLECTION');
+  influencerController.delete(req, res)
+});
 
 module.exports = influencerRouter;
