@@ -4,9 +4,9 @@ A platform for Influencers with less hassle. Check us out at [strikingensemble.c
 
 # Getting Started
 
-To fork this repository, the following steps will allow you to set up your dev environment.
+Fork this repository and clone from your own fork. Then, the following steps will allow you to set up your dev environment.
 
-1. Node stable/latest version, NPM, and MongoDB v3.6 are installed
+1. Node stable/latest version, NPM, and MongoDB >= v3.6 are installed
 2. Download dev/build tools and packages:
 ```sh
   npm install
