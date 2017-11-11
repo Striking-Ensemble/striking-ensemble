@@ -8,11 +8,15 @@ router.use(function timeLog (req, res, next) {
   next();
 });
 
+// router.use((req, res, next) => {
+//   console.log('URL Check: ', req.body.url)
+// })
+
 // Route handlers for each of the controllers
 
 router.get('/', (req, res) => res.send('Influencers Page!'));
 
-router.get('/influencer', (req, res) => {
+router.get('/influencers', (req, res) => {
   console.log('CHECKING GET INFLUENCER');
   influencerController.retrieve(req, res);
 });
@@ -22,17 +26,17 @@ router.post('/influencer', (req, res) => {
   influencerController.createOne(req, res)
 });
 
-router.get('/influencer/:username', (req, res) => { 
-  console.log('CHECKING GET ONE INFLUENCER');
+router.post('/influencer/username', (req, res) => { 
+  console.log('CHECKING POST ONE INFLUENCER');
   influencerController.retrieveOne(req, res)
 });
 
-router.put('/influencer/:username', (req, res) => { 
+router.put('/influencer/username', (req, res) => { 
   console.log('CHECKING PUT, UPDATE ONE INFLUENCER');
   influencerController.updateOne(req, res)
 });
 
-router.delete('/influencer/:username', (req, res) => { 
+router.delete('/influencer/username', (req, res) => { 
   console.log('CHECKING DELETE ONE INFLUENCER');
   influencerController.deleteOne(req, res)
 });

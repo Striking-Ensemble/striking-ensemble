@@ -33,7 +33,7 @@ exports.retrieve = (req, res) => {
 };
 
 exports.retrieveOne = (req, res) => {
-  Influencer.find({username: req.body.data.username}, (err, data) => {
+  Influencer.find({username: req.body.username}, (err, data) => {
     if (err) {
       throw err;
     }
@@ -42,11 +42,15 @@ exports.retrieveOne = (req, res) => {
 };
 
 exports.updateOne = (req, res) => {
-  Influencer.update({username: req.body.data.username}, (err, data) => {
+  let query = { username: req.body.username };
+
+  Influencer.find(query, (err, data) => {
     if (err) {
       throw err;
     }
-    res.send('Influencer is updated:', data);
+    Influencer.update(query, { data: req.body.data }, {upsert: true});
+    console.log('Influencer is updated:', query.username);
+    res.send(data);
   });
 };
 
