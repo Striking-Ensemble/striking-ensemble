@@ -33,7 +33,8 @@ exports.retrieve = (req, res) => {
 };
 
 exports.retrieveOne = (req, res) => {
-  Influencer.find({username: req.body.username}, (err, data) => {
+  let query = { username: req.body.username };
+  Influencer.find(query, (err, data) => {
     if (err) {
       throw err;
     }
@@ -64,7 +65,8 @@ exports.delete = (req, res) => {
 };
 
 exports.deleteOne = (req, res) => {
-  Influencer.remove(req.body.data.number, (err, data) => {
+  let query = { username: req.body.username };
+  Influencer.remove(query, (err, data) => {
     if (err) {
       throw err;
     }
