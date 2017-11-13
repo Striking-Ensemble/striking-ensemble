@@ -6,14 +6,16 @@ const app = require('../server.js');
 
 exports.createOne = (req, res) => {
   console.log('what is in req body?', req.body);
+  let mediaData = JSON.parse(req.body.data);
   let newInfluencer = new Influencer({
     id: req.body.id,
     username: req.body.username,
     full_name: req.body.full_name,
     bio: req.body.bio,
     website: req.body.website,
-    data: req.body.data
+    data: mediaData.map((obj) => obj)
   });
+
   newInfluencer.save((err, data) => {
     console.log('ON CREATEONE, ADDING:', data);
     if (err) {
@@ -44,7 +46,6 @@ exports.retrieveOne = (req, res) => {
 
 exports.updateOne = (req, res) => {
   let query = { username: req.params.username };
-
   Influencer.find(query, (err, data) => {
     if (err) {
       throw err;
