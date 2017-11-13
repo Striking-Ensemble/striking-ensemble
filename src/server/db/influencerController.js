@@ -5,7 +5,7 @@ const app = require('../server.js');
 // Controller methods
 
 exports.createOne = (req, res) => {
-  console.log('what is body?', req.body);
+  console.log('what is in req body?', req.body);
   let newInfluencer = new Influencer({
     id: req.body.id,
     username: req.body.username,
@@ -33,7 +33,7 @@ exports.retrieve = (req, res) => {
 };
 
 exports.retrieveOne = (req, res) => {
-  let query = { username: req.body.username };
+  let query = { username: req.params.username };
   Influencer.find(query, (err, data) => {
     if (err) {
       throw err;
@@ -43,7 +43,7 @@ exports.retrieveOne = (req, res) => {
 };
 
 exports.updateOne = (req, res) => {
-  let query = { username: req.body.username };
+  let query = { username: req.params.username };
 
   Influencer.find(query, (err, data) => {
     if (err) {
@@ -65,7 +65,7 @@ exports.delete = (req, res) => {
 };
 
 exports.deleteOne = (req, res) => {
-  let query = { username: req.body.username };
+  let query = { username: req.params.username };
   Influencer.remove(query, (err, data) => {
     if (err) {
       throw err;
