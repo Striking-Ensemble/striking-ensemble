@@ -10,17 +10,20 @@ const base_url = 'http://localhost:3000/';
 //   });
 // });
 
-describe('GET Request', () => {
-  it('returns status code 200', () => {
-    request(base_url, (err, res, body) => {
-      expect(res.statusCode).toBe(200);
-      done();
+describe('Striking Ensemble Server and DB', () => {
+  describe('GET request on all influencers', () => {
+    it('returns status code 200', (done) => {
+      request(base_url, (err, res, body) => {
+        expect(res.statusCode).toBe(200);
+        done();
+      });
     });
-  });
-  it('should get all influencer info', () => {
-    request(base_url + 'influencers', (err, res, body) => {
-      expect(body.length).toBe(!0);
-      done();
+
+    it('should get all influencer info', (done) => {
+      request(base_url + 'api/influencers', (err, res, body) => {
+        expect(JSON.parse(body).length).toBe(6);
+        done();
+      });
     });
   });
 });
