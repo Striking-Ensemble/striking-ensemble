@@ -4,18 +4,11 @@ const bodyParser = require('body-parser');
 
 // middleware that is specific to this router
 router.use(function timeLog (req, res, next) {
-  console.log('Time: ', Date.now());
+  console.log('Time in Influencer Router: ', Date.now());
   next();
 });
 
-// router.use((req, res, next) => {
-//   console.log('URL Check: ', req.body.url)
-// })
-
 // Route handlers for each of the controllers
-
-router.get('/', (req, res) => res.send('Influencers Page!'));
-
 router.get('/influencers', (req, res) => {
   console.log('CHECKING GET INFLUENCER');
   influencerController.retrieve(req, res);
@@ -26,18 +19,18 @@ router.post('/influencer', (req, res) => {
   influencerController.createOne(req, res)
 });
 
-router.post('/influencer/username', (req, res) => { 
-  console.log('CHECKING POST ONE INFLUENCER');
+router.get('/influencer/:username', (req, res) => { 
+  console.log('CHECKING GET ONE INFLUENCER:', req.params.username);
   influencerController.retrieveOne(req, res)
 });
 
-router.put('/influencer/username', (req, res) => { 
-  console.log('CHECKING PUT, UPDATE ONE INFLUENCER');
+router.put('/influencer/:username', (req, res) => { 
+  console.log('CHECKING PUT, UPDATE ONE INFLUENCER:', req.params.username);
   influencerController.updateOne(req, res)
 });
 
-router.delete('/influencer/username', (req, res) => { 
-  console.log('CHECKING DELETE ONE INFLUENCER');
+router.delete('/influencer/:username', (req, res) => { 
+  console.log('CHECKING DELETE ONE INFLUENCER:', req.params.username);
   influencerController.deleteOne(req, res)
 });
 
