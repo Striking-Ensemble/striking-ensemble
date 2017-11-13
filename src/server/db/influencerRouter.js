@@ -9,7 +9,6 @@ router.use(function timeLog (req, res, next) {
 });
 
 // Route handlers for each of the controllers
-
 router.get('/influencers', (req, res) => {
   console.log('CHECKING GET INFLUENCER');
   influencerController.retrieve(req, res);
