@@ -49,9 +49,14 @@ exports.updateOne = (req, res) => {
     if (err) {
       throw err;
     }
-    Influencer.update(query, { data: req.body.data }, {upsert: true});
+    Influencer.update(query, {$set: req.body}, {upsert: true}, (err, data) => {
+      if (err) {
+        throw err;
+      }
+      console.log('Update res:', data)
+    });
     console.log('Influencer is updated:', query.username);
-    res.send(data);
+    res.send(query.username + ' is updated!');
   });
 };
 
