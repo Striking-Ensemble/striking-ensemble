@@ -16,13 +16,13 @@ const influencerSchema = mongoose.Schema({
     unique: true
   },
   full_name: String,
-  types: [String],
   profile_picture: String,
   bio: String,
   website: String,
   counts: {
     media: Number
   },
+  type: String,
   data: []
 });
 

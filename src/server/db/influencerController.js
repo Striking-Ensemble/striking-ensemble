@@ -1,8 +1,7 @@
 const Influencer = require('./Influencer.js');
 const bodyParser = require('body-parser');
-const app = require('../server.js');
 
-// Controller methods
+// Controller methods for DB
 
 exports.createOne = (req, res) => {
   console.log('what is in req body?', req.body);
