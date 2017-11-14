@@ -45,16 +45,11 @@ exports.retrieveOne = (req, res) => {
 
 exports.updateOne = (req, res) => {
   let query = { username: req.params.username };
-  Influencer.find(query, (err, data) => {
+  Influencer.update(query, {$set: req.body}, {upsert: true}, (err, data) => {
     if (err) {
       throw err;
     }
-    Influencer.update(query, {$set: req.body}, {upsert: true}, (err, data) => {
-      if (err) {
-        throw err;
-      }
-      console.log('Update res:', data)
-    });
+    console.log('Update result in controller:', data);
     console.log('Influencer is updated:', query.username);
     res.send(query.username + ' is updated!');
   });
@@ -75,6 +70,6 @@ exports.deleteOne = (req, res) => {
     if (err) {
       throw err;
     }
-    res.send('Deleted Influencer!');
+    res.send('Deleted ' + query.username + '!');
   })
 };

@@ -77,14 +77,42 @@ describe('Influencer API', () => {
           json: body
         }
         request(query, (err, res, body) => {
-          console.log('update result:', body);
+          request(query.uri, (err, res, data) => {
+            let user = JSON.parse(data);
+            expect(user[0].account_type).toBe('public');
+            done();
+          });
         });
-        request(query.uri, (err, res, body) => {
-          let user = JSON.parse(body);
-          expect(user[0].account_type).toBe('public');
-          done();
-        })
       });
     });
+
+    describe('DELETE /api/influencer/:username', () => {
+      it('should delete user by username query', (done) => {
+        let query = {
+          method: 'DELETE',
+          uri: base_url + 'api/influencer/snoopdogg'
+        };
+        request(query, (err, res, body) => {
+          expect(body).toBe('Deleted snoopdogg!');
+          done();
+        });
+      });
+    });
+
+    describe('DELETE /api/influencers', () => {
+      it('should delete entire influencer collection', (done) => {
+        let query = {
+          method: 'DELETE',
+          uri: base_url + 'api/influencers'
+        };
+        request(query, (err, res, body) => {
+          expect(body).toBe('DELETED Collection!');
+        });
+        request(base_url + 'api/influencers', (err, res, body) => {
+          expect(body).toBe('[]');
+          done();
+        })
+      })
+    })
   });
 });
