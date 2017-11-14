@@ -36,20 +36,20 @@ describe('Influencer API', () => {
 
   afterEach(() => server.close());
 
-  describe('GET requests', () => {
+  describe('GET and PUT requests', () => {
     beforeEach((done) => {
       Influencer.create(mock_user, done);
-    })
-    describe('GET /api/influencers', () => {
       it('returns status code 200', (done) => {
-        request(base_url, (err, res, body) => {
+        request.get(base_url, (err, res, body) => {
           expect(res.statusCode).toBe(200);
           done();
         });
       });
+    });
 
+    describe('GET /api/influencers', () => {
       it('should get all influencer info', (done) => {
-        request(base_url + 'api/influencers', (err, res, body) => {
+        request.get(base_url + 'api/influencers', (err, res, body) => {
           let user = JSON.parse(body);
           expect(user[0].username).toBe('snoopdogg');
           done();
@@ -57,15 +57,62 @@ describe('Influencer API', () => {
       });
 
       it('should return influencer info by username query', (done) => {
-        request(base_url + 'api/influencer/snoopdogg', (err, res, body) => {
+        request.get(base_url + 'api/influencer/snoopdogg', (err, res, body) => {
           let user = JSON.parse(body);
           expect(user[0].full_name).toBe('Snoop Dogg');
           expect(user[0].profile_picture).toBe('http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg');
           expect(user[0].bio).toBe('This is my bio');
           expect(user[0].website).toBe('http://snoopdogg.com');
           done();
-        })
+        });
       });
     });
+
+    describe('PUT /api/influencer/:username', () => {
+      it('should update user account type', (done) => {
+        let body = {"account_type": "public"};
+        let query = {
+          method: 'PUT',
+          uri: base_url + 'api/influencer/snoopdogg',
+          json: body
+        }
+        request(query, (err, res, body) => {
+          request(query.uri, (err, res, data) => {
+            let user = JSON.parse(data);
+            expect(user[0].account_type).toBe('public');
+            done();
+          });
+        });
+      });
+    });
+
+    describe('DELETE /api/influencer/:username', () => {
+      it('should delete user by username query', (done) => {
+        let query = {
+          method: 'DELETE',
+          uri: base_url + 'api/influencer/snoopdogg'
+        };
+        request(query, (err, res, body) => {
+          expect(body).toBe('Deleted snoopdogg!');
+          done();
+        });
+      });
+    });
+
+    describe('DELETE /api/influencers', () => {
+      it('should delete entire influencer collection', (done) => {
+        let query = {
+          method: 'DELETE',
+          uri: base_url + 'api/influencers'
+        };
+        request(query, (err, res, body) => {
+          expect(body).toBe('DELETED Collection!');
+        });
+        request(base_url + 'api/influencers', (err, res, body) => {
+          expect(body).toBe('[]');
+          done();
+        })
+      })
+    })
   });
 });

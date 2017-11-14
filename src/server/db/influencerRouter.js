@@ -34,7 +34,7 @@ router.delete('/influencer/:username', (req, res) => {
   influencerController.deleteOne(req, res)
 });
 
-router.delete('/influencer', (req, res) => { 
+router.delete('/influencers', (req, res) => { 
   console.log('CHECKING DELETE INFLUENCER COLLECTION');
   influencerController.delete(req, res)
 });

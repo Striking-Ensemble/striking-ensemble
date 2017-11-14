@@ -20,9 +20,11 @@ const influencerSchema = mongoose.Schema({
   bio: String,
   website: String,
   counts: {
-    media: Number
+    media: Number,
+    follows: Number,
+    followed_by: Number
   },
-  type: String,
+  account_type: String,
   data: []
 });
 
