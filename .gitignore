@@ -1,5 +1,8 @@
 # Attempted complete list of files to git ignore
 
+# Variables
+.env
+
 # Logs
 logs
 *.log
