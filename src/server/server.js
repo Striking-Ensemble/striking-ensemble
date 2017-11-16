@@ -3,10 +3,35 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const router = require('./db/influencerRouter.js');
-const reqRoutes = require('./routes/routes.js')
+const reqRoutes = require('./routes/routes.js');
+const passport = require('passport');
+const instagramConfig = require('./config/passport.js');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
+// serialize and deserialize
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function (obj, done) {
+  done(null, obj);
+});
+
+// config
+instagramConfig(passport);
 
 // Create the Express application
 const app = express();
+
+// revisit this after thinking it over whether to use this approach
+// app.set('views', path.join(__dirname, '../client/views'));
+// app.set('view engine', 'jade');
+app.use(cookieParser());
+
+// ============ for authentication with passport ==============//
+app.use(session( {secret: 'sessionSecret'} ));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // modify express to take url that contain any format/type of file
 app.use(bodyParser.urlencoded({ extended: false }));

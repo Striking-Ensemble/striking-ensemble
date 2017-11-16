@@ -70,7 +70,7 @@ describe('Influencer API', () => {
 
     describe('PUT /api/influencer/:username', () => {
       it('should update user account type', (done) => {
-        let body = {"account_type": "public"};
+        let body = {"is_business": false};
         let query = {
           method: 'PUT',
           uri: base_url + 'api/influencer/snoopdogg',
@@ -79,7 +79,7 @@ describe('Influencer API', () => {
         request(query, (err, res, body) => {
           request(query.uri, (err, res, data) => {
             let user = JSON.parse(data);
-            expect(user[0].account_type).toBe('public');
+            expect(user[0].is_business).toBe(false);
             done();
           });
         });
