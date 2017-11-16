@@ -13,12 +13,15 @@ module.exports = (passport) => {
             return done(err);
           }
           if (!user) {
+            let data = profile._json.data;
             user = new Influencer({
-              id: profile.id,
-              username: profile.username,
-              full_name: profile.full_name,
-              bio: profile.bio,
-              website: profile.website
+              id: data.id,
+              username: data.username,
+              profile_picture: data.profile_picture,
+              full_name: data.full_name,
+              bio: data.bio,
+              website: data.website,
+              is_business: data.is_business
             });
             user.save((err) => {
               if (err) {
