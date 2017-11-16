@@ -18,7 +18,7 @@ reqRoutes.get('/user:username', (req, res) => {
 });
 
 reqRoutes.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/views/index.html'))
+  res.sendFile(path.join(__dirname, '../../client/public/views/login.html'))
 });
 
 reqRoutes.get('/auth/instagram', passport.authenticate('instagram'), 
@@ -38,7 +38,7 @@ reqRoutes.get('/logout', (req, res) => {
 });
 
 reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/views/account.html'));
+  res.sendFile(path.join(__dirname, '../../client/public/views/account.html'));
 });
 
 reqRoutes.post('/:username/checkout', (req, res) => {

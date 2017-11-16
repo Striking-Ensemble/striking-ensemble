@@ -5,7 +5,7 @@ const Influencer = require('../db/Influencer.js');
 module.exports = (passport) => {
   passport.use(new InstagramStrategy( instagramAuth,
     function (accessToken, refreshToken, profile, done) {
-      console.log('WHAT AM I GIVEN?', profile);
+      console.log('WHAT AM I GIVEN INSIDE PASSPORT?', profile);
       Influencer.findOne({
           id: profile.id 
         }, function (err, user) {

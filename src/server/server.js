@@ -23,8 +23,9 @@ instagramConfig(passport);
 // Create the Express application
 const app = express();
 
-app.set('views', path.join(__dirname, '../client/views'));
-// app.set('view engine', 'jade'); thinking it over whether to use this approach
+// revisit this after thinking it over whether to use this approach
+// app.set('views', path.join(__dirname, '../client/views'));
+// app.set('view engine', 'jade');
 app.use(cookieParser());
 
 // ============ for authentication with passport ==============//
