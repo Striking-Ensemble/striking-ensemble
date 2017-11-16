@@ -23,6 +23,8 @@ instagramConfig(passport);
 // Create the Express application
 const app = express();
 
+app.set('views', path.join(__dirname, '../client/views'));
+// app.set('view engine', 'jade'); thinking it over whether to use this approach
 app.use(cookieParser());
 
 // ============ for authentication with passport ==============//
@@ -40,16 +42,5 @@ app.use(express.static(path.join(__dirname, '../client/public/')));
 // set up API routes
 app.use('/api', router);
 app.use('/', reqRoutes);
-app.get('/account', ensureAuthenticated, (req, res) => {
-  res.render('account', { user: req.user });
-});
-
-// test authentication
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/');
-}
 
 module.exports = app;
