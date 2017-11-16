@@ -24,7 +24,7 @@ const influencerSchema = mongoose.Schema({
     follows: Number,
     followed_by: Number
   },
-  account_type: String,
+  is_business: Boolean,
   data: []
 });
 

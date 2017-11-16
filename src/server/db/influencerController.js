@@ -12,6 +12,7 @@ exports.createOne = (req, res) => {
     full_name: req.body.full_name,
     bio: req.body.bio,
     website: req.body.website,
+    is_business: req.body.is_business,
     data: mediaData.map((obj) => obj)
   });
 
