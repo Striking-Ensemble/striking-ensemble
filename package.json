@@ -6,7 +6,9 @@
   "scripts": {
     "test": "jasmine",
     "build": "node_modules/.bin/webpack -w",
-    "start": "node ./src/server/index.js"
+    "start": "node ./src/server/index.js",
+    "db": "sudo mongod",
+    "dev": "npm run db & npm run build & npm run start"
   },
   "repository": {
     "type": "git",

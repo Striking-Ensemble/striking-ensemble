@@ -23,22 +23,24 @@ instagramConfig(passport);
 // Create the Express application
 const app = express();
 
-// revisit this after thinking it over whether to use this approach
+// revisit this after thinking it over whether to use jade
 // app.set('views', path.join(__dirname, '../client/views'));
 // app.set('view engine', 'jade');
 app.use(cookieParser());
 
-// ============ for authentication with passport ==============//
+// ============ for authentication with passport ============== //
 app.use(session( {secret: 'sessionSecret'} ));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// ============================================================ //
 
 // modify express to take url that contain any format/type of file
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // parses the text as JSON and set to req.body
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../client/public/')));
+app.use(express.static(path.join(__dirname, '../client/public')));
 
 // set up API routes
 app.use('/api', router);
