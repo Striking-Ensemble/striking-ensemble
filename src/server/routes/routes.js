@@ -17,8 +17,19 @@ reqRoutes.get('/user:username', (req, res) => {
   influencerController.retrieveOne(req, res);
 });
 
+reqRoutes.post('/:username/checkout', (req, res) => {
+  console.log('READY FOR CHECKOUT');
+  reqController.checkout(req, res);
+})
+
+// ================= Passport Instagram Endpoints ================= //
 reqRoutes.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../../client/public/views/login.html'))
+});
+
+reqRoutes.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/login');
 });
 
 reqRoutes.get('/auth/instagram', passport.authenticate('instagram'), 
@@ -32,19 +43,9 @@ reqRoutes.get('/auth/instagram/callback',
   }
 );
 
-reqRoutes.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/login');
-});
-
 reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '../../client/public/views/account.html'));
 });
-
-reqRoutes.post('/:username/checkout', (req, res) => {
-  console.log('READY FOR CHECKOUT');
-  reqController.checkout(req, res);
-})
 
 // test authentication
 function ensureAuthenticated(req, res, next) {
@@ -53,5 +54,5 @@ function ensureAuthenticated(req, res, next) {
   }
   res.redirect('/');
 }
-
+// =================================================================== //
 module.exports = reqRoutes;
