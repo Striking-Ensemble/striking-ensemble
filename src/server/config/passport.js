@@ -3,8 +3,18 @@ const instagramAuth = require('./keys.js');
 const Influencer = require('../db/Influencer.js');
 
 module.exports = (passport) => {
+
+  // serialize and deserialize
+  passport.serializeUser(function (user, done) {
+    done(null, user);
+  });
+  passport.deserializeUser(function (obj, done) {
+    done(null, obj);
+  });
+  
   passport.use(new InstagramStrategy( instagramAuth,
     function (accessToken, refreshToken, profile, done) {
+      console.log('accessToken:', accessToken);
       console.log('WHAT AM I GIVEN INSIDE PASSPORT?', profile);
       Influencer.findOne({
           id: profile.id 

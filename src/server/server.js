@@ -1,7 +1,10 @@
+// ===================== Module Dependencies ========================= //
+
 const express = require('express');
 // extracts the entire body portion of incoming req to be used as req.body
 const bodyParser = require('body-parser');
 const path = require('path');
+const logger = require('morgan');
 const router = require('./db/influencerRouter.js');
 const reqRoutes = require('./routes/routes.js');
 const passport = require('passport');
@@ -9,31 +12,29 @@ const instagramConfig = require('./config/passport.js');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
-// serialize and deserialize
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-passport.deserializeUser(function (obj, done) {
-  done(null, obj);
-});
-
-// config
+// create insta-pass config
 instagramConfig(passport);
 
 // Create the Express application
 const app = express();
 
+// **************** Express Setup Below ***************** //
+
 // revisit this after thinking it over whether to use jade
 // app.set('views', path.join(__dirname, '../client/views'));
 // app.set('view engine', 'jade');
+app.use(logger('dev'));
 app.use(cookieParser());
+app.use(session({
+  secret: 'sessionSecret',
+  name: 'cookie-cookie',
+  resave: true,
+  saveUninitialized: true
+}));
 
-// ============ for authentication with passport ============== //
-app.use(session( {secret: 'sessionSecret'} ));
+// for authentication with passport
 app.use(passport.initialize());
 app.use(passport.session());
-
-// ============================================================ //
 
 // modify express to take url that contain any format/type of file
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -45,5 +46,7 @@ app.use(express.static(path.join(__dirname, '../client/public')));
 // set up API routes
 app.use('/api', router);
 app.use('/', reqRoutes);
+
+// ************************************************************ //
 
 module.exports = app;
