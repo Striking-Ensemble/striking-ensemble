@@ -9,34 +9,16 @@ router.use(function timeLog (req, res, next) {
 });
 
 // Route handlers for each of the controllers
-router.get('/influencers', (req, res) => {
-  console.log('CHECKING GET INFLUENCER');
-  influencerController.retrieve(req, res);
-});
+router.get('/influencers', influencerController.retrieve);
 
-router.post('/influencer', (req, res) => {
-  console.log('CHECKING POST ADDING INFLUENCER');
-  influencerController.createOne(req, res)
-});
+router.post('/influencer', influencerController.createOne);
 
-router.get('/influencer/:username', (req, res) => { 
-  console.log('CHECKING GET ONE INFLUENCER:', req.params.username);
-  influencerController.retrieveOne(req, res)
-});
+router.get('/influencer/:username', influencerController.retrieveOne);
 
-router.put('/influencer/:username', (req, res) => { 
-  console.log('CHECKING PUT, UPDATE ONE INFLUENCER:', req.params.username);
-  influencerController.updateOne(req, res)
-});
+router.put('/influencer/:username', influencerController.updateOne);
 
-router.delete('/influencer/:username', (req, res) => { 
-  console.log('CHECKING DELETE ONE INFLUENCER:', req.params.username);
-  influencerController.deleteOne(req, res)
-});
+router.delete('/influencer/:username', influencerController.deleteOne);
 
-router.delete('/influencers', (req, res) => { 
-  console.log('CHECKING DELETE INFLUENCER COLLECTION');
-  influencerController.delete(req, res)
-});
+router.delete('/influencers', influencerController.delete);
 
 module.exports = router;
