@@ -7,6 +7,7 @@ const Routing = () => {
   return (
     <Switch>
       <Route exact path="/" component={App} />
+      <Route path="/account" component={App} />
       <Route path="/login" component={Signin} />
     </Switch>
   )

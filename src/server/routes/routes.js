@@ -19,10 +19,11 @@ reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 
 // ================= Passport Instagram Endpoints ================= //
 reqRoutes.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/public/views/login.html'))
+  res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
 });
 
 reqRoutes.get('/logout', (req, res) => {
+  console.log('IS THIS EVEN ON??', req.logout);
   req.logout();
   res.redirect('/login');
 });
@@ -39,7 +40,7 @@ reqRoutes.get('/auth/instagram/callback',
 );
 
 reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/public/views/account.html'));
+  res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
 });
 
 // test authentication
