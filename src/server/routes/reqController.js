@@ -3,16 +3,26 @@ const request = require('request');
 
 // Controller methods for TwoTap
 
-exports.checkout = (req, res) => {
+exports.prepareCheckout = (req, res) => {
+  console.log('READY FOR CHECKOUT');
+  let apiURL = 'https://checkout.twotap.com/prepare_checkout';
   let checkoutRequest = req.body;
   checkoutRequest.products = JSON.parse(req.body.products);
-  checkoutRequest.confirm = JSON.parse(req.body.confirm);
+  checkoutRequest.confirm = {
+    method: 'sms',
+    sms_confirm_url: 'http://localhost:3000/purchase_confirm_callback'
+  };
+  checkoutRequest.public_token = process.env.TwoTap_public_token;
+  checkoutRequest.unique_token = (Math.floor(Math.random() * 9999999) + 1).toString();
   console.log('CONTENTS OF checkReq', checkoutRequest);
   
-  request.post('https://checkout.twotap.com/prepare_checkout', { checkout_request: checkoutRequest }, (err, res, body) => {
+  const callPath = '';
+
+  request.post(apiURL, { checkout_request: checkoutRequest }, (err, res, body) => {
     if (err) {
       throw err;
     }
     console.log('FROM TT', body);
+    res.json(JSON.parse(body));
   });
 };

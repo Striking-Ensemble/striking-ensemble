@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import Signin from '../scenes/Sign/signin.react.jsx';
+import Footer from './footer.react.jsx';
 
 export default class App extends Component {
   render() {
     return (
       <div className="container">
-        <h1>Hello World in React</h1>
-        <a href="/"> GO HOME </a>
-        <br />
-        <a href="/logout"> Logout </a>
+        <Signin />
+        <Footer />
       </div>
     )
   }

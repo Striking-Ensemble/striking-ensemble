@@ -4,6 +4,7 @@ const influencerController = require('../db/influencerController.js');
 const reqController = require('./reqController.js');
 const passport = require('passport');
 const path = require('path');
+const integrations = require('./integrations.js');
 
 // middleware that is specific to this router
 reqRoutes.use(function timeLog(req, res, next) {
@@ -12,15 +13,9 @@ reqRoutes.use(function timeLog(req, res, next) {
 });
 
 // Public route handlers
-reqRoutes.get('/user:username', (req, res) => {
-  console.log('Influencer\'s Page! under USERNAME');
-  influencerController.retrieveOne(req, res);
-});
+reqRoutes.get('/user:username', influencerController.retrieveOne);
 
-reqRoutes.post('/:username/checkout', (req, res) => {
-  console.log('READY FOR CHECKOUT');
-  reqController.checkout(req, res);
-})
+reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 
 // ================= Passport Instagram Endpoints ================= //
 reqRoutes.get('/login', (req, res) => {
@@ -55,4 +50,9 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/');
 }
 // =================================================================== //
+
+// ======================== TwoTap API Routes ======================== //
+reqRoutes.get('/', integrations.integration);
+reqRoutes.post('/purchase_confirm_callback', integrations.purchaseConfirmCallback);
+
 module.exports = reqRoutes;

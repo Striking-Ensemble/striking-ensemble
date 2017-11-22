@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 // Controller methods for DB
 
 exports.createOne = (req, res) => {
+  console.log('CHECKING POST ADDING INFLUENCER');
   console.log('what is in req body?', req.body);
   let mediaData = JSON.parse(req.body.data);
   let newInfluencer = new Influencer({
@@ -26,6 +27,7 @@ exports.createOne = (req, res) => {
 };
 
 exports.retrieve = (req, res) => {
+  console.log('CHECKING GET INFLUENCER');
   Influencer.find((err, data) => {
     if (err) {
       throw err;
@@ -35,6 +37,7 @@ exports.retrieve = (req, res) => {
 };
 
 exports.retrieveOne = (req, res) => {
+  console.log('CHECKING GET ONE INFLUENCER:', req.params.username);
   let query = { username: req.params.username };
   Influencer.find(query, (err, data) => {
     if (err) {
@@ -45,6 +48,7 @@ exports.retrieveOne = (req, res) => {
 };
 
 exports.updateOne = (req, res) => {
+  console.log('CHECKING PUT, UPDATE ONE INFLUENCER:', req.params.username);
   let query = { username: req.params.username };
   Influencer.update(query, {$set: req.body}, {upsert: true}, (err, data) => {
     if (err) {
@@ -57,6 +61,7 @@ exports.updateOne = (req, res) => {
 };
 
 exports.delete = (req, res) => {
+  console.log('CHECKING DELETE INFLUENCER COLLECTION');
   Influencer.remove({}, (err, data) => {
     if (err) {
       throw err;
@@ -66,6 +71,7 @@ exports.delete = (req, res) => {
 };
 
 exports.deleteOne = (req, res) => {
+  console.log('CHECKING DELETE ONE INFLUENCER:', req.params.username);
   let query = { username: req.params.username };
   Influencer.remove(query, (err, data) => {
     if (err) {
