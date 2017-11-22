@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class Footer extends Component {
   render() {
     return (
       <div className="footer">
         <h2>Footer Sample</h2>
-        <a href="/terms"> Terms </a>
+        <Link to="/terms"> Terms </Link>
         <br />
-        <a href="/privacy"> Privacy </a>
+        <Link to="/privacy"> Privacy </Link>
         <br />
-        <a href="/contact"> Contact </a>
+        <Link to="/contact"> Contact </Link>
       </div>
     )
   }
