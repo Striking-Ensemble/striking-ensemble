@@ -41,7 +41,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parses the text as JSON and set to req.body
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../client/public')));
+app.use(express.static(path.join(__dirname, '../../public')));
 
 // set up API routes
 app.use('/api', router);
