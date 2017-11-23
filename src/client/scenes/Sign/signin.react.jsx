@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Footer from '../../components/footer.react.jsx';
 
 export default class Signin extends Component {
   render() {
@@ -11,7 +10,6 @@ export default class Signin extends Component {
           <span className="fa fa-instagram"></span> Sign in with Instagram
         </a>
         </div>
-        <Footer />
       </div>
     )
   }
