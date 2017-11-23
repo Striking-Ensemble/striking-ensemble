@@ -1,4 +1,4 @@
-const Influencer = require('./Influencer.js');
+const Influencer = require('./Influencer');
 const bodyParser = require('body-parser');
 
 // Controller methods for DB

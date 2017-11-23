@@ -12,7 +12,7 @@ module.exports = {
 		filename: 'bundle.js'
 	},
 	resolve: {
-		extensions: ['.js', '.jsx']
+		extensions: ['.js', '.jsx'] // auto resolve file extensions when importing
 	},
 	module: {
 		loaders: [

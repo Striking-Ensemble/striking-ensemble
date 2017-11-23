@@ -5,10 +5,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const logger = require('morgan');
-const router = require('./db/influencerRouter.js');
-const reqRoutes = require('./routes/routes.js');
+const router = require('./db/influencerRouter');
+const reqRoutes = require('./routes/routes');
 const passport = require('passport');
-const instagramConfig = require('./config/passport.js');
+const instagramConfig = require('./config/passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 

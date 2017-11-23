@@ -1,10 +1,10 @@
 const reqRoutes = require('express').Router();
 const bodyParser = require('body-parser');
-const influencerController = require('../db/influencerController.js');
-const reqController = require('./reqController.js');
+const influencerController = require('../db/influencerController');
+const reqController = require('./reqController');
 const passport = require('passport');
 const path = require('path');
-const integrations = require('./integrations.js');
+const integrations = require('./integrations');
 
 // middleware that is specific to this router
 reqRoutes.use(function timeLog(req, res, next) {
