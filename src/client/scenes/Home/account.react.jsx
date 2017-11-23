@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Navigation from '../../components/navigation.react.jsx';
 
 export default class Account extends Component {
   render() {

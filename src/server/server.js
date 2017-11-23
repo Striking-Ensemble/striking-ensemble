@@ -44,8 +44,8 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../../public')));
 
 // set up API routes
-app.use('/api', router);
 app.use('/', reqRoutes);
+app.use('/api', router);
 
 // ************************************************************ //
 

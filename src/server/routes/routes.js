@@ -13,6 +13,15 @@ reqRoutes.use(function timeLog(req, res, next) {
 });
 
 // Public route handlers
+// reqRoutes.get('/', (req, res) => {
+//   console.log('TRIGGERED');
+//   if (!req.user || req.user.status !== 'ENABLED') {
+//     return res.redirect('/login');
+//   }
+//   console.log('FOUND USER:', req.user);
+//   res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
+// });
+
 reqRoutes.get('/user:username', influencerController.retrieveOne);
 
 reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
@@ -23,7 +32,7 @@ reqRoutes.get('/login', (req, res) => {
 });
 
 reqRoutes.get('/logout', (req, res) => {
-  console.log('IS THIS EVEN ON??', req.logout);
+  console.log('LOGGING OUT USER');
   req.logout();
   res.redirect('/login');
 });
@@ -33,7 +42,7 @@ reqRoutes.get('/auth/instagram', passport.authenticate('instagram'),
 );
 
 reqRoutes.get('/auth/instagram/callback', 
-  passport.authenticate('instagram', { failureRedirect: '/' }), 
+  passport.authenticate('instagram', { failureRedirect: '/login' }), 
   (req, res) => {
     res.redirect('/account');
   }
@@ -43,17 +52,19 @@ reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
 });
 
+
 // test authentication
 function ensureAuthenticated(req, res, next) {
+  console.log('AUTH FUNC:', req.isAuthenticated);
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/');
+  res.redirect('/login');
 }
 // =================================================================== //
 
 // ======================== TwoTap API Routes ======================== //
-reqRoutes.get('/', integrations.integration);
+reqRoutes.get('/:username', integrations.integration);
 reqRoutes.post('/purchase_confirm_callback', integrations.purchaseConfirmCallback);
 
 module.exports = reqRoutes;
