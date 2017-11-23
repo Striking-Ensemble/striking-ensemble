@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const influencerController = require('./influencerController.js');
+const influencerController = require('./influencerController');
 const bodyParser = require('body-parser');
 
 // middleware that is specific to this router

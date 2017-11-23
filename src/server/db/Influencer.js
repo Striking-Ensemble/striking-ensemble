@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 // fix deprecation warning on utilizing save by specifiying native promises
 mongoose.Promise = global.Promise;
-const db = require('./index.js');
+const db = require('./index');
 
 
 const influencerSchema = mongoose.Schema({
