@@ -44,12 +44,16 @@ reqRoutes.get('/auth/instagram', passport.authenticate('instagram'),
 reqRoutes.get('/auth/instagram/callback', 
   passport.authenticate('instagram', { failureRedirect: '/login' }), 
   (req, res) => {
-    res.redirect('/account');
+    res.redirect('/');
   }
 );
 
 reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
+  console.log('OTHER RES STUFF:', req.user);
+  // res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
+  let user = req.user;
+  user.isAuthenticated = req.isAuthenticated();
+  res.send(user);
 });
 
 
