@@ -4,11 +4,15 @@ import App from '../components/app.react';
 import Signin from '../scenes/Sign/signin.react';
 import Account from '../scenes/Home/account.react';
 
+const requireAuth = () => {
+
+}
+
 const Routing = () => {
   return (
     <Switch>
       <Route exact path="/" component={App} />
-      <Route path="/account" component={Account} />
+      <Route path="/account" component={App} />
       <Route path="/login" component={Signin} />
     </Switch>
   )
