@@ -11,6 +11,11 @@ const passport = require('passport');
 const instagramConfig = require('./config/passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const store = require('store');
+
+// Refresh persistent isAuthenticated data
+// every server start
+store.remove('isAuthenticated');
 
 // create insta-pass config
 instagramConfig(passport);

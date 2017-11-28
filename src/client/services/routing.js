@@ -5,11 +5,11 @@ import Signin from '../scenes/Sign/signin.react';
 import Account from '../scenes/Home/account.react';
 
 const Routing = () => {
+  // <Route path="/account" component={App} />
   return (
     <Switch>
       <Route path="/login" component={Signin} />
       <Route path="/" component={App} />
-      <Route path="/account" component={App} />
     </Switch>
   )
 }
