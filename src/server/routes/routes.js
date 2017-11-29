@@ -5,6 +5,7 @@ const reqController = require('./reqController');
 const passport = require('passport');
 const path = require('path');
 const integrations = require('./integrations');
+const Influencer = require('../db/Influencer');
 
 // middleware that is specific to this router
 reqRoutes.use(function timeLog(req, res, next) {
@@ -28,7 +29,8 @@ reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 
 // ================= Passport Instagram Endpoints ================= //
 reqRoutes.get('/login', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
+  console.log('IN LOGIN =======', req.query);
+  res.status(200).sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
 });
 
 reqRoutes.get('/logout', (req, res) => {
@@ -50,19 +52,25 @@ reqRoutes.get('/auth/instagram/callback',
 
 reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
   console.log('OTHER RES STUFF:', req.user);
-  // res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
-  let user = req.user;
-  user.isAuthenticated = req.isAuthenticated();
-  res.send(user);
+  console.log('FINDING INFLUENCER', req.session.passport.user);
+  Influencer.findById(req.session.passport.user, (err, user) => { 
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(user);
+    }
+  });
 });
 
 
 // test authentication
 function ensureAuthenticated(req, res, next) {
-  console.log('AUTH FUNC:', req.isAuthenticated);
+  console.log('ENSURE AUTH:', req.isAuthenticated());
   if (req.isAuthenticated()) {
     return next();
   }
+  // res.status(302).end();
+  console.log('GOING TO REDIRECT:');
   res.redirect('/login');
 }
 // =================================================================== //

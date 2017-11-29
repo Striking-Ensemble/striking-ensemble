@@ -12,10 +12,7 @@ const instagramConfig = require('./config/passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const store = require('store');
-
-// Refresh persistent isAuthenticated data
-// every server start
-store.remove('isAuthenticated');
+const Influencer = require('./db/Influencer');
 
 // create insta-pass config
 instagramConfig(passport);
@@ -47,6 +44,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parses the text as JSON and set to req.body
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../../public')));
+
+// serialize and deserialize
+passport.serializeUser((user, done) => {
+  console.log('serializeUser:', user._id)
+  done(null, user._id);
+});
+passport.deserializeUser((id, done) => {
+  Influencer.findById(id, (err, user) => {
+    console.log('DESERIALIZE', user);
+    (!err) ? done(null, user) : done(err, null);
+  })
+});
 
 // set up API routes
 app.use('/', reqRoutes);
