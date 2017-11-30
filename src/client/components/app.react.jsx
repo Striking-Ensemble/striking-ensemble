@@ -53,7 +53,7 @@ export default class App extends Component  {
           // history.push('/');
         }
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         store.each((value, key) => {
           console.log('WHATs IN STORE:', key, '==', value);

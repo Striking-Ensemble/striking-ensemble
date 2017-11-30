@@ -71,7 +71,11 @@ function ensureAuthenticated(req, res, next) {
   console.log('GOING TO REDIRECT:');
   res.redirect('/login');
 }
+
 // =================================================================== //
+
+// ======================= Instagram Endpoints ======================== //
+reqRoutes.get('/account/media', reqController.getMedia);
 
 // ======================== TwoTap API Routes ======================== //
 reqRoutes.get('/:username', integrations.integration);
