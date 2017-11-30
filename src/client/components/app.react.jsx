@@ -70,7 +70,7 @@ export default class App extends Component  {
     } 
     console.log('SHOULD BE LOGGED, PROPS?', this.props);
     if (!this.state.isLoaded) {
-      return (<div className="container"><LoadingSpinner /></div>)
+      return <LoadingSpinner />
     } else {
       return (
         <div className="container">

@@ -7,7 +7,7 @@ export default class Account extends Component {
     console.log('IN ACCOUNT:', this.props.user);
     let data = this.props.user;
     return (
-      <div className="container">
+      <div className="main">
         <h1>{data.full_name} is logged in.</h1>
         <img src={data.profile_picture} /><p>{data.username}</p>
       </div>
