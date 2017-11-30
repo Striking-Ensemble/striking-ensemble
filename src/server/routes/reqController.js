@@ -37,9 +37,7 @@ exports.getMedia = (req, res) => {
   let options = {
     url: instaApiURL + '/?access_token=' + process.env.ACCESS_TOKEN
   };
-  console.log('GETTING RECENT MEDIA FROM INSTA', process.env.ACCESS_TOKEN);
-  // console.log('HUHHHH??', passport.authenticate('instagram'));
-  request.get(options, (err, res, body) => {
+  request.get(options, (err, response, body) => {
     if (err) {
       throw err;
     }
