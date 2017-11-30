@@ -36,13 +36,10 @@ export default class App extends Component  {
     axios.get(ROOT_URL + '/account')
       .then(
       res => {
-        console.log('HEEEELLLPPP MEEEEEEE', res);
         if (res.request.responseURL === ROOT_URL + '/login') {
-          console.log('SOOOO IT HAPPENED');
           this.setState({ login: true });
         }
         if (res.data.username) {
-          console.log('TRIGGGEEERRRED in mounting');
           this.setState({
             isLoaded: true,
             user: res.data,

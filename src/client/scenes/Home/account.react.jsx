@@ -11,13 +11,18 @@ const pathname = window.location.pathname;
 const ROOT_URL = `${protocol}//${host}`;
 
 export default class Account extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    }
+  }
   componentWillMount() {
     axios.get(ROOT_URL + '/account/media')
       .then(
       res => {
-        this.props.user.data = res.data.data.map((post, index) => {
-          return post;
-        });
+        const newArr = res.data.data.map(post => post);
+        this.setState({ data: [...this.state.data, ...newArr] })
       })
       .catch(err => {
         console.log(err);
@@ -25,8 +30,7 @@ export default class Account extends Component {
   }
 
   renderPosts() {
-    console.log('DO I HAVE DATA NOW?', this.props.user.data);
-    return this.props.user.data.map(post => {
+    return this.state.data.map(post => {
       return (
         <PostListItem
           key={post.id}
@@ -42,7 +46,6 @@ export default class Account extends Component {
   render() {
     console.log('IN ACCOUNT:', this.props.user);
     let user = this.props.user;
-
     return (
       <div className="main">
         <h1>{user.full_name} is logged in.</h1>
