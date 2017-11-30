@@ -62,14 +62,12 @@ reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
   });
 });
 
-
 // test authentication
 function ensureAuthenticated(req, res, next) {
   console.log('ENSURE AUTH:', req.isAuthenticated());
   if (req.isAuthenticated()) {
     return next();
   }
-  // res.status(302).end();
   console.log('GOING TO REDIRECT:');
   res.redirect('/login');
 }

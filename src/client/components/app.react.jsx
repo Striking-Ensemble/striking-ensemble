@@ -5,6 +5,7 @@ import store from 'store';
 import Navigation from './navigation.react';
 import Account from '../scenes/Home/account.react';
 import Footer from './footer.react';
+import LoadingSpinner from './loadingSpinner.react';
 import isAuthenticated from '../services/isAuthenticated';
 
 const protocol = window.location.protocol;
@@ -69,7 +70,7 @@ export default class App extends Component  {
     } 
     console.log('SHOULD BE LOGGED, PROPS?', this.props);
     if (!this.state.isLoaded) {
-      return <h3>Loading...</h3>
+      return (<div className="container"><LoadingSpinner /></div>)
     } else {
       return (
         <div className="container">
@@ -81,4 +82,3 @@ export default class App extends Component  {
     }
   }
 }
-
