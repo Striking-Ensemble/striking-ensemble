@@ -3,6 +3,7 @@ import isAuthenticated from '../../services/isAuthenticated'
 import { Redirect } from 'react-router-dom';
 import PostListItem from './postListItem.react';
 import axios from 'axios';
+import LoadingSpinner from '../../components/loadingSpinner.react';
 
 const protocol = window.location.protocol;
 const host = window.location.host;
@@ -14,6 +15,7 @@ export default class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoaded: false,
       data: [],
       currentPost: {}
     }
@@ -23,7 +25,10 @@ export default class Account extends Component {
       .then(
       res => {
         const newArr = res.data.data.map(post => post);
-        this.setState({ data: [...this.state.data, ...newArr] })
+        this.setState({
+          isLoaded: true, 
+          data: [...this.state.data, ...newArr] 
+        });
       })
       .catch(err => {
         console.log(err);
@@ -31,19 +36,23 @@ export default class Account extends Component {
   }
 
   renderPosts() {
-    return this.state.data.map(post => {
-      return (
-        <PostListItem
-          key={post.id}
-          id={post.id}
-          caption={post.caption.text}
-          image_low={post.images.low_resolution}
-          image_norm={post.images.standard_resolution}
-          image_thumb={post.images.thumbnail}
-          {...this.props}
-        />
-      )
-    })
+    if (!this.state.isLoaded) {
+      return <LoadingSpinner />
+    } else {
+      return this.state.data.map(post => {
+        return (
+          <PostListItem
+            key={post.id}
+            id={post.id}
+            caption={post.caption.text}
+            image_low={post.images.low_resolution}
+            image_norm={post.images.standard_resolution}
+            image_thumb={post.images.thumbnail}
+            {...this.props}
+          />
+        )
+      })
+    }
   }
 
   render() {
