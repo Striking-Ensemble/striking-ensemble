@@ -14,7 +14,8 @@ export default class Account extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      currentPost: {}
     }
   }
   componentWillMount() {
@@ -34,22 +35,25 @@ export default class Account extends Component {
       return (
         <PostListItem
           key={post.id}
+          id={post.id}
           caption={post.caption.text}
           image_low={post.images.low_resolution}
           image_norm={post.images.standard_resolution}
           image_thumb={post.images.thumbnail}
+          {...this.props}
         />
       )
     })
   }
 
   render() {
-    console.log('IN ACCOUNT:', this.props.user);
+    console.log('do i have props?', this.props);
+    console.log('IN ACCOUNT:', this.state.data);
     let user = this.props.user;
     return (
       <div className="main">
         <h1>{user.full_name} is logged in.</h1>
-        <img src={user.profile_picture} /><p>{user.username}</p>
+        <img src={user.profile_picture} className="img-circle" /><p>{user.username}</p>
         <br />
         <div className="post-container">
           {this.renderPosts.bind(this)()}

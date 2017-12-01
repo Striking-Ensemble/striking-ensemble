@@ -72,7 +72,7 @@ export default class App extends Component  {
       return (
         <div className="container">
           <Navigation />
-          <Account user={this.state.user} />
+          <Account user={this.state.user} {...this.props}/>
           <Footer />
         </div>
       )
