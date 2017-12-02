@@ -70,9 +70,11 @@ export default class App extends Component  {
       return <LoadingSpinner />
     } else {
       return (
-        <div className="container">
+        <div id="page-outer">
           <Navigation />
-          <Account user={this.state.user} {...this.props}/>
+          <div className="page-container">
+            <Account user={this.state.user} {...this.props}/>
+          </div>
           <Footer />
         </div>
       )
