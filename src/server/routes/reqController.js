@@ -35,7 +35,7 @@ exports.prepareCheckout = (req, res) => {
 
 exports.getMedia = (req, res) => {
   let options = {
-    url: instaApiURL + '/?access_token=' + process.env.ACCESS_TOKEN
+    url: instaApiURL + '/?access_token=' + req.app.settings.insta_accessToken
   };
   request.get(options, (err, response, body) => {
     if (err) {

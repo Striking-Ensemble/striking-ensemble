@@ -1,3 +1,4 @@
+const express = require('express');
 const reqRoutes = require('express').Router();
 const bodyParser = require('body-parser');
 const influencerController = require('../db/influencerController');
@@ -29,7 +30,6 @@ reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 
 // ================= Passport Instagram Endpoints ================= //
 reqRoutes.get('/login', (req, res) => {
-  console.log('IN LOGIN =======', req.query);
   res.status(200).sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
 });
 
@@ -46,13 +46,14 @@ reqRoutes.get('/auth/instagram', passport.authenticate('instagram'),
 reqRoutes.get('/auth/instagram/callback', 
   passport.authenticate('instagram', { failureRedirect: '/login' }), 
   (req, res) => {
+    req.app.settings.insta_accessToken = req.authInfo;
     res.redirect('/');
   }
 );
 
 reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
-  console.log('OTHER RES STUFF:', req.user);
-  console.log('FINDING INFLUENCER', req.session.passport.user);
+  console.log('FINDING INFLUENCER on /account endpoint', req.session.passport);
+  console.log('WITH ACCESS TOKEN:', req.app.settings.insta_accessToken);
   Influencer.findById(req.session.passport.user, (err, user) => { 
     if (err) {
       console.log(err);
