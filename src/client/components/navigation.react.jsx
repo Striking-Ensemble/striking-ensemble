@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 export default class Navigation extends Component {
   handleRedirect() {
     store.remove('isAuthenticated');
+    store.remove('user');
     browserHistory.push('/login');
   }
 

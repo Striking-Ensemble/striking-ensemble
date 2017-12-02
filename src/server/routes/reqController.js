@@ -1,11 +1,13 @@
 const bodyParser = require('body-parser');
 const request = require('request');
+const passport = require('passport');
 
 // Controller methods for TwoTap
+const twoTapApiURL = 'https://checkout.twotap.com/prepare_checkout';
+const instaApiURL = 'https://api.instagram.com/v1/users/self/media/recent';
 
 exports.prepareCheckout = (req, res) => {
   console.log('READY FOR CHECKOUT');
-  let apiURL = 'https://checkout.twotap.com/prepare_checkout';
   let checkoutRequest = req.body;
   checkoutRequest.products = JSON.parse(req.body.products);
   checkoutRequest.confirm = {
@@ -26,3 +28,19 @@ exports.prepareCheckout = (req, res) => {
     res.json(JSON.parse(body));
   });
 };
+
+// ======================================================================= //
+
+// Controller methods for Instagram
+
+exports.getMedia = (req, res) => {
+  let options = {
+    url: instaApiURL + '/?access_token=' + req.app.settings.insta_accessToken
+  };
+  request.get(options, (err, response, body) => {
+    if (err) {
+      throw err;
+    }
+    res.json(JSON.parse(body));
+  });
+}
