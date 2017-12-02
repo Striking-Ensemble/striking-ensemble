@@ -62,7 +62,7 @@ export default class Account extends Component {
     return (
       <div className="main">
         <h1>{user.full_name} is logged in.</h1>
-        <img src={user.profile_picture} className="img-circle" /><p>{user.username}</p>
+        <img src={user.profile_picture} className="img-circle" style={{'max-width': '15%'}} /><p>{user.username}</p>
         <br />
         <div className="post-container">
           {this.renderPosts.bind(this)()}
