@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser');
+const path = require('path');
 const request = require('request');
 const passport = require('passport');
 
@@ -44,3 +45,7 @@ exports.getMedia = (req, res) => {
     res.json(JSON.parse(body));
   });
 }
+
+exports.getFrontEnd = (req, res) => {
+  res.status(200).sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
+};
