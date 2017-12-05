@@ -8,11 +8,16 @@ import Footer from './footer.react';
 import LoadingSpinner from './loadingSpinner.react';
 import isAuthenticated from '../services/isAuthenticated';
 
-const protocol = window.location.protocol;
-const host = window.location.host;
-const pathname = window.location.pathname;
+const protocol = window.location.protocol,
+      host = window.location.host,
+      pathname = window.location.pathname;
 
-const ROOT_URL = `${protocol}//${host}`;
+store.set('URL', { 
+  protocol: protocol,
+  host: host,
+  pathname: pathname,
+  root_url: `${protocol}//${host}`
+});
 
 export default class App extends Component  {
   constructor(props) {
@@ -33,12 +38,12 @@ export default class App extends Component  {
     //   store.remove('user');
     // }
 
-    axios.get(ROOT_URL + '/account')
+    axios.get(store.get('URL').root_url + '/account')
       .then(
       res => {
         // If res URL is a redirect to /login, set login to true
         // this will render Signin scene
-        if (res.request.responseURL === ROOT_URL + '/login') {
+        if (res.request.responseURL === store.get('URL').root_url + '/login') {
           this.setState({ login: true });
         }
         if (res.data.username) {

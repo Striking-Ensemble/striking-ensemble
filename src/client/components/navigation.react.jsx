@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
 import store from 'store';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default class Navigation extends Component {
   handleRedirect() {
-    store.remove('isAuthenticated');
-    store.remove('user');
-    browserHistory.push('/login');
+    axios.get(store.get('URL').root_url + '/logout')
+      .then(
+        res => {
+          browserHistory.push('/login');
+        }
+      )
+      .catch( err => {
+        console.log(err);
+      });
+    console.log('IN NAV', browserHistory);
+  }
+
+  handleHome() {
+    // should change currentPost state to empty
   }
 
   render() {

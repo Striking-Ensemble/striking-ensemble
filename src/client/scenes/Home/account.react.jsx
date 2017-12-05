@@ -3,13 +3,8 @@ import isAuthenticated from '../../services/isAuthenticated'
 import { Redirect } from 'react-router-dom';
 import PostListItem from './postListItem.react';
 import axios from 'axios';
+import store from 'store';
 import LoadingSpinner from '../../components/loadingSpinner.react';
-
-const protocol = window.location.protocol;
-const host = window.location.host;
-const pathname = window.location.pathname;
-
-const ROOT_URL = `${protocol}//${host}`;
 
 export default class Account extends Component {
   constructor(props) {
@@ -24,7 +19,7 @@ export default class Account extends Component {
   }
 
   componentWillMount() {
-    axios.get(ROOT_URL + '/account/media')
+    axios.get(store.get('URL').root_url + '/account/media')
       .then(
       res => {
         const newArr = res.data.data.map(post => post);
@@ -113,7 +108,7 @@ export default class Account extends Component {
       return (
         <div className="container">
           <div id="post-item" className="col-md-8 col-sm-8 col-xs=8">
-            <img src={this.state.currentPost.image_norm} className="img-responsive" />
+            <img src={this.state.currentPost.image_norm.url} className="img-responsive" />
             <p>{this.state.currentPost.caption}</p>
           </div>
           <div className="col-md-4 col-sm-4 col-xs-4">
