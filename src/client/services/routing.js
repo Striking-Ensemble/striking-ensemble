@@ -6,6 +6,7 @@ import Account from '../scenes/Home/account.react';
 import PostItem from '../scenes/Home/postItem.react';
 import Navigation from '../components/navigation.react';
 import Footer from '../components/footer.react';
+import PostListItem from '../scenes/Home/postListItem.react';
 
 // const routes = [
 //   { path:'/login',
@@ -35,7 +36,7 @@ const Routing = () => {
   return (
     <Switch>
       <Route path="/login" component={Signin} />
-      <Route exact path="/account/post/:id" component={PostItem} />
+      <Route exact path="/account/post/:id" component={Account} />
       <Route path="/" component={App} />
       <Route path="/account" component={App} />
     </Switch>
