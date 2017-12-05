@@ -30,9 +30,8 @@ reqRoutes.get('/user:username', influencerController.retrieveOne);
 reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 
 // Account route handlers
-
-reqRoutes.get('/account/post/:id', reqController.getFrontEnd);
 reqRoutes.get('/login', reqController.getFrontEnd);
+reqRoutes.get('/account/post/:id', reqController.getFrontEnd);
 
 // ================= Passport Instagram Endpoints ================= //
 

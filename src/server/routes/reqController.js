@@ -1,3 +1,4 @@
+const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const request = require('request');
@@ -46,6 +47,9 @@ exports.getMedia = (req, res) => {
   });
 }
 
+// Let the front-end handle the rendering
 exports.getFrontEnd = (req, res) => {
-  res.status(200).sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
+  console.log('NEW TRIGGER');
+  res.app.use(express.static(path.join(__dirname, '../../../public')));
+  res.end();
 };
