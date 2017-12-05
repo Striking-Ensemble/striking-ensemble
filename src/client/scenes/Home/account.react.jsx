@@ -17,9 +17,12 @@ export default class Account extends Component {
     this.state = {
       isLoaded: false,
       data: [],
-      currentPost: {}
+      currentPost: {},
+      retailLinks:[]
     }
+    this.changeCurrentPost = this.changeCurrentPost.bind(this);
   }
+
   componentWillMount() {
     axios.get(ROOT_URL + '/account/media')
       .then(
@@ -35,23 +38,91 @@ export default class Account extends Component {
       });
   }
 
+  currentPostIsEmpty() {
+    return Object.keys(this.state.currentPost).length === 0 && this.state.currentPost.constructor === Object;
+  }
+  
+  changeCurrentPost(post) {
+    console.log('WE ARE CHANGING CURRENT');
+    let currentPost = {...this.state.currentPost};
+    currentPost.id = post.id,
+    currentPost.caption = post.caption,
+    currentPost.image_thumb = post.image_thumb
+    currentPost.image_low = post.image_low ? post.image_low : null,
+    currentPost.image_norm = post.image_norm ? post.image_norm : null,
+    currentPost.video_low = post.video_low ? post.video_low : null,
+    currentPost.video_norm = post.video_norm ? post.video_norm : null
+
+    this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
+  }
+
   renderPosts() {
     if (!this.state.isLoaded) {
       return <LoadingSpinner />
     } else {
       return this.state.data.map(post => {
-        return (
-          <PostListItem
-            key={post.id}
-            id={post.id}
-            caption={post.caption.text}
-            image_low={post.images.low_resolution}
-            image_norm={post.images.standard_resolution}
-            image_thumb={post.images.thumbnail}
-            {...this.props}
-          />
-        )
-      })
+        if (post.videos) {
+          return (
+            <PostListItem 
+              key={post.id}
+              id={post.id}
+              caption={post.caption.text}
+              image_thumb={post.images.thumbnail}
+              video_low={post.videos.low_bandwidth}
+              video_norm={post.videos.standard_resolution}
+              changeCurrentPost={this.changeCurrentPost}
+              {...this.props}
+            />
+          )
+        } else {
+          return (
+            <PostListItem
+              key={post.id}
+              id={post.id}
+              caption={post.caption.text}
+              image_low={post.images.low_resolution}
+              image_norm={post.images.standard_resolution}
+              image_thumb={post.images.thumbnail}
+              changeCurrentPost={this.changeCurrentPost}
+              {...this.props}
+            />
+          )
+        }
+      });
+    }
+  }
+
+  renderPostItem() {
+    // previously this.props.location.state.video_low
+    if (this.state.currentPost.video_low) {
+      return (
+        <div className="container">
+          <div id="post-item" className="col-md-8 col-sm-8 col-xs=8">
+            <iframe src={this.state.currentPost.video_low.url} className="embed-responsive-item" style={{ height: '536px' }} seamless>
+            </iframe>
+            <p>{this.state.currentPost.caption}</p>
+          </div>
+          <div className="col-md-4 col-sm-4 col-xs-4">
+            <p>bunch of retail links/img</p>
+            <p>bunch of retail links/img</p>
+            <p>bunch of retail links/img</p>
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="container">
+          <div id="post-item" className="col-md-8 col-sm-8 col-xs=8">
+            <img src={this.state.currentPost.image_norm} className="img-responsive" />
+            <p>{this.state.currentPost.caption}</p>
+          </div>
+          <div className="col-md-4 col-sm-4 col-xs-4">
+            <p>bunch of retail links/img</p>
+            <p>bunch of retail links/img</p>
+            <p>bunch of retail links/img</p>
+          </div>
+        </div>
+      )
     }
   }
 
@@ -62,10 +133,10 @@ export default class Account extends Component {
     return (
       <div className="main">
         <h1>{user.full_name} is logged in.</h1>
-        <img src={user.profile_picture} className="img-circle" style={{'max-width': '15%'}} /><p>{user.username}</p>
+        <img src={user.profile_picture} className="img-circle" style={{'maxWidth': '15%'}} /><p>{user.username}</p>
         <br />
         <div className="post-container">
-          {this.renderPosts.bind(this)()}
+          {this.currentPostIsEmpty() ? this.renderPosts.bind(this)() : this.renderPostItem.bind(this)()}
         </div>
       </div>
     )

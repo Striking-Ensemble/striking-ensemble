@@ -1,34 +1,40 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PostItem from './postItem.react';
 import { Link } from 'react-router-dom';
 
-const PostListItem = (props) => {
-  console.log('GIVE ME THESE', props);
+export default class PostListItem extends Component {
+  constructor(props) {
+    super(props);
 
-  function handleClick(e) {
-    e.preventDefault();
-    console.log('CLICKED!');
-    return <PostItem 
-      key={props.id}
-      caption={props.caption}
-      image_norm={props.image_norm}
-    />
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  return (
-    <div className="col-lg-3 col-md-4 col-sm-4 col-xs-4">
-      <Link to={{
-        pathname: `/account/post/${props.id}`,
-        state: {
-          key: props.id,
-          caption: props.caption,
-          image_norm: props.image_norm.url
-        }
-      }}>
-        <img src={props.image_thumb.url} className="img-responsive" />
-      </Link>
-    </div>
-  )
-}
+  handleClick(e) {
+    e.preventDefault();
+    console.log('CLICKED!');
+    console.log('what event?', this.props);
+    this.props.changeCurrentPost(this.props);
+  }
 
-export default PostListItem;
+  render () {
+    // console.log('GIVE ME THESE', this.props);
+    // console.log('WHATTABOUT changeCurrentPost', this.props.changeCurrentPost);
+
+    return (
+      <div className="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+        {/* <Link to={{
+          pathname: `/account/post/${props.id}`,
+          state: {
+            key: props.id,
+            caption: props.caption,
+            image_norm: props.image_norm ? props.image_norm.url : null,
+            video_low: null || props.video_low,
+            video_norm: null || props.video_norm
+          }
+        }}> */}
+          <img src={this.props.image_thumb.url} className="img-responsive" onClick={this.handleClick} />
+        {/* </Link> */}
+      </div>
+    )
+  }
+};
