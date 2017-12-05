@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "jasmine": "^2.8.0",
     "nodemon": "^1.12.2"
   }
