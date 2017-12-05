@@ -15,6 +15,7 @@ reqRoutes.use(function timeLog(req, res, next) {
 });
 
 // Public route handlers
+
 // reqRoutes.get('/', (req, res) => {
 //   console.log('TRIGGERED');
 //   if (!req.user || req.user.status !== 'ENABLED') {
@@ -28,10 +29,11 @@ reqRoutes.get('/user:username', influencerController.retrieveOne);
 
 reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 
+// Account route handlers
+reqRoutes.get('/login', reqController.getFrontEnd);
+reqRoutes.get('/account/post/:id', reqController.getFrontEnd);
+
 // ================= Passport Instagram Endpoints ================= //
-reqRoutes.get('/login', (req, res) => {
-  res.status(200).sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
-});
 
 reqRoutes.get('/logout', (req, res) => {
   console.log('LOGGING OUT USER');
@@ -52,8 +54,8 @@ reqRoutes.get('/auth/instagram/callback',
 );
 
 reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
-  console.log('FINDING INFLUENCER on /account endpoint', req.session.passport);
-  console.log('WITH ACCESS TOKEN:', req.app.settings.insta_accessToken);
+  // FINDING INFLUENCER on /account endpoint req.session.passport;
+  // WITH ACCESS TOKEN: req.app.settings.insta_accessToken;
   Influencer.findById(req.session.passport.user, (err, user) => { 
     if (err) {
       console.log(err);
@@ -62,6 +64,8 @@ reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
     }
   });
 });
+
+
 
 // test authentication
 function ensureAuthenticated(req, res, next) {

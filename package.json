@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jasmine",
     "build": "node_modules/.bin/webpack -w",
-    "start": "node ./src/server/index.js",
+    "start": "nodemon ./src/server/index.js",
     "db": "sudo mongod",
     "dev": "npm run db & npm run build & npm run start"
   },
@@ -53,6 +53,8 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "jasmine": "^2.8.0"
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "jasmine": "^2.8.0",
+    "nodemon": "^1.12.2"
   }
 }

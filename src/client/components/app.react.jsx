@@ -36,6 +36,8 @@ export default class App extends Component  {
     axios.get(ROOT_URL + '/account')
       .then(
       res => {
+        // If res URL is a redirect to /login, set login to true
+        // this will render Signin scene
         if (res.request.responseURL === ROOT_URL + '/login') {
           this.setState({ login: true });
         }
@@ -59,13 +61,12 @@ export default class App extends Component  {
   }
 
   render() {
-    console.log('USER IN APP', this.state.user);
     console.log('what\'s current load state', this.state.isLoaded);
     if (this.state.login) {
       console.log('NO USER DETECTED... REDIRECTING TO /login');
       return <Redirect to='/login' />
     } 
-    console.log('SHOULD BE LOGGED, PROPS?', this.props);
+    // console.log('SHOULD BE LOGGED, PROPS?', this.props); this.props here are routing properties
     if (!this.state.isLoaded) {
       return <LoadingSpinner />
     } else {

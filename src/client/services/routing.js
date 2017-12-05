@@ -4,6 +4,32 @@ import App from '../components/app.react';
 import Signin from '../scenes/Sign/signin.react';
 import Account from '../scenes/Home/account.react';
 import PostItem from '../scenes/Home/postItem.react';
+import Navigation from '../components/navigation.react';
+import Footer from '../components/footer.react';
+
+// const routes = [
+//   { path:'/login',
+//     mainContent: () => <Signin />
+//   },
+//   { path: '/account/post/:id',
+//     exact: true,
+//     nav: () => <Navigation />,
+//     mainContent: () => <PostItem />,
+//     footer: () => <Footer />
+//   },
+//   {
+//     path: '/',
+//     nav: () => <Navigation />,
+//     mainContent: () => <App />,
+//     footer: () => <Footer />
+//   },
+//   {
+//     path: '/account',
+//     nav: () => <Navigation />,
+//     mainContent: () => <App />,
+//     footer: () => <Footer />
+//   }
+// ];
 
 const Routing = () => {
   return (

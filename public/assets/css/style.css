@@ -1,6 +1,13 @@
 html, body {
   height: 100%;
 }
+
+iframe [seamless] {
+  background-color: transparent;
+  border: 0px none transparent;
+  padding: 0px;
+  overflow: hidden;
+}
 /* /////////////////////////////////////////////////////////// */
 .page-container {
   padding-right: 15px;

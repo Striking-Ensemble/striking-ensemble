@@ -1,4 +1,6 @@
+const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const request = require('request');
 const passport = require('passport');
 
@@ -44,3 +46,10 @@ exports.getMedia = (req, res) => {
     res.json(JSON.parse(body));
   });
 }
+
+// Let the front-end handle the rendering
+exports.getFrontEnd = (req, res) => {
+  console.log('NEW TRIGGER');
+  res.app.use(express.static(path.join(__dirname, '../../../public')));
+  res.end();
+};
