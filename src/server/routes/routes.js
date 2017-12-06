@@ -38,7 +38,7 @@ reqRoutes.get('/account/post/:id', reqController.getFrontEnd);
 reqRoutes.get('/logout', (req, res) => {
   console.log('LOGGING OUT USER');
   req.logout();
-  res.redirect('/login');
+  res.redirect('/');
 });
 
 reqRoutes.get('/auth/instagram', passport.authenticate('instagram'), 

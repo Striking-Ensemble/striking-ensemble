@@ -14,6 +14,7 @@ export default class PostListItem extends Component {
     console.log('CLICKED!');
     console.log('what event?', this.props);
     this.props.changeCurrentPost(this.props);
+    this.props.history.push('/');
   }
 
   render () {
@@ -22,18 +23,18 @@ export default class PostListItem extends Component {
 
     return (
       <div className="col-lg-3 col-md-4 col-sm-4 col-xs-4">
-        {/* <Link to={{
-          pathname: `/account/post/${props.id}`,
+        <Link to={{
+          pathname: `/account/post/${this.props.id}`,
           state: {
-            key: props.id,
-            caption: props.caption,
-            image_norm: props.image_norm ? props.image_norm.url : null,
-            video_low: null || props.video_low,
-            video_norm: null || props.video_norm
+            key: this.props.id,
+            caption: this.props.caption,
+            image_norm: this.props.image_norm ? this.props.image_norm.url : null,
+            video_low: null || this.props.video_low,
+            video_norm: null || this.props.video_norm
           }
-        }}> */}
+        }}>
           <img src={this.props.image_thumb.url} className="img-responsive" onClick={this.handleClick} />
-        {/* </Link> */}
+        </Link>
       </div>
     )
   }

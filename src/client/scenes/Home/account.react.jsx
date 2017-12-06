@@ -3,13 +3,8 @@ import isAuthenticated from '../../services/isAuthenticated'
 import { Redirect } from 'react-router-dom';
 import PostListItem from './postListItem.react';
 import axios from 'axios';
+import store from 'store';
 import LoadingSpinner from '../../components/loadingSpinner.react';
-
-const protocol = window.location.protocol;
-const host = window.location.host;
-const pathname = window.location.pathname;
-
-const ROOT_URL = `${protocol}//${host}`;
 
 export default class Account extends Component {
   constructor(props) {
@@ -21,10 +16,12 @@ export default class Account extends Component {
       retailLinks:[]
     }
     this.changeCurrentPost = this.changeCurrentPost.bind(this);
+    this.removeCurrentPost = this.removeCurrentPost.bind(this);
+    this.props.location.state = { removeCurrentPost: this.removeCurrentPost };
   }
 
-  componentWillMount() {
-    axios.get(ROOT_URL + '/account/media')
+  componentDidMount() {
+    axios.get(store.get('URL').root_url + '/account/media')
       .then(
       res => {
         const newArr = res.data.data.map(post => post);
@@ -54,6 +51,11 @@ export default class Account extends Component {
     currentPost.video_norm = post.video_norm ? post.video_norm : null
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
+  }
+
+  removeCurrentPost() {
+    console.log('REMOVING CURRENT POST');
+    this.setState({currentPost: {}}, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost));
   }
 
   renderPosts() {
@@ -113,7 +115,7 @@ export default class Account extends Component {
       return (
         <div className="container">
           <div id="post-item" className="col-md-8 col-sm-8 col-xs=8">
-            <img src={this.state.currentPost.image_norm} className="img-responsive" />
+            <img src={this.state.currentPost.image_norm.url} className="img-responsive" />
             <p>{this.state.currentPost.caption}</p>
           </div>
           <div className="col-md-4 col-sm-4 col-xs-4">
