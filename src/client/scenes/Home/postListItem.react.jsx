@@ -13,7 +13,7 @@ export default class PostListItem extends Component {
     e.preventDefault();
     console.log('CLICKED!');
     console.log('what event?', this.props);
-    this.props.changeCurrentPost(this.props);
+    this.props.addCurrentPost(this.props);
     this.props.history.push('/');
   }
 
