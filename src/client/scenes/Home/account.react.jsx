@@ -5,6 +5,7 @@ import PostListItem from './postListItem.react';
 import axios from 'axios';
 import store from 'store';
 import LoadingSpinner from '../../components/loadingSpinner.react';
+import RetailForm from './retailForm.react';
 
 export default class Account extends Component {
   constructor(props) {
@@ -14,8 +15,6 @@ export default class Account extends Component {
       data: [],
       retailLinks:[]
     }
-    //this.removeCurrentPost = this.removeCurrentPost.bind(this); // now in props
-    //this.props.location.state = { removeCurrentPost: this.removeCurrentPost }; // now in props
   }
 
   componentDidMount() {
@@ -36,11 +35,6 @@ export default class Account extends Component {
   currentPostIsEmpty() {
     return Object.keys(this.props.currentPost).length === 0 && this.props.currentPost.constructor === Object;
   }
-
-  // removeCurrentPost() {
-  //   console.log('REMOVING CURRENT POST');
-  //   this.setState({currentPost: {}}, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost));
-  // }
 
   renderPosts() {
     if (!this.state.isLoaded) {
@@ -89,9 +83,9 @@ export default class Account extends Component {
             <p>{this.props.currentPost.caption}</p>
           </div>
           <div className="col-md-4 col-sm-4 col-xs-4">
-            <p>bunch of retail links/img</p>
-            <p>bunch of retail links/img</p>
-            <p>bunch of retail links/img</p>
+            <RetailForm 
+              retailLinks={this.state.retailLinks}
+            />
           </div>
         </div>
       )
@@ -103,9 +97,9 @@ export default class Account extends Component {
             <p>{this.props.currentPost.caption}</p>
           </div>
           <div className="col-md-4 col-sm-4 col-xs-4">
-            <p>bunch of retail links/img</p>
-            <p>bunch of retail links/img</p>
-            <p>bunch of retail links/img</p>
+            <RetailForm 
+              retailLinks={this.state.retailLinks}
+            />
           </div>
         </div>
       )
