@@ -1,19 +1,22 @@
-const Influencer = require('./Influencer.js');
+const Influencer = require('./Influencer');
 const bodyParser = require('body-parser');
-const app = require('../server.js');
 
-// Controller methods
+// Controller methods for DB
 
 exports.createOne = (req, res) => {
-  console.log('what is body?', req.body);
+  console.log('CHECKING POST ADDING INFLUENCER');
+  console.log('what is in req body?', req.body);
+  let mediaData = JSON.parse(req.body.data);
   let newInfluencer = new Influencer({
     id: req.body.id,
     username: req.body.username,
     full_name: req.body.full_name,
     bio: req.body.bio,
     website: req.body.website,
-    data: req.body.data
+    is_business: req.body.is_business,
+    data: mediaData.map((obj) => obj)
   });
+
   newInfluencer.save((err, data) => {
     console.log('ON CREATEONE, ADDING:', data);
     if (err) {
@@ -24,6 +27,7 @@ exports.createOne = (req, res) => {
 };
 
 exports.retrieve = (req, res) => {
+  console.log('CHECKING GET INFLUENCER');
   Influencer.find((err, data) => {
     if (err) {
       throw err;
@@ -33,7 +37,9 @@ exports.retrieve = (req, res) => {
 };
 
 exports.retrieveOne = (req, res) => {
-  Influencer.find({username: req.body.username}, (err, data) => {
+  console.log('CHECKING GET ONE INFLUENCER:', req.params.username);
+  let query = { username: req.params.username };
+  Influencer.find(query, (err, data) => {
     if (err) {
       throw err;
     }
@@ -42,19 +48,20 @@ exports.retrieveOne = (req, res) => {
 };
 
 exports.updateOne = (req, res) => {
-  let query = { username: req.body.username };
-
-  Influencer.find(query, (err, data) => {
+  console.log('CHECKING PUT, UPDATE ONE INFLUENCER:', req.params.username);
+  let query = { username: req.params.username };
+  Influencer.update(query, {$set: req.body}, {upsert: true}, (err, data) => {
     if (err) {
       throw err;
     }
-    Influencer.update(query, { data: req.body.data }, {upsert: true});
+    console.log('Update result in controller:', data);
     console.log('Influencer is updated:', query.username);
-    res.send(data);
+    res.send(query.username + ' is updated!');
   });
 };
 
 exports.delete = (req, res) => {
+  console.log('CHECKING DELETE INFLUENCER COLLECTION');
   Influencer.remove({}, (err, data) => {
     if (err) {
       throw err;
@@ -64,10 +71,12 @@ exports.delete = (req, res) => {
 };
 
 exports.deleteOne = (req, res) => {
-  Influencer.remove(req.body.data.number, (err, data) => {
+  console.log('CHECKING DELETE ONE INFLUENCER:', req.params.username);
+  let query = { username: req.params.username };
+  Influencer.remove(query, (err, data) => {
     if (err) {
       throw err;
     }
-    res.send('Deleted Influencer!');
+    res.send('Deleted ' + query.username + '!');
   })
 };

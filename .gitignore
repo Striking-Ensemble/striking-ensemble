@@ -1,5 +1,8 @@
 # Attempted complete list of files to git ignore
 
+# Variables
+.env
+
 # Logs
 logs
 *.log
@@ -9,5 +12,5 @@ npm-debug.log*
 node_modules
 
 # Webpack Output
-src/client/public/bundle.js
-src/client/public/bundle.js.map
+public/bundle.js
+public/bundle.js.map

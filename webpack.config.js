@@ -7,9 +7,12 @@ module.exports = {
 		'./src/client/index.js'
 	],
 	output: {
-		path: __dirname + '/src/client/public',
-		publicPath: '/src/client/public/',
+		path: __dirname + '/public',
+		publicPath: '/public/',
 		filename: 'bundle.js'
+	},
+	resolve: {
+		extensions: ['.js', '.jsx'] // auto resolve file extensions when importing
 	},
 	module: {
 		loaders: [
@@ -23,7 +26,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				use: [ 'style-loader', 'css-loader' ] 
+				use: ['style-loader', 'css-loader'] 
 			}
 		]
 	},

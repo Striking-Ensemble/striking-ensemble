@@ -4,9 +4,11 @@
   "description": "striking ensemble repository",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jasmine",
     "build": "node_modules/.bin/webpack -w",
-    "start": "node ./src/server/index.js"
+    "start": "nodemon ./src/server/index.js",
+    "db": "sudo mongod",
+    "dev": "npm run db & npm run build & npm run start"
   },
   "repository": {
     "type": "git",
@@ -25,21 +27,34 @@
   },
   "homepage": "https://github.com/Striking-Ensemble/striking-ensemble#readme",
   "dependencies": {
+    "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.7",
+    "dotenv-safe": "^4.0.4",
     "express": "^4.16.2",
+    "express-session": "^1.15.6",
     "mongoose": "^4.13.1",
+    "morgan": "^1.9.0",
+    "passport": "^0.4.0",
+    "passport-instagram": "^1.0.0",
     "path": "^0.12.7",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-router-dom": "^4.2.2",
+    "request": "^2.83.0",
+    "store": "^2.0.12",
     "style-loader": "^0.19.0",
     "webpack": "^3.8.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0"
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "jasmine": "^2.8.0",
+    "nodemon": "^1.12.2"
   }
 }
