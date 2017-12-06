@@ -21,6 +21,7 @@ export default class Navigation extends Component {
     // should change currentPost state to empty
     e.preventDefault();
     console.log('LET ME SEE fn', this.props);
+    this.props.removeCurrentPost();
   }
 
   render() {
