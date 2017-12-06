@@ -14,6 +14,7 @@ export default class PostListItem extends Component {
     console.log('CLICKED!');
     console.log('what event?', this.props);
     this.props.changeCurrentPost(this.props);
+    this.props.history.push('/');
   }
 
   render () {

@@ -29,15 +29,10 @@ export default class App extends Component  {
       user: {},
       login: false
     }
+    this.removeUser = this.removeUser.bind(this);
   }
 
   componentWillMount() {
-    // check if state on user is empty
-    // if (Object.keys(this.state.user).length === 0 && this.state.user.constructor === Object) {
-    //   store.remove('isAuthenticated');
-    //   store.remove('user');
-    // }
-
     axios.get(store.get('URL').root_url + '/account')
       .then(
       res => {
@@ -52,9 +47,9 @@ export default class App extends Component  {
             user: res.data,
             login: false
           });
-          // const { history } = this.props;
+          const { history } = this.props;
           // store.set('user', { username: res.data.username });
-          // history.push('/');
+          history.push('/');
         }
       })
       .catch(err => {
@@ -65,8 +60,12 @@ export default class App extends Component  {
       });
   }
 
+  removeUser() {
+    this.setState({ user: {}, login: true }, () => console.log('back in app', this.state.login));
+  }
+
   render() {
-    console.log('what\'s current load state', this.state.isLoaded);
+    console.log('what\'s current user state', this.state.user);
     if (this.state.login) {
       console.log('NO USER DETECTED... REDIRECTING TO /login');
       return <Redirect to='/login' />
@@ -77,9 +76,9 @@ export default class App extends Component  {
     } else {
       return (
         <div id="page-outer">
-          <Navigation />
+          <Navigation user={this.state.user} removeUser={this.removeUser} {...this.props} />
           <div className="page-container">
-            <Account user={this.state.user} {...this.props}/>
+            <Account user={this.state.user} {...this.props} />
           </div>
           <Footer />
         </div>
