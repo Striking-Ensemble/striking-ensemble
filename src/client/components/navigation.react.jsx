@@ -10,7 +10,6 @@ export default class Navigation extends Component {
       .then(
         res => {
           this.props.removeUser();
-          this.props.history.push('/login');
         }
       )
       .catch( err => {
@@ -18,16 +17,17 @@ export default class Navigation extends Component {
       });
   }
 
-  handleHome() {
+  handleHome(e) {
     // should change currentPost state to empty
-
+    e.preventDefault();
+    console.log('LET ME SEE fn', this.props);
   }
 
   render() {
     return (
       <div className="navigation">
         <h1>NAVIGATION SAMPLE</h1>
-        <Link to="/">Home</Link>
+        <Link to="/" onClick={this.handleHome.bind(this)}>Home</Link>
         <br />
         <Link to="/login" onClick={this.handleRedirect.bind(this)}>Logout</Link>
       </div>

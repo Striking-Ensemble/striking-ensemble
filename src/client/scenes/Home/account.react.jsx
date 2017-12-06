@@ -16,9 +16,11 @@ export default class Account extends Component {
       retailLinks:[]
     }
     this.changeCurrentPost = this.changeCurrentPost.bind(this);
+    this.removeCurrentPost = this.removeCurrentPost.bind(this);
+    this.props.location.state = { removeCurrentPost: this.removeCurrentPost };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     axios.get(store.get('URL').root_url + '/account/media')
       .then(
       res => {
@@ -49,6 +51,11 @@ export default class Account extends Component {
     currentPost.video_norm = post.video_norm ? post.video_norm : null
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
+  }
+
+  removeCurrentPost() {
+    console.log('REMOVING CURRENT POST');
+    this.setState({currentPost: {}}, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost));
   }
 
   renderPosts() {

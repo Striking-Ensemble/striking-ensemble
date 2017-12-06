@@ -27,12 +27,14 @@ export default class App extends Component  {
       error: null,
       isLoaded: false,
       user: {},
-      login: false
+      login: false,
+      currentPost: {}
     }
+
     this.removeUser = this.removeUser.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     axios.get(store.get('URL').root_url + '/account')
       .then(
       res => {
@@ -60,25 +62,25 @@ export default class App extends Component  {
       });
   }
 
+  componentWillUnmount() {
+  }
+
   removeUser() {
     this.setState({ user: {}, login: true }, () => console.log('back in app', this.state.login));
+    this.props.history.push('/login');
   }
 
   render() {
     console.log('what\'s current user state', this.state.user);
     if (this.state.login) {
       console.log('NO USER DETECTED... REDIRECTING TO /login');
-      return <Redirect to='/login' />
-    } 
-    // console.log('SHOULD BE LOGGED, PROPS?', this.props); this.props here are routing properties
-    if (!this.state.isLoaded) {
-      return <LoadingSpinner />
+      return (<Redirect to='/login' />)
     } else {
       return (
         <div id="page-outer">
           <Navigation user={this.state.user} removeUser={this.removeUser} {...this.props} />
           <div className="page-container">
-            <Account user={this.state.user} {...this.props} />
+            { !this.state.isLoaded ? (<LoadingSpinner />) : (<Account user={this.state.user} {...this.props} />) }
           </div>
           <Footer />
         </div>
