@@ -2,7 +2,7 @@
 
 A platform for Influencers with less hassle. Check us out at [strikingensemble.com](http://www.strikingensemble.com).
 
-# Getting Started
+## Getting Started
 
 Fork this repository and clone from your own fork. Then, the following steps will allow you to set up your dev environment.
 
@@ -31,7 +31,7 @@ Fork this repository and clone from your own fork. Then, the following steps wil
 ```
 6. Check the app at http://localhost:3000
 
-# Adding to Repo
+## Adding to Repo
 
 * Push your code to dev branch and make a pull request to master. Then, a review will be made before successful merging.
 * Create an upstream for the master branch to stay up-to-date with changes on the codebase.
