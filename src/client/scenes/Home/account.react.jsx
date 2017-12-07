@@ -13,8 +13,10 @@ export default class Account extends Component {
     this.state = {
       isLoaded: false,
       data: [],
-      retailLinks:[]
+      retailLinks: []
     }
+
+    this.removeRetailLink = this.removeRetailLink.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +36,13 @@ export default class Account extends Component {
 
   currentPostIsEmpty() {
     return Object.keys(this.props.currentPost).length === 0 && this.props.currentPost.constructor === Object;
+  }
+
+  removeRetailLink(index) {
+    console.log('REMOVING INPUT BOX', index);
+    let retailArr = this.state.retailLinks.slice();
+    retailArr.splice(index, 1);
+    this.setState({ retailLinks: retailArr }, () => console.log('Current Retail State:', this.state.retailLinks))
   }
 
   renderPosts() {
@@ -85,6 +94,7 @@ export default class Account extends Component {
           <div className="col-md-4 col-sm-4 col-xs-4">
             <RetailForm 
               retailLinks={this.state.retailLinks}
+              removeRetailLink={this.removeRetailLink}
             />
           </div>
         </div>
@@ -99,6 +109,7 @@ export default class Account extends Component {
           <div className="col-md-4 col-sm-4 col-xs-4">
             <RetailForm 
               retailLinks={this.state.retailLinks}
+              removeRetailLink={this.removeRetailLink}
             />
           </div>
         </div>
