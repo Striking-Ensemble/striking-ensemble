@@ -16,6 +16,7 @@ export default class InputBox extends Component {
   handleChange(e) {
     this.setState({textLink: e.target.value}, () => console.log('textLink TYPING...', this.state.textLink));
     //this.props.editRetailLink(this.props.retailIndex, this.state.textLink);
+    this.props.handleLinkFields(this.state.textLink, e.target.name);
   }
 
   removeItem() {
@@ -29,7 +30,7 @@ export default class InputBox extends Component {
   render() {
     return (
       <div>
-        <input type="url" defaultValue={this.props.retailLink} onChange={this.handleChange} />
+        <input type="url" name={`link_${this.props.retailIndex}`} defaultValue={this.props.retailLink} onChange={this.handleChange} />
         <button onClick={this.removeItem} value="retail-form" type="button">-</button>
       </div>
     )
