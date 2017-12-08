@@ -5,17 +5,18 @@ import axios from 'axios';
 export default class RetailForm extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
-      inputBox: [
-        {
-          id: 1 
-        }
-      ]
-    };
+      retailLinkFields: []
+    }
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.addInputBox = this.addInputBox.bind(this);
+    this.handleLinkFields = this.handleLinkFields.bind(this);
+  }
+
+  componentDidMount() {
+    let retailCopy = this.props.retailLinks.map((item, index) => ({id: `link_${index}`, url: item}))
+    this.setState({retailLinkFields: retailCopy});
   }
 
   handleSubmit(e) {
@@ -24,27 +25,39 @@ export default class RetailForm extends Component {
     // axios.post('')
   }
 
-  addInputBox(e) {
-    e.preventDefault();
-    console.log('I need something from event to add', e.target);
-    let newItem = ['new Item'];
-    this.setState({inputBox: [...this.state.inputBox, ...newItem]});
+  handleLinkFields(textLink, nameField) {
+    this.setState({retailLinkFields: this.state.retailLinkFields.map(item => {
+      if (item.name == nameField) {
+        item.url = textLink;
+        return item;
+      } else {
+        return item;
+      }
+    })}, () => console.log('CHECKING RETAILLINKSSSS:', this.state.retailLinkFields))
   }
 
   render() {
+    console.log('CONTENTS OF RETAIL LINKS AFTER UPDATE:', this.props.retailLinks);
     return (
-      <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
-        <legend>Add your retail links</legend>
-        <input type="submit" value="Save" /><input type="reset" value="Cancel" />
-        <br />
-        {this.state.inputBox.map((item, index) => (
-          <InputBox
-            key={item.id + 1}
-            retailLinks={this.props.retailLinks}
-            addInputBox={this.addInputBox}
-          />
-        ))}
-      </form>
+      <div>
+        <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
+          <legend>Add your retail links</legend>
+          <input type="submit" value="Save" /><input type="reset" value="Cancel" />
+          <br />
+          {this.props.retailLinks.map((item, index) => (
+            <InputBox 
+              key={item.id}
+              retailIndex={index}
+              retailLink={item.url}
+              editRetailLink={this.props.editRetailLink}
+              removeRetailLink={this.props.removeRetailLink}
+              handleLinkFields={this.handleLinkFields}
+            />
+          ))}
+          <br />
+          <button onClick={this.props.addInputBox} value="retail-form" type="button">Add More Link Boxes</button>
+        </form>
+      </div>
     )
   }
 };

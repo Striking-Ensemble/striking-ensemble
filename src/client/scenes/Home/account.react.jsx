@@ -13,8 +13,12 @@ export default class Account extends Component {
     this.state = {
       isLoaded: false,
       data: [],
-      retailLinks:[]
+      retailLinks: [] // must accept array of obj with id and url as properties
     }
+
+    this.removeRetailLink = this.removeRetailLink.bind(this);
+    this.editRetailLink = this.editRetailLink.bind(this);
+    this.addInputBox = this.addInputBox.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +38,23 @@ export default class Account extends Component {
 
   currentPostIsEmpty() {
     return Object.keys(this.props.currentPost).length === 0 && this.props.currentPost.constructor === Object;
+  }
+
+  editRetailLink(index, link) {
+    let retailArr = this.state.retailLinks.slice();
+    retailArr[index].url = link;
+    this.setState({ retailLinks: retailArr }, () => console.log('Retail so far...', this.state.retailLinks));
+  }
+
+  removeRetailLink(index) {
+    console.log('REMOVING @ index', index);
+    let retailArr = this.state.retailLinks.slice();
+    retailArr.splice(index, 1);
+    this.setState({ retailLinks: retailArr }, () => console.log('Current Retail State:', this.state.retailLinks))
+  }
+
+  addInputBox() {
+    this.setState({ retailLinks: [...this.state.retailLinks, ''] }, () => console.log('ADDING NEW BOX', this.state.retailLinks));
   }
 
   renderPosts() {
@@ -85,6 +106,9 @@ export default class Account extends Component {
           <div className="col-md-4 col-sm-4 col-xs-4">
             <RetailForm 
               retailLinks={this.state.retailLinks}
+              editRetailLink={this.editRetailLink}
+              removeRetailLink={this.removeRetailLink}
+              addInputBox={this.addInputBox}
             />
           </div>
         </div>
@@ -99,6 +123,9 @@ export default class Account extends Component {
           <div className="col-md-4 col-sm-4 col-xs-4">
             <RetailForm 
               retailLinks={this.state.retailLinks}
+              editRetailLink={this.editRetailLink}
+              removeRetailLink={this.removeRetailLink}
+              addInputBox={this.addInputBox}
             />
           </div>
         </div>
