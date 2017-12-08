@@ -16,23 +16,26 @@ export default class RetailForm extends Component {
   }
 
   render() {
+    console.log('CONTENTS OF RETAIL LINKS AFTER UPDATE:', this.props.retailLinks);
     return (
-      <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
-        <legend>Add your retail links</legend>
-        <input type="submit" value="Save" /><input type="reset" value="Cancel" />
-        <br />
-        {this.props.retailLinks.map((item, index) => (
-          <InputBox 
-            key={index}
-            retailIndex={index}
-            retailLink={item}
-            editRetailLink={this.props.editRetailLink}
-            removeRetailLink={this.props.removeRetailLink}
-          />
-        ))}
-        <br />
-        <button onClick={this.props.addInputBox} value="retail-form" type="button">Add More Link Boxes</button>
-      </form>
+      <div>
+        <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
+          <legend>Add your retail links</legend>
+          <input type="submit" value="Save" /><input type="reset" value="Cancel" />
+          <br />
+          {this.props.retailLinks.map((item, index) => (
+            <InputBox 
+              key={item.id}
+              retailIndex={index}
+              retailLink={item.url}
+              editRetailLink={this.props.editRetailLink}
+              removeRetailLink={this.props.removeRetailLink}
+            />
+          ))}
+          <br />
+          <button onClick={this.props.addInputBox} value="retail-form" type="button">Add More Link Boxes</button>
+        </form>
+      </div>
     )
   }
 };

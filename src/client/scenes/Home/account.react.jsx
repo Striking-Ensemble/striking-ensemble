@@ -13,7 +13,7 @@ export default class Account extends Component {
     this.state = {
       isLoaded: false,
       data: [],
-      retailLinks: []
+      retailLinks: [] // must accept array of obj with id and url as properties
     }
 
     this.removeRetailLink = this.removeRetailLink.bind(this);
@@ -42,11 +42,12 @@ export default class Account extends Component {
 
   editRetailLink(index, link) {
     let retailArr = this.state.retailLinks.slice();
-    retailArr[index] = link;
+    retailArr[index].url = link;
     this.setState({ retailLinks: retailArr }, () => console.log('Retail so far...', this.state.retailLinks));
   }
 
   removeRetailLink(index) {
+    console.log('REMOVING @ index', index);
     let retailArr = this.state.retailLinks.slice();
     retailArr.splice(index, 1);
     this.setState({ retailLinks: retailArr }, () => console.log('Current Retail State:', this.state.retailLinks))
