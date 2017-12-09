@@ -28,7 +28,7 @@ export default class Navigation extends Component {
     return (
       <nav className="navbar navbar-default">
         <div className="navbar-header">
-          <Link className="navbar-brand" to="/">Striking Ensemble</Link>
+          <Link className="navbar-brand" to="/" onClick={this.handleHome.bind(this)}>Striking Ensemble</Link>
         </div>
         <ul className="nav navbar-nav">
           <li>
