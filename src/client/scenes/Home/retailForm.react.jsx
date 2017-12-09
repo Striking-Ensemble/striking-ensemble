@@ -46,7 +46,7 @@ export default class RetailForm extends Component {
           <br />
           {this.props.retailLinks.map((item, index) => (
             <InputBox 
-              key={item.id}
+              key={item.id ? item.id : index}
               retailIndex={index}
               retailLink={item.url}
               editRetailLink={this.props.editRetailLink}
