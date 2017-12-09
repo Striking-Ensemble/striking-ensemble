@@ -25,6 +25,7 @@ export default class Account extends Component {
     axios.get(store.get('URL').root_url + '/account/media')
       .then(
       res => {
+        console.log('I NEED TO FIND res.data', res.data);
         const newArr = res.data.data.map(post => post);
         this.setState({
           isLoaded: true, 
