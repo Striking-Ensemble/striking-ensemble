@@ -46,6 +46,13 @@ iframe [seamless] {
   top: 45%;
 }
 
+/* NAV */
+.navbar .nav.pull-right {
+  float: right;
+  margin-top: 0.5%;
+  margin-right: 1.5%;
+}
+
 /* Spinner */
 @keyframes lds-eclipse {
   0% {
