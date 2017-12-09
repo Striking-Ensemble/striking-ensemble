@@ -7,55 +7,58 @@ import Account from '../scenes/Home/account.react';
 import Footer from './footer.react';
 import LoadingSpinner from './loadingSpinner.react';
 import isAuthenticated from '../services/isAuthenticated';
+import checkCredentials from '../services/checkCredentials';
 
-export default class App extends Component  {
+class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       error: null,
       isLoaded: false,
-      user: {},
-      login: false,
       currentPost: {}
     }
 
     this.removeUser = this.removeUser.bind(this);
     this.addCurrentPost = this.addCurrentPost.bind(this);
     this.removeCurrentPost = this.removeCurrentPost.bind(this);
+    this.currentUserIsEmpty = this.currentUserIsEmpty.bind(this);
+    this.checkAuthentication = this.checkAuthentication.bind(this);
   }
 
-  componentDidMount() {
-    axios.get(store.get('URL').root_url + '/account')
-      .then(
-      res => {
-        // If res URL is a redirect to /login, set login to true
-        // this will render Signin scene
-        if (res.request.responseURL === store.get('URL').root_url + '/login') {
-          this.setState({ login: true });
-        }
-        if (res.data.username) {
-          this.setState({
-            isLoaded: true,
-            user: res.data,
-            login: false
-          });
-          const { history } = this.props;
-          // store.set('user', { username: res.data.username });
-          history.push('/');
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        store.each((value, key) => {
-          console.log('WHATs IN STORE:', key, '==', value);
-        })
-      });
+  componentWillMount() {
+    console.log('REVAMP!!', this.props);
+    this.checkAuthentication(this.props);
+    this.setState({ isLoaded: true });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('WILL RECEIVE:', nextProps);
+    console.log('im supposed to compare: this.props,', this.props.location);
+    if (nextProps.location !== this.props.location) {
+      this.checkAuthentication(nextProps);
+    }
+  }
+
+  checkAuthentication(params) {
+    const { history } = params;
+    return checkCredentials(params);
+      // .catch(e => history.replace({ pathname: '/login' }));
+  }
+
+  componentWillUnmount() {
+
   }
 
   removeUser() {
-    this.setState({ user: {}, login: true }, () => console.log('back in app', this.state.login));
+    // this.setState({ user: {}, loggedIn: false }, () => console.log('back in app, loggedIn:', this.state.loggedIn));
+    store.clearAll();
     this.props.history.push('/login');
+  }
+
+  currentUserIsEmpty() {
+    let user = store.get('user') ? store.get('user').data : {};
+    return Object.keys(user).length === 0 && user.constructor === Object;
   }
 
   addCurrentPost(post) {
@@ -78,15 +81,15 @@ export default class App extends Component  {
   }
 
   render() {
-    console.log('what\'s current user state', this.state.user);
-    if (this.state.login) {
+    // console.log('what\'s current user state', store.get('user').data);
+    if (this.currentUserIsEmpty()) {
       console.log('NO USER DETECTED... REDIRECTING TO /login');
       return (<Redirect to='/login' />)
     } else {
       return (
         <div id="page-outer">
           <Navigation 
-            user={this.state.user} 
+            user={store.get('user').data} 
             removeUser={this.removeUser} 
             removeCurrentPost={this.removeCurrentPost}
             {...this.props} 
@@ -96,7 +99,7 @@ export default class App extends Component  {
               (<LoadingSpinner />) 
               : 
               (<Account 
-                user={this.state.user}
+                user={store.get('user').data}
                 currentPost={this.state.currentPost} 
                 addCurrentPost={this.addCurrentPost} 
                 removeCurrentPost={this.removeCurrentPost} 
@@ -109,4 +112,6 @@ export default class App extends Component  {
       )
     }
   }
-}
+};
+
+export default App;
