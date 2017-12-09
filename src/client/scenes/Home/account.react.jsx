@@ -13,7 +13,7 @@ export default class Account extends Component {
     this.state = {
       isLoaded: false,
       data: [],
-      retailLinks: [] // must accept array of obj with id and url as properties
+      retailLinks: [{ id: 1234, url: 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000211808' }, { id: 12356, url: 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000249599' }, { id: 1111, url: 'http://us.asos.com/pullbear/pullbear-sweater-with-shawl-neck-in-gray-marl/prd/9172440?clr=chinefon&SearchQuery=&cid=6993&gridcolumn=3&gridrow=5&gridsize=3&pge=1&pgesize=72&totalstyles=877' }, { id: 2222, url: 'fake sample' }] // must accept array of obj with id and url as properties
     }
 
     this.removeRetailLink = this.removeRetailLink.bind(this);

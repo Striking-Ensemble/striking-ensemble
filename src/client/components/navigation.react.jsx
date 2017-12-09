@@ -26,12 +26,27 @@ export default class Navigation extends Component {
 
   render() {
     return (
-      <div className="navigation">
-        <h1>NAVIGATION SAMPLE</h1>
-        <Link to="/" onClick={this.handleHome.bind(this)}>Home</Link>
-        <br />
-        <Link to="/login" onClick={this.handleRedirect.bind(this)}>Logout</Link>
-      </div>
+      <nav className="navbar navbar-default">
+        <div className="navbar-header">
+          <Link className="navbar-brand" to="/">Striking Ensemble</Link>
+        </div>
+        <ul className="nav navbar-nav">
+          <li>
+            <Link to="/" onClick={this.handleHome.bind(this)}>Home</Link>
+          </li>
+          <li>
+            <Link to="/">Billing Info</Link>
+          </li>
+          <li>
+            <Link to="/">Stats</Link>
+          </li>
+        </ul>
+        <ul className="nav navbar-nav pull-right">
+          <li>
+            <button className="btn btn-danger log" onClick={this.handleRedirect.bind(this)}>Logout</button>
+          </li>
+        </ul>
+      </nav>
     )
   }
 }

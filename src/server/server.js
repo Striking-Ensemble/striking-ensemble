@@ -1,3 +1,5 @@
+'use strict';
+
 // ===================== Module Dependencies ========================= //
 const express = require('express');
 // extracts the entire body portion of incoming req to be used as req.body

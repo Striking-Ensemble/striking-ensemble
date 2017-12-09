@@ -35,10 +35,10 @@ import PostListItem from '../scenes/Home/postListItem.react';
 const Routing = () => {
   return (
     <Switch>
-      <Route path="/login" component={Signin} />
+      <Route exact path="/login" component={Signin} />
+      <Route exact path="/account" component={App} />
       <Route exact path="/account/post/:id" component={Account} />
-      <Route path="/" component={App} />
-      <Route path="/account" component={App} />
+      <Route exact path="/" component={App} />
     </Switch>
   )
 }

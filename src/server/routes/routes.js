@@ -37,7 +37,7 @@ reqRoutes.get('/account/post/:id', reqController.getFrontEnd);
 
 reqRoutes.get('/logout', (req, res) => {
   console.log('LOGGING OUT USER');
-  req.logout();
+  req.logOut();
   res.redirect('/');
 });
 
