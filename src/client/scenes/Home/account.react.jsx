@@ -26,11 +26,13 @@ export default class Account extends Component {
       .then(
       res => {
         console.log('I NEED TO FIND res.data', res.data);
-        const newArr = res.data.data.map(post => post);
-        this.setState({
-          isLoaded: true, 
-          data: [...this.state.data, ...newArr] 
-        });
+        if (res.data.data) {
+          const newArr = res.data.data.map(post => post);
+          this.setState({
+            isLoaded: true, 
+            data: [...this.state.data, ...newArr] 
+          });
+        }
       })
       .catch(err => {
         console.log(err);
@@ -67,7 +69,7 @@ export default class Account extends Component {
           return (
             <PostListItem 
               key={post.id}
-              id={post.id}
+              instaId={post.id}
               caption={post.caption.text}
               image_thumb={post.images.thumbnail}
               video_low={post.videos.low_bandwidth}
@@ -80,7 +82,7 @@ export default class Account extends Component {
           return (
             <PostListItem
               key={post.id}
-              id={post.id}
+              instaId={post.id}
               caption={post.caption.text}
               image_low={post.images.low_resolution}
               image_norm={post.images.standard_resolution}
@@ -96,6 +98,7 @@ export default class Account extends Component {
 
   renderPostItem() {
     // previously this.props.location.state.video_low
+    console.log('seek this.props.currentPost:', this.props.currentPost);
     if (this.props.currentPost.video_low) {
       return (
         <div className="container">
@@ -106,6 +109,7 @@ export default class Account extends Component {
           </div>
           <div className="col-md-4 col-sm-4 col-xs-4">
             <RetailForm 
+              instaId={this.props.currentPost.instaId}
               retailLinks={this.state.retailLinks}
               editRetailLink={this.editRetailLink}
               removeRetailLink={this.removeRetailLink}
@@ -122,7 +126,8 @@ export default class Account extends Component {
             <p>{this.props.currentPost.caption}</p>
           </div>
           <div className="col-md-4 col-sm-4 col-xs-4">
-            <RetailForm 
+            <RetailForm
+              instaId={this.props.currentPost.instaId} 
               retailLinks={this.state.retailLinks}
               editRetailLink={this.editRetailLink}
               removeRetailLink={this.removeRetailLink}

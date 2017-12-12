@@ -64,7 +64,7 @@ class App extends Component {
   addCurrentPost(post) {
     console.log('WE ARE ADDING CURRENT POST FROM ROOT');
     let currentPost = {...this.state.currentPost};
-    currentPost.id = post.id;
+    currentPost.instaId = post.instaId;
     currentPost.caption = post.caption;
     currentPost.image_thumb = post.image_thumb;
     currentPost.image_low = post.image_low ? post.image_low : null;
