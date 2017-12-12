@@ -1,16 +1,14 @@
 // influencer schema
 
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'),
+      Schema = mongoose.Schema;
 // fix deprecation warning on utilizing save by specifiying native promises
 mongoose.Promise = global.Promise;
 const db = require('./index');
 
 
-const influencerSchema = mongoose.Schema({
-  id: {
-    type: Number,
-    unique: true
-  },
+const influencerSchema = Schema({
+  _id: String,
   username: {
     type: String,
     unique: true
@@ -25,7 +23,7 @@ const influencerSchema = mongoose.Schema({
     followed_by: Number
   },
   is_business: Boolean,
-  data: []
+  media: [{ type: Schema.Types.ObjectId, ref: 'Media'}]
 });
 
 // Register the schema with Mongoose as the Influencer collection
