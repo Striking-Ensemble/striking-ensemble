@@ -24,9 +24,9 @@ export default class PostListItem extends Component {
     return (
       <div className="col-lg-3 col-md-4 col-sm-4 col-xs-4">
         <Link to={{
-          pathname: `/account/post/${this.props.id}`,
+          pathname: `/account/post/${this.props.instaId}`,
           state: {
-            key: this.props.id,
+            key: this.props.instaId,
             caption: this.props.caption,
             image_norm: this.props.image_norm ? this.props.image_norm.url : null,
             video_low: null || this.props.video_low,
