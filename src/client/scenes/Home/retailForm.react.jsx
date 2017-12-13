@@ -21,8 +21,19 @@ export default class RetailForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    alert('Sending a POST req to server');
-    // axios.post('')
+    let elements = e.target.elements;
+    let body = [];
+    for (let i = 0; i < elements.length - 1; i++) {
+      let item = elements[i];
+      if (item.type == 'url') {
+        body.push({index: item.name, url: item.value});
+      }
+    }
+    console.log('json would be body:', body);
+
+    axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
   }
 
   handleLinkFields(textLink, nameField) {
@@ -37,7 +48,7 @@ export default class RetailForm extends Component {
   }
 
   render() {
-    console.log('CONTENTS OF RETAIL LINKS AFTER UPDATE:', this.props.retailLinks);
+    console.log('CONTENTS OF RETAIL LINKS PROPS', this.props);
     return (
       <div>
         <form id="retail-form" method="post" onSubmit={this.handleSubmit}>

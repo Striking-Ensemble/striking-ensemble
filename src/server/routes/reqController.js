@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const request = require('request');
 const passport = require('passport');
-
+const mediaController = require('../db/mediaController');
 // Controller methods for TwoTap
 const twoTapApiURL = 'https://checkout.twotap.com/prepare_checkout';
 const instaApiURL = 'https://api.instagram.com/v1/users/self/media/recent';
@@ -47,9 +47,24 @@ exports.getMedia = (req, res) => {
   });
 }
 
+// submit media to specified influencer in db
+exports.submitMedia = (req, res) => {
+  mediaController.saveMedia(req, res);
+};
+
 // Let the front-end handle the rendering
 exports.getFrontEnd = (req, res) => {
   console.log('NEW TRIGGER');
   res.app.use(express.static(path.join(__dirname, '../../../public')));
   res.end();
+};
+
+exports.submitLinks = (req, res) => {
+  console.log('can i hazz user?', req.user);
+  // find db user
+    // find individual post through req.params given
+    console.log('I SAID PARAMS', req.params);
+      // save links inside that post
+      console.log('receiving POST of LINKS', req.body);
+      res.json('LIST SAVED!');
 };

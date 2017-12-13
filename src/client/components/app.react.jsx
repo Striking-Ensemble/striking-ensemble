@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'; 
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import store from 'store';
@@ -35,9 +35,9 @@ class App extends Component {
   componentWillReceiveProps(nextProps) {
     console.log('WILL RECEIVE:', nextProps);
     console.log('im supposed to compare: this.props,', this.props.location);
-    if (nextProps.location !== this.props.location) {
-      this.checkAuthentication(nextProps);
-    }
+    // if (nextProps.location !== this.props.location) {
+    //  this.checkAuthentication(nextProps);
+    // }
   }
 
   checkAuthentication(params) {
@@ -64,7 +64,7 @@ class App extends Component {
   addCurrentPost(post) {
     console.log('WE ARE ADDING CURRENT POST FROM ROOT');
     let currentPost = {...this.state.currentPost};
-    currentPost.id = post.id;
+    currentPost.instaId = post.instaId;
     currentPost.caption = post.caption;
     currentPost.image_thumb = post.image_thumb;
     currentPost.image_low = post.image_low ? post.image_low : null;
@@ -82,9 +82,14 @@ class App extends Component {
 
   render() {
     // console.log('what\'s current user state', store.get('user').data);
-    if (this.currentUserIsEmpty()) {
-      console.log('NO USER DETECTED... REDIRECTING TO /login');
-      return (<Redirect to='/login' />)
+    if (!isAuthenticated()) {
+      console.log('NO USER Authenticated... REDIRECTING TO /login');
+      return (
+        <Redirect to={{
+          pathname: '/login',
+          state: { from: this.props.location } 
+        }}/>
+      )
     } else {
       return (
         <div id="page-outer">

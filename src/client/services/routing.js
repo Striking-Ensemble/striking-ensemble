@@ -7,6 +7,7 @@ import PostItem from '../scenes/Home/postItem.react';
 import Navigation from '../components/navigation.react';
 import Footer from '../components/footer.react';
 import PostListItem from '../scenes/Home/postListItem.react';
+import NotFound from '../components/notFound.react';
 
 // const routes = [
 //   { path:'/login',
@@ -38,6 +39,7 @@ const Routing = () => {
       <Route exact path="/login" component={Signin} />
       <Route exact path="/account" component={App} />
       <Route exact path="/account/post/:id" component={Account} />
+      <Route exact path="/404" component={NotFound} />
       <Route exact path="/" component={App} />
     </Switch>
   )
