@@ -1,7 +1,6 @@
 const Influencer = require('./Influencer');
 const Media = require('./media');
 const bodyParser = require('body-parser');
-
 // media methods to db
 
 exports.saveMedia = (req, res) => {
@@ -45,4 +44,19 @@ exports.saveMedia = (req, res) => {
   });
 };
 
+exports.updateMedia = (req, res) => {
+  console.log('UPDATING MEDIA CONTENTS');
+  let query = { _id: req.user.id };
+  Influencer.find(query, (err, data) => {
+    if (err) {
+      throw err;
+    }
+    // should populate the influencer media with its media
+    Media.populate(data, {path: 'media'}, (err, influencer) => {
+      influencer.forEach(user => console.log('inside each looping for update', user));
+    })
+    // update by existence of _id
+    // do i even need to populate? or just handle everything with _creator media matches
+  })
+}
 
