@@ -50,7 +50,7 @@ reqRoutes.get('/auth/instagram', passport.authenticate('instagram'),
 reqRoutes.get('/auth/instagram/callback', 
   passport.authenticate('instagram', { failureRedirect: '/login' }), 
   (req, res) => {
-    req.app.settings.insta_accessToken = req.authInfo;
+    req.app.settings.authInfo = req.authInfo;
     res.redirect('/');
   }
 );
