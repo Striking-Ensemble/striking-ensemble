@@ -8,7 +8,7 @@ const db = require('./index');
 
 
 const influencerSchema = Schema({
-  _id: String,
+  _id: Number,
   username: {
     type: String,
     unique: true

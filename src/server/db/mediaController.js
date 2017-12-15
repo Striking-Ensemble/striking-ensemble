@@ -4,11 +4,12 @@ const bodyParser = require('body-parser');
 // media methods to db
 
 exports.saveMedia = (req, res) => {
-  console.log('SAVE A BUNCH OF MEDIA TO INFLUENCER');
-  let mediaData = req.body.data.map(obj => {
+  console.log('SAVE A BUNCH OF MEDIA FOR NEW INFLUENCER', req.user);
+  let mediaArray = req.body.data.map(obj => {
     if (obj.type == 'video') {
       return {
-        instaId: obj.id,
+        _id: obj.id,
+        _creator: req.user.id, 
         caption: obj.caption,
         created_time: obj.created_time,
         images: obj.images,
@@ -19,7 +20,8 @@ exports.saveMedia = (req, res) => {
       }
     } else {
       return {
-        instaId: obj.id,
+        _id: obj.id,
+        _creator: req.user.id,
         caption: obj.caption,
         created_time: obj.created_time,
         images: obj.images,
@@ -29,34 +31,56 @@ exports.saveMedia = (req, res) => {
       }
     }
   });
-  console.log('I NEED TO CHECK', mediaData);
-  let newMedia = new Media({
-    _creator: req.user.id,
-    data: mediaData
-  });
-
-  newMedia.save((err, data) => {
-    // console.log('ON SAVEMEDIA', data);
-    if (err) {
-      throw err;
-    }
-    res.send('MEDIA SAVED');
-  });
+  
+  let promise = Media.create(mediaArray);
+  promise
+    .then(response => {
+      let user = { _id: req.user._id }
+      Influencer
+        .findById(user)
+        .populate({ path: 'media', model: 'Media' })
+        .exec((err, user) => {
+          if (err) {
+            throw err;
+          }
+          console.log('POPULATED Influencer:', user);
+        })
+      })
+      .catch(err => console.log('ERROR IN SAVING MEDIA!', err));
 };
 
 exports.updateMedia = (req, res) => {
-  console.log('UPDATING MEDIA CONTENTS');
-  let query = { _id: req.user.id };
-  Influencer.find(query, (err, data) => {
-    if (err) {
-      throw err;
-    }
-    // should populate the influencer media with its media
-    Media.populate(data, {path: 'media'}, (err, influencer) => {
-      influencer.forEach(user => console.log('inside each looping for update', user));
-    })
-    // update by existence of _id
-    // do i even need to populate? or just handle everything with _creator media matches
-  })
-}
+  console.log('UPDATING from MEDIA Controller', req.user);
+  req.body.data.forEach(obj => {
+    let query = { _id: obj.id, _creator: req.user._id };
+    let post = {
+      _id: obj.id,
+      caption: obj.caption,
+      created_time: obj.created_time,
+      images: obj.images,
+      link: obj.link,
+      tags: obj.tags,
+      post_type: obj.type
+    };
 
+    if (obj.type == 'video') {
+      post.videos = obj.videos;
+    }  
+    Media
+      .update(query, post, { upsert: true, overwrite: true })
+      .then(response => {
+        let user = { _id: req.user._id }
+        Influencer
+          .findById(user)
+          .populate({ path: 'media', model: 'Media' })
+          .exec((err, user) => {
+            if (err) {
+              throw err;
+            }
+            console.log('POPULATED Influencer:', user);
+          });
+        console.log('updated!', response);
+      })
+      .catch(err => console.log('ERROR IN UPDATING POST!', err));
+  });
+};
