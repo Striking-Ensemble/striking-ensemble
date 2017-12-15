@@ -5,7 +5,9 @@ const bodyParser = require('body-parser');
 
 exports.saveMedia = (req, res) => {
   console.log('SAVE A BUNCH OF MEDIA FOR NEW INFLUENCER', req.user);
+  let postsArr = [];
   let mediaArray = req.body.data.map(obj => {
+    postsArr.push(obj.id);
     if (obj.type == 'video') {
       return {
         _id: obj.id,
@@ -31,19 +33,16 @@ exports.saveMedia = (req, res) => {
       }
     }
   });
-  
   let promise = Media.create(mediaArray);
   promise
     .then(response => {
       let user = { _id: req.user._id }
       Influencer
-        .findById(user)
-        .populate({ path: 'media', model: 'Media' })
-        .exec((err, user) => {
+        .update(user, {media: postsArr}, (err, response) => {
           if (err) {
-            throw err;
+            console.log('ERROR DURING SAVE MEDIA IN Controller:', err)
           }
-          console.log('POPULATED Influencer:', user);
+          console.log('IN MEDIA SAVE:', response);
         })
       })
       .catch(err => console.log('ERROR IN SAVING MEDIA!', err));
@@ -51,10 +50,11 @@ exports.saveMedia = (req, res) => {
 
 exports.updateMedia = (req, res) => {
   console.log('UPDATING from MEDIA Controller', req.user);
+
   req.body.data.forEach(obj => {
     let query = { _id: obj.id, _creator: req.user._id };
     let post = {
-      _id: obj.id,
+      _creator: req.user._id,
       caption: obj.caption,
       created_time: obj.created_time,
       images: obj.images,
@@ -71,14 +71,18 @@ exports.updateMedia = (req, res) => {
       .then(response => {
         let user = { _id: req.user._id }
         Influencer
-          .findById(user)
-          .populate({ path: 'media', model: 'Media' })
-          .exec((err, user) => {
+          .findOneAndUpdate(user, (err, response) => {
             if (err) {
-              throw err;
+              console.log('ERROR IN MEDIA UPDATE CONTROLLER:', err);
             }
-            console.log('POPULATED Influencer:', user);
-          });
+            response.media.addToSet(obj.id);
+            response
+              .save()
+              .then(influencer => {
+                console.log('UPDATED INFLUENCER:', influencer.media)
+              })
+              .catch(err => console.log(err))
+          })
         console.log('updated!', response);
       })
       .catch(err => console.log('ERROR IN UPDATING POST!', err));

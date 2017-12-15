@@ -1,17 +1,14 @@
 // instagram posts schema
 
-const mongoose = require('mongoose'),
-      Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 // fix deprecation warning on utilizing save by specifiying native promises
 mongoose.Promise = global.Promise;
 const db = require('./index');
 
 const mediaSchema = Schema({
   _id: String,
-  _creator: {
-    type: Number,
-    ref: 'Influencer'
-  },
+  _creator: Number,
   caption: { type: [{
     id: String,
     text: String,
