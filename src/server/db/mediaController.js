@@ -33,9 +33,10 @@ exports.saveMedia = (req, res) => {
       }
     }
   });
-  let promise = Media.create(mediaArray);
+  let promise = Media.insertMany(mediaArray);
   promise
     .then(response => {
+      console.log('insertMany RESULT:', response)
       let user = { _id: req.user._id }
       Influencer
         .update(user, {media: postsArr}, (err, response) => {
@@ -67,7 +68,7 @@ exports.updateMedia = (req, res) => {
       post.videos = obj.videos;
     }  
     Media
-      .update(query, post, { upsert: true, overwrite: true })
+      .update(query, { $set: post }, { upsert: true, new: true })
       .then(response => {
         let user = { _id: req.user._id }
         Influencer
