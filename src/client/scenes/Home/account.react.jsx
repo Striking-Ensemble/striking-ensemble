@@ -49,10 +49,8 @@ export default class Account extends Component {
     return Object.keys(this.props.currentPost).length === 0 && this.props.currentPost.constructor === Object;
   }
 
-  editRetailLink(index, link) {
-    let retailArr = this.state.retailLinks.slice();
-    retailArr[index].url = link;
-    this.setState({ retailLinks: retailArr }, () => console.log('Retail so far...', this.state.retailLinks));
+  editRetailLink(links) {
+    this.setState({ retailLinks: links }, () => console.log('Retail so far...', this.state.retailLinks));
   }
 
   removeRetailLink(index) {
