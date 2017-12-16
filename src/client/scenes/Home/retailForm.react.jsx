@@ -55,15 +55,16 @@ export default class RetailForm extends Component {
           <legend>Add your retail links</legend>
           <input type="submit" value="Save" /><input type="reset" value="Cancel" />
           <br />
-          {this.props.retailLinks.map((item, index) => (
-            <InputBox 
-              key={item.id}
-              retailIndex={index}
-              retailLink={item.url}
-              editRetailLink={this.props.editRetailLink}
-              removeRetailLink={this.props.removeRetailLink}
-              handleLinkFields={this.handleLinkFields}
-            />
+          {
+            this.props.retailLinks.map((item, index) => (
+              <InputBox 
+                key={`link_${index}`}
+                retailIndex={index}
+                retailLink={item.url}
+                editRetailLink={this.props.editRetailLink}
+                removeRetailLink={this.props.removeRetailLink}
+                handleLinkFields={this.handleLinkFields}
+              />
           ))}
           <br />
           <button onClick={this.props.addInputBox} value="retail-form" type="button">Add More Link Boxes</button>

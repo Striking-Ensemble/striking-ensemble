@@ -49,7 +49,7 @@ class App extends Component {
   componentWillUnmount() {
 
   }
-
+  // for logout nav use
   removeUser() {
     // this.setState({ user: {}, loggedIn: false }, () => console.log('back in app, loggedIn:', this.state.loggedIn));
     store.clearAll();
@@ -74,7 +74,7 @@ class App extends Component {
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
   }
-
+  // for navigation use
   removeCurrentPost() {
     console.log('REMOVING CURRENT POST FROM ROOT');
     this.setState({currentPost: {}}, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost))
