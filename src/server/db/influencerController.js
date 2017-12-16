@@ -50,6 +50,7 @@ exports.retrieveOne = (req, res) => {
 exports.updateOne = (req, res) => {
   console.log('CHECKING PUT, UPDATE ONE INFLUENCER:', req.params.username);
   let query = { username: req.params.username };
+  // upsert creates new object if it doesnt exist
   Influencer.update(query, {$set: req.body}, {upsert: true}, (err, data) => {
     if (err) {
       throw err;

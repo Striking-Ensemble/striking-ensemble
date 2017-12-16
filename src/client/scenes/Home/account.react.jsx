@@ -13,7 +13,9 @@ export default class Account extends Component {
     this.state = {
       isLoaded: false,
       data: [],
-      retailLinks: [{ id: 1234, url: 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000211808' }, { id: 12356, url: 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000249599' }, { id: 1111, url: 'http://us.asos.com/pullbear/pullbear-sweater-with-shawl-neck-in-gray-marl/prd/9172440?clr=chinefon&SearchQuery=&cid=6993&gridcolumn=3&gridrow=5&gridsize=3&pge=1&pgesize=72&totalstyles=877' }, { id: 2222, url: 'fake sample' }] // must accept array of obj with id and url as properties
+      retailLinks: [{
+        url: ''
+      }] //[{ id: 1234, url: 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000211808' }, { id: 12356, url: 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000249599' }, { id: 1111, url: 'http://us.asos.com/pullbear/pullbear-sweater-with-shawl-neck-in-gray-marl/prd/9172440?clr=chinefon&SearchQuery=&cid=6993&gridcolumn=3&gridrow=5&gridsize=3&pge=1&pgesize=72&totalstyles=877' }, { id: 2222, url: 'fake sample' }] // must accept array of obj with id and url as properties
     }
 
     this.removeRetailLink = this.removeRetailLink.bind(this);
@@ -31,10 +33,11 @@ export default class Account extends Component {
           this.setState({
             isLoaded: true, 
             data: [...this.state.data, ...newArr] 
+          }, () => {
+            axios.post(store.get('URL').root_url + '/account/submit_media', { data: newArr })
+              .then(res => console.log('SUBMITTED ALL MEDIA', res))
+              .catch(err => console.log(err));
           });
-          axios.post(store.get('URL').root_url + '/account/save_media', {data: newArr})
-            .then(res => console.log('SUBMITTED ALL MEDIA', res))
-            .catch(err => console.log(err));
         }
       })
       .catch(err => {
@@ -46,10 +49,8 @@ export default class Account extends Component {
     return Object.keys(this.props.currentPost).length === 0 && this.props.currentPost.constructor === Object;
   }
 
-  editRetailLink(index, link) {
-    let retailArr = this.state.retailLinks.slice();
-    retailArr[index].url = link;
-    this.setState({ retailLinks: retailArr }, () => console.log('Retail so far...', this.state.retailLinks));
+  editRetailLink(links) {
+    this.setState({ retailLinks: links }, () => console.log('Retail so far...', this.state.retailLinks));
   }
 
   removeRetailLink(index) {
@@ -60,7 +61,7 @@ export default class Account extends Component {
   }
 
   addInputBox() {
-    this.setState({ retailLinks: [...this.state.retailLinks, ''] }, () => console.log('ADDING NEW BOX', this.state.retailLinks));
+    this.setState({ retailLinks: [...this.state.retailLinks, {url: ''}] }, () => console.log('ADDING NEW BOX', this.state.retailLinks));
   }
 
   renderPosts() {

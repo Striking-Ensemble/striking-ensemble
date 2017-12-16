@@ -37,19 +37,27 @@ exports.prepareCheckout = (req, res) => {
 
 exports.getMedia = (req, res) => {
   let options = {
-    url: instaApiURL + '/?access_token=' + req.app.settings.insta_accessToken
+    url: instaApiURL + '/?access_token=' + req.app.settings.authInfo.accessToken
   };
   request.get(options, (err, response, body) => {
     if (err) {
       throw err;
     }
+    console.log('GOT IT COACH! in reqController getMedia');
     res.json(JSON.parse(body));
   });
 }
 
 // submit media to specified influencer in db
 exports.submitMedia = (req, res) => {
-  mediaController.saveMedia(req, res);
+  console.log('USER CONTENTS IN reqController', req.user);
+  // if user is new, use saveMedia controller
+  if (req.app.settings.authInfo.newUser) {
+    mediaController.saveMedia(req, res);
+  } else {
+    // if user already exists, use updateMedia controller
+    mediaController.updateMedia(req, res);
+  }
 };
 
 // Let the front-end handle the rendering

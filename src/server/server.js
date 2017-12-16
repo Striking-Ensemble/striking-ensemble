@@ -20,7 +20,6 @@ const Influencer = require('./db/Influencer');
 // Create the Express application
 const app = express();
 
-
 // **************** Express Setup Below ***************** //
 
 // revisit this after thinking it over whether to use jade

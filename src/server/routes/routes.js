@@ -32,7 +32,7 @@ reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 // Account route handlers
 reqRoutes.get('/login', reqController.getFrontEnd);
 reqRoutes.get('/account/post/:id', reqController.getFrontEnd);
-reqRoutes.post('/account/save_media', reqController.submitMedia);
+reqRoutes.post('/account/submit_media', reqController.submitMedia);
 reqRoutes.post('/account/post/:id/submit_links', reqController.submitLinks);
 
 // ================= Passport Instagram Endpoints ================= //
@@ -50,7 +50,7 @@ reqRoutes.get('/auth/instagram', passport.authenticate('instagram'),
 reqRoutes.get('/auth/instagram/callback', 
   passport.authenticate('instagram', { failureRedirect: '/login' }), 
   (req, res) => {
-    req.app.settings.insta_accessToken = req.authInfo;
+    req.app.settings.authInfo = req.authInfo;
     res.redirect('/');
   }
 );

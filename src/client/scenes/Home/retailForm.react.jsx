@@ -7,7 +7,7 @@ export default class RetailForm extends Component {
     super(props);
 
     this.state = {
-      retailLinkFields: []
+      // retailLinkFields: []
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,14 +26,18 @@ export default class RetailForm extends Component {
     for (let i = 0; i < elements.length - 1; i++) {
       let item = elements[i];
       if (item.type == 'url') {
-        body.push({index: item.name, url: item.value});
+        if (item.value !== '') {
+          body.push({index: item.name, url: item.value});
+        }
       }
     }
-    console.log('json would be body:', body);
 
-    axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
-      .then(response => console.log(response))
-      .catch(err => console.log(err));
+    console.log('json would be body:', body);
+    this.props.editRetailLink(body);
+
+    // axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
+    //   .then(response => console.log(response))
+    //   .catch(err => console.log(err));
   }
 
   handleLinkFields(textLink, nameField) {
@@ -55,15 +59,16 @@ export default class RetailForm extends Component {
           <legend>Add your retail links</legend>
           <input type="submit" value="Save" /><input type="reset" value="Cancel" />
           <br />
-          {this.props.retailLinks.map((item, index) => (
-            <InputBox 
-              key={item.id}
-              retailIndex={index}
-              retailLink={item.url}
-              editRetailLink={this.props.editRetailLink}
-              removeRetailLink={this.props.removeRetailLink}
-              handleLinkFields={this.handleLinkFields}
-            />
+          {
+            this.props.retailLinks.map((item, index) => (
+              <InputBox 
+                key={`link_${index}`}
+                retailIndex={index}
+                retailLink={item.url}
+                editRetailLink={this.props.editRetailLink}
+                removeRetailLink={this.props.removeRetailLink}
+                handleLinkFields={this.handleLinkFields}
+              />
           ))}
           <br />
           <button onClick={this.props.addInputBox} value="retail-form" type="button">Add More Link Boxes</button>
