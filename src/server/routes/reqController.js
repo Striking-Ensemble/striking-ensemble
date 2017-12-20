@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const request = require('request');
+const Promise = require('bluebird');
 const passport = require('passport');
+const Media = require('../db/media');
 const mediaController = require('../db/mediaController');
 // Controller methods for TwoTap
 const twoTapApiURL = 'https://checkout.twotap.com/prepare_checkout';
@@ -44,7 +46,51 @@ exports.getMedia = (req, res) => {
       throw err;
     }
     console.log('GOT IT COACH! in reqController getMedia');
-    res.json(JSON.parse(body));
+    // res.send(body);
+    if (req.app.settings.authInfo.newUser) {
+      res.send(body);
+    } else {
+      let nowBody = JSON.parse(body);
+      let mediaArr = [];
+      // for (let item of body.data) {
+      //   Media.count({_id: item.id}, (err, count) => {
+      //     if (count > 0) {
+      //       mediaArr.push(item);
+      //     } else {
+      //       break;
+      //     }
+      //   })
+      // }
+      function mediaCount(arr) {
+        return arr.reduce((promise, item) => 
+          promise.then(() => Media.count({_id: item.id})
+            .then((count) => {
+              if (count > 0) {
+                mediaArr.push(item);
+              } else {
+                return
+              }
+            })), Promise.resolve())
+      }
+      mediaCount(nowBody.data).then(() => {
+        if (mediaArr.length == 0) {
+          console.log('I NEED HALP', req.user);
+          Media.find({_creator: req.user.id}, (err, response) => {
+            if (err) {
+              console.log('IN MEDIA COUNT #78', err);
+            }
+            res.send(response);
+          })
+        } else {
+          let arrToSend = [...mediaArr, ...nowBody.data];
+          Media
+            .insertMany(mediaArr)
+            .then(response => console.log('GOT THEM UPDATED!'))
+            .catch(err => console.log('ERR in reqController #89', err));
+          res.send(arrToSend);
+        }
+      })
+    }
   });
 }
 
