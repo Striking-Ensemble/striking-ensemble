@@ -16,7 +16,7 @@ export default class InputBox extends Component {
   handleChange(e) {
     this.setState({textLink: e.target.value}, () => console.log('textLink TYPING...', this.state.textLink));
     //this.props.editRetailLink(this.props.retailIndex, this.state.textLink);
-    this.props.handleLinkFields(this.state.textLink, e.target.name);
+    // this.props.handleLinkFields(this.state.textLink, e.target.name);
   }
 
   removeItem() {

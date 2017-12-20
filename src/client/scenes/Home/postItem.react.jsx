@@ -5,9 +5,7 @@ export default class PostItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      retailLinks: [{
-        url: ''
-      }] //[{ id: 1234, url: 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000211808' }, { id: 12356, url: 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000249599' }, { id: 1111, url: 'http://us.asos.com/pullbear/pullbear-sweater-with-shawl-neck-in-gray-marl/prd/9172440?clr=chinefon&SearchQuery=&cid=6993&gridcolumn=3&gridrow=5&gridsize=3&pge=1&pgesize=72&totalstyles=877' }, { id: 2222, url: 'fake sample' }] // must accept array of obj with id and url as properties
+      retailLinks: [] //[{ id: 1234, url: 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000211808' }, { id: 12356, url: 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000249599' }, { id: 1111, url: 'http://us.asos.com/pullbear/pullbear-sweater-with-shawl-neck-in-gray-marl/prd/9172440?clr=chinefon&SearchQuery=&cid=6993&gridcolumn=3&gridrow=5&gridsize=3&pge=1&pgesize=72&totalstyles=877' }, { id: 2222, url: 'fake sample' }] // must accept array of obj with id and url as properties
     }
 
     this.removeRetailLink = this.removeRetailLink.bind(this);
@@ -15,10 +13,13 @@ export default class PostItem extends Component {
     this.addInputBox = this.addInputBox.bind(this);
   }
 
-  // for retail links associated with the post
-  // renderPostItem () {
-  //   return this.state.links
-  // }
+  componentDidMount() {
+    this.props.currentPost.retailLinks.length === 0 ? (
+      this.setState({ retailLinks: [{ id: 'link_0', url: '' }] }))
+      :
+      this.setState({ retailLinks: this.props.currentPost.retailLinks })
+  }
+
   editRetailLink(links) {
     this.setState({ retailLinks: links }, () => console.log('Retail so far...', this.state.retailLinks));
   }
@@ -35,7 +36,7 @@ export default class PostItem extends Component {
   }
 
   render() {
-    console.log('HERE WE ARE NOW *************', this.props);
+    console.log('HERE WE ARE NOW FOR PROPS*************', this.props);
     // location.state is being set in postListItem component on Link
     if (this.props.currentPost.video_low) {
       return (

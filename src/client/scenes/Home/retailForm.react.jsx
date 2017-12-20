@@ -6,18 +6,19 @@ export default class RetailForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      // retailLinkFields: []
-    }
-
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleLinkFields = this.handleLinkFields.bind(this);
+    // this.handleLinkFields = this.handleLinkFields.bind(this);
   }
 
-  componentDidMount() {
-    let retailCopy = this.props.retailLinks.map((item, index) => ({id: `link_${index}`, url: item}))
-    this.setState({retailLinkFields: retailCopy});
-  }
+  // componentDidMount() {
+  //   let retailCopy = this.props.retailLinks.map((item, index) => ({id: `link_${index}`, url: item.url}))
+  //   this.setState({localRetailLinkFields: retailCopy});
+  // }
+
+  // componentWillReceiveProps(nextProps) {
+  //   let retailArr = nextProps.retailLinks.map((item, index) => ({ id: `link_${index}`, url: item.url }))
+  //   this.setState({ localRetailLinkFields: retailArr });
+  // }
 
   handleSubmit(e) {
     e.preventDefault();
@@ -40,19 +41,20 @@ export default class RetailForm extends Component {
     //   .catch(err => console.log(err));
   }
 
-  handleLinkFields(textLink, nameField) {
-    this.setState({retailLinkFields: this.state.retailLinkFields.map(item => {
-      if (item.name == nameField) {
-        item.url = textLink;
-        return item;
-      } else {
-        return item;
-      }
-    })}, () => console.log('CHECKING RETAILLINKSSSS:', this.state.retailLinkFields))
-  }
+  // handleLinkFields(textLink, nameField) {
+  //   this.setState({localRetailLinkFields: this.state.localRetailLinkFields.map(item => {
+  //     if (item.id == nameField) {
+  //       console.log('I HAVE TEXTLINK:', textLink);
+  //       item.url = textLink;
+  //       return item;
+  //     } else {
+  //       return item;
+  //     }
+  //   })}, () => console.log('CHECKING RETAILLINKSSSS:', this.state.localRetailLinkFields))
+  // }
 
   render() {
-    console.log('CONTENTS OF RETAIL LINKS PROPS', this.props);
+    console.log('CONTENTS OF LOCAL RETAIL LINKS', this.props.retailLinks);
     return (
       <div>
         <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
@@ -62,12 +64,12 @@ export default class RetailForm extends Component {
           {
             this.props.retailLinks.map((item, index) => (
               <InputBox 
-                key={`link_${index}`}
+                key={item.id ? item.id : `link_${index}`}
                 retailIndex={index}
                 retailLink={item.url}
                 editRetailLink={this.props.editRetailLink}
                 removeRetailLink={this.props.removeRetailLink}
-                handleLinkFields={this.handleLinkFields}
+                // handleLinkFields={this.handleLinkFields}
               />
           ))}
           <br />
