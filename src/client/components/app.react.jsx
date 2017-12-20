@@ -71,6 +71,7 @@ class App extends Component {
     currentPost.image_norm = post.image_norm ? post.image_norm : null;
     currentPost.video_low = post.video_low ? post.video_low : null;
     currentPost.video_norm = post.video_norm ? post.video_norm : null;
+    currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
   }
