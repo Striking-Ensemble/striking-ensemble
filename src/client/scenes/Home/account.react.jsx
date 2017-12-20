@@ -27,11 +27,11 @@ export default class Account extends Component {
           this.setState({
             isLoaded: true, 
             data: [...this.state.data, ...newArr] 
-          }, () => {
-            return axios.post(store.get('URL').root_url + '/account/submit_media', { data: newArr })
-              .then(res => console.log('SUBMITTED ALL MEDIA', res))
-              .catch(err => console.log(err));
           });
+
+          axios.post(store.get('URL').root_url + '/account/submit_media', { data: newArr })
+            .then(res => console.log('SUBMITTED ALL MEDIA', res))
+            .catch(err => console.log(err));
         }
       })
       .catch(err => {
