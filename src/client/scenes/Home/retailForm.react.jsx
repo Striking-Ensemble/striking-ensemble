@@ -7,18 +7,7 @@ export default class RetailForm extends Component {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    // this.handleLinkFields = this.handleLinkFields.bind(this);
   }
-
-  // componentDidMount() {
-  //   let retailCopy = this.props.retailLinks.map((item, index) => ({id: `link_${index}`, url: item.url}))
-  //   this.setState({localRetailLinkFields: retailCopy});
-  // }
-
-  // componentWillReceiveProps(nextProps) {
-  //   let retailArr = nextProps.retailLinks.map((item, index) => ({ id: `link_${index}`, url: item.url }))
-  //   this.setState({ localRetailLinkFields: retailArr });
-  // }
 
   handleSubmit(e) {
     e.preventDefault();
@@ -28,7 +17,7 @@ export default class RetailForm extends Component {
       let item = elements[i];
       if (item.type == 'url') {
         if (item.value !== '') {
-          body.push({index: item.name, url: item.value});
+          body.push({id: `link_${body.length}`, url: item.value});
         }
       }
     }
@@ -36,22 +25,10 @@ export default class RetailForm extends Component {
     console.log('json would be body:', body);
     this.props.editRetailLink(body);
 
-    // axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
-    //   .then(response => console.log(response))
-    //   .catch(err => console.log(err));
+    axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
   }
-
-  // handleLinkFields(textLink, nameField) {
-  //   this.setState({localRetailLinkFields: this.state.localRetailLinkFields.map(item => {
-  //     if (item.id == nameField) {
-  //       console.log('I HAVE TEXTLINK:', textLink);
-  //       item.url = textLink;
-  //       return item;
-  //     } else {
-  //       return item;
-  //     }
-  //   })}, () => console.log('CHECKING RETAILLINKSSSS:', this.state.localRetailLinkFields))
-  // }
 
   render() {
     console.log('CONTENTS OF LOCAL RETAIL LINKS', this.props.retailLinks);
@@ -69,7 +46,6 @@ export default class RetailForm extends Component {
                 retailLink={item.url}
                 editRetailLink={this.props.editRetailLink}
                 removeRetailLink={this.props.removeRetailLink}
-                // handleLinkFields={this.handleLinkFields}
               />
           ))}
           <br />
