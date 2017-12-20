@@ -70,9 +70,5 @@ exports.getFrontEnd = (req, res) => {
 exports.submitLinks = (req, res) => {
   console.log('can i hazz user?', req.user);
   // find db user
-    // find individual post through req.params given
-    console.log('I SAID PARAMS', req.params);
-      // save links inside that post
-      console.log('receiving POST of LINKS', req.body);
-      res.json('LIST SAVED!');
+  mediaController.updateRetailLinks(req, res);
 };
