@@ -47,12 +47,13 @@ export default class Account extends Component {
         if (post.videos) {
           return (
             <PostListItem 
-              key={post.id}
-              instaId={post.id}
+              key={post._id || post.id}
+              instaId={post._id || post.id}
               caption={post.caption.text}
               image_thumb={post.images.thumbnail}
               video_low={post.videos.low_bandwidth}
               video_norm={post.videos.standard_resolution}
+              retailLinks={post.retailLinks}
               addCurrentPost={this.props.addCurrentPost}
               {...this.props}
             />
@@ -60,12 +61,13 @@ export default class Account extends Component {
         } else {
           return (
             <PostListItem
-              key={post.id}
-              instaId={post.id}
+              key={post._id || post.id}
+              instaId={post._id || post.id}
               caption={post.caption.text}
               image_low={post.images.low_resolution}
               image_norm={post.images.standard_resolution}
               image_thumb={post.images.thumbnail}
+              retailLinks={post.retailLinks}
               addCurrentPost={this.props.addCurrentPost}
               {...this.props}
             />
