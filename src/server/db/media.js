@@ -9,11 +9,11 @@ const db = require('./index');
 const mediaSchema = Schema({
   _id: String,
   _creator: Number,
-  caption: { type: [{
+  caption: { type: {
     id: String,
     text: String,
     created_time: String
-  }]},
+  }},
   created_time: String,
   images: { type: {
     low_resolution: { type: {
