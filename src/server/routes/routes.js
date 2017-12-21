@@ -63,6 +63,7 @@ reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
       console.log(err);
     } else {
       console.log('SENDING USER from routes /account', user);
+      req.app.settings.authInfo.newUser = false;
       let temp = user;
       temp.media = undefined;
       res.send(temp);
