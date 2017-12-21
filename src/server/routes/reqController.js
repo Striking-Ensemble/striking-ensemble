@@ -45,37 +45,58 @@ exports.getMedia = (req, res) => {
     if (err) {
       throw err;
     }
+    let nowBody = JSON.parse(body);
     console.log('GOT IT COACH! in reqController getMedia');
-    // res.send(body);
     if (req.app.settings.authInfo.newUser) {
-      res.send(body);
+      let mediaArr = nowBody.data.map(obj => {
+        if (obj.type == 'video') {
+          return {
+            _id: obj.id,
+            _creator: req.user.id,
+            caption: obj.caption,
+            created_time: obj.created_time,
+            images: obj.images,
+            link: obj.link,
+            tags: obj.tags,
+            post_type: obj.type,
+            videos: obj.videos
+          }
+        } else {
+          return {
+            _id: obj.id,
+            _creator: req.user.id,
+            caption: obj.caption,
+            created_time: obj.created_time,
+            images: obj.images,
+            link: obj.link,
+            tags: obj.tags,
+            post_type: obj.type
+          }
+        }
+      });
+
+      Media
+        .insertMany(mediaArr)
+        .then((response) => console.log('INSERTED MANY #80'))
+        .catch(err => console.log('ERROR IN INSERTING MEDIA #81!', err));
+
+      res.send(nowBody.data);
     } else {
-      let nowBody = JSON.parse(body);
       let mediaArr = [];
-      // for (let item of body.data) {
-      //   Media.count({_id: item.id}, (err, count) => {
-      //     if (count > 0) {
-      //       mediaArr.push(item);
-      //     } else {
-      //       break;
-      //     }
-      //   })
-      // }
       function mediaCount(arr) {
         return arr.reduce((promise, item) => 
           promise.then(() => Media.count({_id: item.id})
             .then((count) => {
-              if (count > 0) {
+              console.log('CAN I EVEN SEE??', count);
+              if (count <= 0) {
                 mediaArr.push(item);
-              } else {
-                return
               }
             })), Promise.resolve())
       }
       mediaCount(nowBody.data).then(() => {
         if (mediaArr.length == 0) {
           console.log('I NEED HALP', req.user);
-          Media.find({_creator: req.user.id}, (err, response) => {
+          Media.find({_creator: req.user._id}, (err, response) => {
             if (err) {
               console.log('IN MEDIA COUNT #78', err);
             }
