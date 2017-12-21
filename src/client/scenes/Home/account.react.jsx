@@ -21,17 +21,13 @@ export default class Account extends Component {
       .then(
       res => {
         console.log('I NEED TO FIND res.data', res.data);
-        if (res.data.data) {
-          const newArr = res.data.data.map(post => post);
+        if (res.data) {
+          const newArr = res.data.map(post => post);
           // update state, then send recent media to DB
           this.setState({
             isLoaded: true, 
             data: [...this.state.data, ...newArr] 
           });
-
-          axios.post(store.get('URL').root_url + '/account/submit_media', { data: newArr })
-            .then(res => console.log('SUBMITTED ALL MEDIA', res))
-            .catch(err => console.log(err));
         }
       })
       .catch(err => {
