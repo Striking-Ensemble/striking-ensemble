@@ -14,18 +14,6 @@ reqRoutes.use(function timeLog(req, res, next) {
   next();
 });
 
-// Public route handlers
-
-// reqRoutes.get('/', (req, res) => {
-//   console.log('TRIGGERED');
-//   if (!req.user || req.user.status !== 'ENABLED') {
-//     return res.redirect('/login');
-//   }
-//   console.log('FOUND USER:', req.user);
-//   res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
-// });
-
-reqRoutes.get('/user:username', influencerController.retrieveOne);
 
 reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 
@@ -44,15 +32,15 @@ reqRoutes.get('/logout', (req, res) => {
 });
 
 reqRoutes.get('/auth/instagram', passport.authenticate('instagram'), 
-  (req, res) => {}
+(req, res) => {}
 );
 
 reqRoutes.get('/auth/instagram/callback', 
-  passport.authenticate('instagram', { failureRedirect: '/login' }), 
-  (req, res) => {
-    req.app.settings.authInfo = req.authInfo;
-    res.redirect('/');
-  }
+passport.authenticate('instagram', { failureRedirect: '/login' }), 
+(req, res) => {
+  req.app.settings.authInfo = req.authInfo;
+  res.redirect('/');
+}
 );
 
 reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
@@ -63,7 +51,6 @@ reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
       console.log(err);
     } else {
       console.log('SENDING USER from routes /account', user);
-      req.app.settings.authInfo.newUser = false;
       let temp = user;
       temp.media = undefined;
       res.send(temp);
@@ -89,7 +76,22 @@ function ensureAuthenticated(req, res, next) {
 reqRoutes.get('/account/media', reqController.getMedia);
 
 // ======================== TwoTap API Routes ======================== //
-reqRoutes.get('/:username', integrations.integration);
+reqRoutes.get('/:username/cart', integrations.integration);
 reqRoutes.post('/purchase_confirm_callback', integrations.purchaseConfirmCallback);
+
+// Public route handlers here due to paths can be loosely associated with other paths
+
+// reqRoutes.get('/', (req, res) => {
+//   console.log('TRIGGERED');
+//   if (!req.user || req.user.status !== 'ENABLED') {
+//     return res.redirect('/login');
+//   }
+//   console.log('FOUND USER:', req.user);
+//   res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
+// });
+
+// reqRoutes.get('/:username', reqController.getFrontEnd);
+reqRoutes.get('/user/:username', influencerController.retrieveOne);
+reqRoutes.get('/:username/media', reqController.getInfluencerPosts);
 
 module.exports = reqRoutes;
