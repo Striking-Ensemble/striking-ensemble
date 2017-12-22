@@ -27,13 +27,14 @@ export default class Consumer extends Component {
     axios.get(store.get('URL').root_url + `/user${this.props.location.pathname}`)
       .then(
       res => {
-        console.log('I NEED TO FIND res.data', res.data);
+        console.log('I NEED TO FIND res.data for user', res.data);
         if (res.data) {
-          const newObj = res.data.forEach(post => post);
+          const newObj = res.data[0]
+          // res.data.forEach(post => post);
           // update user state
           this.setState({
             userIsLoaded: true,
-            user: {...newObj}
+            user: newObj
           });
         }
       })
@@ -41,10 +42,10 @@ export default class Consumer extends Component {
         console.log(err);
       });
 
-    axios.get(store.get('URL').root_url + '/:username/media')
+    axios.get(store.get('URL').root_url + `${this.props.location.pathname}media`)
       .then(
       res => {
-        console.log('I NEED TO FIND res.data', res.data);
+        console.log('I NEED TO FIND res.data for user MEDIA', res);
         if (res.data) {
           const newArr = res.data.map(post => post);
           // update media state
@@ -83,7 +84,7 @@ export default class Consumer extends Component {
     return (
       <div className="user-info">
         <button className="btn btn-default" onClick={this.removeCurrentPost}>Back</button>
-        <h2>{this.state.user.full_name}</h2>
+        <h3>{this.state.user.full_name}</h3>
         <img src={this.state.user.profile_picture} className="img-circle" style={{ 'maxWidth': '15%' }} />
         <br />
       </div>
@@ -103,6 +104,7 @@ export default class Consumer extends Component {
             video_norm={post.videos.standard_resolution}
             retailLinks={post.retailLinks}
             addCurrentPost={this.props.addCurrentPost}
+            removeCurrentPost={this.removeCurrentPost}
             {...this.props}
           />
         )
@@ -117,6 +119,7 @@ export default class Consumer extends Component {
             image_thumb={post.images.thumbnail}
             retailLinks={post.retailLinks}
             addCurrentPost={this.props.addCurrentPost}
+            removeCurrentPost={this.removeCurrentPost}
             {...this.props}
           />
         )
@@ -125,6 +128,8 @@ export default class Consumer extends Component {
   }
 
   render() {
+    console.log('OOOOOOO state of user:', this.state.user);
+    console.log('ahhhhhh state of media:', this.state.data)
     return (
       <div id="page-outer">
         <div className="page-container">

@@ -110,7 +110,7 @@ exports.updateRetailLinks = async (req, res) => {
 
 exports.getInfluencerMedia = (req, res) => {
   let query = { username: req.params.username }
-
+  console.log('QUERY on getInfluencerMedia cont.:', query);
   Media.find(query, (err, response) => {
     if (err) {
       console.log('IN getInfluencerMedia #116', err);
