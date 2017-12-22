@@ -3,7 +3,8 @@ import axios from 'axios';
 import store from 'store';
 import Footer from '../components/footer.react';
 import LoadingSpinner from '../components/loadingSpinner.react';
-import PostListItem from './Home/postListItem.react';
+import ConsumerPostList from './consumerPostList.react';
+import ConsumerPostItem from './consumerPostItem.react';
 
 export default class Consumer extends Component {
   constructor(props) {
@@ -19,8 +20,12 @@ export default class Consumer extends Component {
     }
 
     this.renderUser = this.renderUser.bind(this);
+    this.renderPosts = this.renderPosts.bind(this);
+    this.renderPostItem = this.renderPostItem.bind(this);
     this.addCurrentPost = this.addCurrentPost.bind(this);
     this.removeCurrentPost = this.removeCurrentPost.bind(this);
+    this.currentPostIsEmpty = this.currentPostIsEmpty.bind(this);
+
   }
 
   componentDidMount() {
@@ -78,12 +83,16 @@ export default class Consumer extends Component {
   removeCurrentPost() {
     console.log('REMOVING CURRENT POST FROM ROOT');
     this.setState({ currentPost: {} }, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost))
+    this.props.history.goBack();
+  }
+
+  currentPostIsEmpty() {
+    return Object.keys(this.state.currentPost).length === 0 && this.state.currentPost.constructor === Object;
   }
 
   renderUser() {
     return (
       <div className="user-info">
-        <button className="btn btn-default" onClick={this.removeCurrentPost}>Back</button>
         <h3>{this.state.user.full_name}</h3>
         <img src={this.state.user.profile_picture} className="img-circle" style={{ 'maxWidth': '15%' }} />
         <br />
@@ -95,36 +104,47 @@ export default class Consumer extends Component {
     return this.state.data.map(post => {
       if (post.videos) {
         return (
-          <PostListItem
+          <ConsumerPostList
             key={post._id || post.id}
+            username={post.username}
             instaId={post._id || post.id}
             caption={post.caption.text}
             image_thumb={post.images.thumbnail}
             video_low={post.videos.low_bandwidth}
             video_norm={post.videos.standard_resolution}
             retailLinks={post.retailLinks}
-            addCurrentPost={this.props.addCurrentPost}
-            removeCurrentPost={this.removeCurrentPost}
+            addCurrentPost={this.addCurrentPost}
             {...this.props}
           />
         )
       } else {
         return (
-          <PostListItem
+          <ConsumerPostList
             key={post._id || post.id}
+            username={post.username}
             instaId={post._id || post.id}
             caption={post.caption.text}
             image_low={post.images.low_resolution}
             image_norm={post.images.standard_resolution}
             image_thumb={post.images.thumbnail}
             retailLinks={post.retailLinks}
-            addCurrentPost={this.props.addCurrentPost}
-            removeCurrentPost={this.removeCurrentPost}
+            addCurrentPost={this.addCurrentPost}
             {...this.props}
           />
         )
       }
     });
+  }
+
+  renderPostItem() {
+    console.log('SHOTS FIRED SINGLE POST');
+    return (
+      <ConsumerPostItem
+        currentPost={this.state.currentPost}
+        removeCurrentPost={this.removeCurrentPost} 
+        {...this.props}
+      />
+    );
   }
 
   render() {
@@ -142,7 +162,7 @@ export default class Consumer extends Component {
           {!this.state.mediaIsLoaded ?
             (<LoadingSpinner />)
             :
-            (this.renderPosts())
+            (this.currentPostIsEmpty() ? this.renderPosts() : this.renderPostItem())
           }
         </div>
         <Footer />
