@@ -51,7 +51,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parses the text as JSON and set to req.body
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../../public')));
-// app.use('/:username', express.static(path.join(__dirname, '../../public')));
 
 // serialize and deserialize
 passport.serializeUser((user, done) => {
@@ -68,6 +67,7 @@ passport.deserializeUser((id, done) => {
 // set up API routes
 app.use('/', reqRoutes);
 app.use('/api', router);
+app.use('/:username', express.static(path.join(__dirname, '../../public')));
 
 // ************************************************************ //
 
