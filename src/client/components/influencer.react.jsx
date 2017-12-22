@@ -9,7 +9,7 @@ import LoadingSpinner from './loadingSpinner.react';
 import isAuthenticated from '../services/isAuthenticated';
 import checkCredentials from '../services/checkCredentials';
 
-class App extends Component {
+export default class Influencer extends Component {
   constructor(props) {
     super(props);
 
@@ -119,5 +119,3 @@ class App extends Component {
     }
   }
 };
-
-export default App;
