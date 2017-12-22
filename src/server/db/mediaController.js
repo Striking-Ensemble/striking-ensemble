@@ -11,7 +11,8 @@ exports.saveMedia = (req, res) => {
     if (obj.type == 'video') {
       return {
         _id: obj.id,
-        _creator: req.user.id, 
+        _creator: req.user.id,
+        username: obj.user.username, 
         caption: obj.caption,
         created_time: obj.created_time,
         images: obj.images,
@@ -24,6 +25,7 @@ exports.saveMedia = (req, res) => {
       return {
         _id: obj.id,
         _creator: req.user.id,
+        username: obj.user.username,
         caption: obj.caption,
         created_time: obj.created_time,
         images: obj.images,
@@ -56,6 +58,7 @@ exports.updateMedia = async (req, res) => {
     let query = { _id: obj.id, _creator: req.user._id };
     let post = {
       _creator: req.user._id,
+      username: obj.user.username,
       caption: obj.caption,
       created_time: obj.created_time,
       images: obj.images,
@@ -104,3 +107,14 @@ exports.updateRetailLinks = async (req, res) => {
   })
   res.json('LIST SAVED!');
 };
+
+exports.getInfluencerMedia = (req, res) => {
+  let query = { username: req.params.username }
+
+  Media.find(query, (err, response) => {
+    if (err) {
+      console.log('IN getInfluencerMedia #116', err);
+    }
+    res.send(response);
+  })
+}
