@@ -48,11 +48,14 @@ exports.getMedia = (req, res) => {
     let nowBody = JSON.parse(body);
     console.log('GOT IT COACH! in reqController getMedia');
     if (req.app.settings.authInfo.newUser) {
+      console.log('NEW USER DETECTED IN SAVING MEDIA');
       let mediaArr = nowBody.data.map(obj => {
         if (obj.type == 'video') {
+          console.log('HEAVY CHECKING #54', obj.id);
           return {
             _id: obj.id,
             _creator: req.user.id,
+            username: req.user.username,
             caption: obj.caption,
             created_time: obj.created_time,
             images: obj.images,
@@ -65,6 +68,7 @@ exports.getMedia = (req, res) => {
           return {
             _id: obj.id,
             _creator: req.user.id,
+            username: req.user.username,
             caption: obj.caption,
             created_time: obj.created_time,
             images: obj.images,
@@ -77,11 +81,13 @@ exports.getMedia = (req, res) => {
 
       Media
         .insertMany(mediaArr)
-        .then((response) => console.log('INSERTED MANY #80'))
+        .then((response) => console.log('INSERTED MANY #84'))
         .catch(err => console.log('ERROR IN INSERTING MEDIA #81!', err));
 
+      req.app.settings.authInfo.newUser = false;
       res.send(nowBody.data);
     } else {
+      console.log('USER EXISTS in getMedia. Now saving in a special way...');
       let mediaArr = [];
       function mediaCount(arr) {
         return arr.reduce((promise, item) => 
@@ -95,11 +101,11 @@ exports.getMedia = (req, res) => {
       }
       mediaCount(nowBody.data).then(() => {
         if (mediaArr.length == 0) {
-          console.log('I NEED HALP', req.user);
           Media.find({_creator: req.user._id}, (err, response) => {
             if (err) {
               console.log('IN MEDIA COUNT #78', err);
             }
+            console.log('NO NEW MEDIA TO ADD FOR USER... sending oldies');
             res.send(response);
           })
         } else {
@@ -117,7 +123,7 @@ exports.getMedia = (req, res) => {
 
 // submit media to specified influencer in db
 exports.submitMedia = (req, res) => {
-  console.log('USER CONTENTS IN reqController', req.user);
+  console.log('USER CONTENTS IN reqController by submitMedia', req.user);
   // if user is new, use saveMedia controller
   if (req.app.settings.authInfo.newUser) {
     mediaController.saveMedia(req, res);
@@ -129,7 +135,7 @@ exports.submitMedia = (req, res) => {
 
 // Let the front-end handle the rendering
 exports.getFrontEnd = (req, res) => {
-  console.log('NEW TRIGGER');
+  console.log('get Front End route');
   res.app.use(express.static(path.join(__dirname, '../../../public')));
   res.end();
 };
@@ -138,4 +144,9 @@ exports.submitLinks = (req, res) => {
   console.log('can i hazz user?', req.user);
   // find db user
   mediaController.updateRetailLinks(req, res);
+};
+
+exports.getInfluencerPosts = (req, res) => {
+  console.log('GET INFLUENCER POSTS controller');
+  mediaController.getInfluencerMedia(req, res);
 };
