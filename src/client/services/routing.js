@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Influencer from '../components/influencer.react';
 import Signin from '../scenes/Sign/signin.react';
 import Account from '../scenes/Home/account.react';
@@ -38,7 +38,7 @@ const Routing = () => {
   return (
     <Switch>
       <Route exact path="/login" component={Signin} />
-      <Route exact path="/account" component={Influencer} />
+      <Route path="/account" component={Influencer} />
       <Route exact path="/account/post/:id" component={Account} />
       <Route path="/:username" component={Consumer} />
       <Route exact path="/404" component={NotFound} />

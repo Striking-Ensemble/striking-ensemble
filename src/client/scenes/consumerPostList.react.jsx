@@ -10,14 +10,12 @@ export default class ConsumerPostList extends Component {
 
   handleClick(e) {
     e.preventDefault();
-    console.log('CLICKED!');
     console.log('what event?', this.props);
     this.props.addCurrentPost(this.props);
     this.props.history.push(`/${this.props.username}/post/${this.props.instaId}`);
   }
 
   render() {
-    // console.log('GIVE ME THESE', this.props);
     return (
       <div className="col-lg-3 col-md-4 col-sm-4 col-xs-4">
         <Link to={{

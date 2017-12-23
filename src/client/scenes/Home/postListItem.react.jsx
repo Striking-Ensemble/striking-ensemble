@@ -14,7 +14,7 @@ export default class PostListItem extends Component {
     console.log('CLICKED!');
     console.log('what event?', this.props);
     this.props.addCurrentPost(this.props);
-    this.props.history.push('/');
+    this.props.history.push(`/account/post/${this.props.instaId}`);
   }
 
   render () {

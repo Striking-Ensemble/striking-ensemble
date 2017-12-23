@@ -79,6 +79,7 @@ export default class Influencer extends Component {
   removeCurrentPost() {
     console.log('REMOVING CURRENT POST FROM ROOT');
     this.setState({currentPost: {}}, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost))
+    this.props.history.push('/');
   }
 
   render() {
