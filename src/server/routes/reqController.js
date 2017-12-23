@@ -150,3 +150,7 @@ exports.getInfluencerPosts = (req, res) => {
   console.log('GET INFLUENCER POSTS controller');
   mediaController.getInfluencerMedia(req, res);
 };
+
+exports.getPostCatalog = (req, res) => {
+  // TwoTap logic here for saving product catalogs to catalogs Schema
+};
