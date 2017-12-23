@@ -11,7 +11,8 @@ exports.saveMedia = (req, res) => {
     if (obj.type == 'video') {
       return {
         _id: obj.id,
-        _creator: req.user.id, 
+        _creator: req.user.id,
+        username: obj.user.username, 
         caption: obj.caption,
         created_time: obj.created_time,
         images: obj.images,
@@ -24,6 +25,7 @@ exports.saveMedia = (req, res) => {
       return {
         _id: obj.id,
         _creator: req.user.id,
+        username: obj.user.username,
         caption: obj.caption,
         created_time: obj.created_time,
         images: obj.images,
@@ -49,13 +51,14 @@ exports.saveMedia = (req, res) => {
       .catch(err => console.log('ERROR IN SAVING MEDIA!', err));
 };
 
-exports.updateMedia = (req, res) => {
+exports.updateMedia = async (req, res) => {
   console.log('UPDATING from MEDIA Controller', req.user);
 
-  req.body.data.forEach(obj => {
+  await req.body.data.forEach(obj => {
     let query = { _id: obj.id, _creator: req.user._id };
     let post = {
       _creator: req.user._id,
+      username: obj.user.username,
       caption: obj.caption,
       created_time: obj.created_time,
       images: obj.images,
@@ -88,4 +91,30 @@ exports.updateMedia = (req, res) => {
       })
       .catch(err => console.log('ERROR IN UPDATING POST!', err));
   });
+  
+  res.json('User media updated!');
 };
+
+exports.updateRetailLinks = async (req, res) => {
+  console.log('in UPDATE RETAIL LINK #96');
+  // find individual post through req.params given
+  let query = { _id: req.params.id };
+  await Media.update(query, { $set: { retailLinks: req.body } }, { new: true }, (err, response) => {
+    if (err) {
+      console.log('ERR in updateRetailLinks', err)
+    }
+    console.log('UPDATED LINKS!', response);
+  })
+  res.json('LIST SAVED!');
+};
+
+exports.getInfluencerMedia = (req, res) => {
+  let query = { username: req.params.username }
+  console.log('QUERY on getInfluencerMedia cont.:', query);
+  Media.find(query, (err, response) => {
+    if (err) {
+      console.log('IN getInfluencerMedia #116', err);
+    }
+    res.send(response);
+  })
+}

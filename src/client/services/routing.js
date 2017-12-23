@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import App from '../components/app.react';
+import { Route, Switch } from 'react-router-dom';
+import Influencer from '../components/influencer.react';
 import Signin from '../scenes/Sign/signin.react';
 import Account from '../scenes/Home/account.react';
 import PostItem from '../scenes/Home/postItem.react';
@@ -8,6 +8,7 @@ import Navigation from '../components/navigation.react';
 import Footer from '../components/footer.react';
 import PostListItem from '../scenes/Home/postListItem.react';
 import NotFound from '../components/notFound.react';
+import Consumer from '../scenes/consumer.react';
 
 // const routes = [
 //   { path:'/login',
@@ -22,13 +23,13 @@ import NotFound from '../components/notFound.react';
 //   {
 //     path: '/',
 //     nav: () => <Navigation />,
-//     mainContent: () => <App />,
+//     mainContent: () => <Influencer />,
 //     footer: () => <Footer />
 //   },
 //   {
 //     path: '/account',
 //     nav: () => <Navigation />,
-//     mainContent: () => <App />,
+//     mainContent: () => <Influencer />,
 //     footer: () => <Footer />
 //   }
 // ];
@@ -37,10 +38,11 @@ const Routing = () => {
   return (
     <Switch>
       <Route exact path="/login" component={Signin} />
-      <Route exact path="/account" component={App} />
+      <Route path="/account" component={Influencer} />
       <Route exact path="/account/post/:id" component={Account} />
+      <Route path="/:username" component={Consumer} />
       <Route exact path="/404" component={NotFound} />
-      <Route exact path="/" component={App} />
+      <Route exact path="/" component={Influencer} />
     </Switch>
   )
 }

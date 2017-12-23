@@ -6,17 +6,7 @@ export default class RetailForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      // retailLinkFields: []
-    }
-
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleLinkFields = this.handleLinkFields.bind(this);
-  }
-
-  componentDidMount() {
-    let retailCopy = this.props.retailLinks.map((item, index) => ({id: `link_${index}`, url: item}))
-    this.setState({retailLinkFields: retailCopy});
   }
 
   handleSubmit(e) {
@@ -27,7 +17,7 @@ export default class RetailForm extends Component {
       let item = elements[i];
       if (item.type == 'url') {
         if (item.value !== '') {
-          body.push({index: item.name, url: item.value});
+          body.push({id: `link_${body.length}`, url: item.value});
         }
       }
     }
@@ -35,24 +25,13 @@ export default class RetailForm extends Component {
     console.log('json would be body:', body);
     this.props.editRetailLink(body);
 
-    // axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
-    //   .then(response => console.log(response))
-    //   .catch(err => console.log(err));
-  }
-
-  handleLinkFields(textLink, nameField) {
-    this.setState({retailLinkFields: this.state.retailLinkFields.map(item => {
-      if (item.name == nameField) {
-        item.url = textLink;
-        return item;
-      } else {
-        return item;
-      }
-    })}, () => console.log('CHECKING RETAILLINKSSSS:', this.state.retailLinkFields))
+    axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
   }
 
   render() {
-    console.log('CONTENTS OF RETAIL LINKS PROPS', this.props);
+    console.log('CONTENTS OF LOCAL RETAIL LINKS', this.props.retailLinks);
     return (
       <div>
         <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
@@ -62,12 +41,11 @@ export default class RetailForm extends Component {
           {
             this.props.retailLinks.map((item, index) => (
               <InputBox 
-                key={`link_${index}`}
+                key={item.id ? item.id : `link_${index}`}
                 retailIndex={index}
                 retailLink={item.url}
                 editRetailLink={this.props.editRetailLink}
                 removeRetailLink={this.props.removeRetailLink}
-                handleLinkFields={this.handleLinkFields}
               />
           ))}
           <br />

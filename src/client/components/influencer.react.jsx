@@ -9,7 +9,7 @@ import LoadingSpinner from './loadingSpinner.react';
 import isAuthenticated from '../services/isAuthenticated';
 import checkCredentials from '../services/checkCredentials';
 
-class App extends Component {
+export default class Influencer extends Component {
   constructor(props) {
     super(props);
 
@@ -62,7 +62,7 @@ class App extends Component {
   }
 
   addCurrentPost(post) {
-    console.log('WE ARE ADDING CURRENT POST FROM ROOT');
+    console.log('WE ARE ADDING CURRENT POST FROM ROOT', post);
     let currentPost = {...this.state.currentPost};
     currentPost.instaId = post.instaId;
     currentPost.caption = post.caption;
@@ -71,6 +71,7 @@ class App extends Component {
     currentPost.image_norm = post.image_norm ? post.image_norm : null;
     currentPost.video_low = post.video_low ? post.video_low : null;
     currentPost.video_norm = post.video_norm ? post.video_norm : null;
+    currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
   }
@@ -78,6 +79,7 @@ class App extends Component {
   removeCurrentPost() {
     console.log('REMOVING CURRENT POST FROM ROOT');
     this.setState({currentPost: {}}, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost))
+    this.props.history.push('/');
   }
 
   render() {
@@ -118,5 +120,3 @@ class App extends Component {
     }
   }
 };
-
-export default App;

@@ -67,6 +67,7 @@ passport.deserializeUser((id, done) => {
 // set up API routes
 app.use('/', reqRoutes);
 app.use('/api', router);
+app.use('/:username', express.static(path.join(__dirname, '../../public')));
 
 // ************************************************************ //
 

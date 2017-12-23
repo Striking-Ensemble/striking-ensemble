@@ -28,11 +28,11 @@ module.exports = (passport) => {
             website: data.website,
             is_business: data.is_business
           });
+          info.newUser = true;
           user.save((err) => {
             if (err) {
               console.log(err);
             }
-            info.newUser = true;
             return done(err, user, info);
           });
         } else {
