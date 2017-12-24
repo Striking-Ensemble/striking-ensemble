@@ -15,7 +15,7 @@ reqRoutes.use(function timeLog(req, res, next) {
 });
 
 
-reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
+// reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 
 // Account route handlers
 reqRoutes.get('/login', reqController.getFrontEnd);
@@ -77,7 +77,7 @@ reqRoutes.get('/account/media', reqController.getMedia);
 
 // ======================== TwoTap API Routes ======================== //
 reqRoutes.get('/:username/cart', integrations.integration);
-reqRoutes.post('/purchase_confirm_callback', integrations.purchaseConfirmCallback);
+reqRoutes.post('/purchase_confirm_callback', reqController.purchaseConfirmController);
 
 // Public route handlers here due to paths can be loosely associated with other paths
 
