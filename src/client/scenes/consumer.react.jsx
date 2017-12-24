@@ -5,6 +5,7 @@ import Footer from '../components/footer.react';
 import LoadingSpinner from '../components/loadingSpinner.react';
 import ConsumerPostList from './consumerPostList.react';
 import ConsumerPostItem from './consumerPostItem.react';
+import checkCredentials from '../services/checkCredentials';
 
 export default class Consumer extends Component {
   constructor(props) {
@@ -17,7 +18,8 @@ export default class Consumer extends Component {
       user: {},
       data: [],
       currentPost: {},
-      localCart: []
+      localCart: [],
+      checkout_request_id: ''
     }
 
     this.renderUser = this.renderUser.bind(this);
@@ -27,7 +29,8 @@ export default class Consumer extends Component {
     this.removeCurrentPost = this.removeCurrentPost.bind(this);
     this.currentPostIsEmpty = this.currentPostIsEmpty.bind(this);
     this.addToLocalCart = this.addToLocalCart.bind(this);
-
+    this.buyProducts = this.buyProducts.bind(this);
+    this.renderPurchase = this.renderPurchase.bind(this);
   }
 
   componentDidMount() {
@@ -36,8 +39,7 @@ export default class Consumer extends Component {
       res => {
         console.log('I NEED TO FIND res.data for user', res.data);
         if (res.data) {
-          const newObj = res.data[0]
-          // res.data.forEach(post => post);
+          const newObj = res.data[0];
           // update user state
           this.setState({
             userIsLoaded: true,
@@ -82,18 +84,42 @@ export default class Consumer extends Component {
     this.setState({ currentPost }, () => console.log('updated state value', this.state.currentPost));
   }
 
-  addToLocalCart(item) {
-    this.setState({ localCart: [...this.state.localCart, item] }, () => console.log('local cart:', this.state.localCart));
-  }
-
+  
   removeCurrentPost() {
     console.log('REMOVING CURRENT POST FROM ROOT');
     this.setState({ currentPost: {} }, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost))
     this.props.history.goBack();
   }
-
+  
   currentPostIsEmpty() {
     return Object.keys(this.state.currentPost).length === 0 && this.state.currentPost.constructor === Object;
+  }
+  
+  addToLocalCart(item) {
+    // might need to use store instead
+    this.setState({ localCart: [...this.state.localCart, {url: item}] }, () => console.log('local cart:', this.state.localCart));
+  }
+
+  buyProducts() {
+    let checkoutRequest = {};
+    checkoutRequest['products'] = this.state.localCart;
+    checkoutRequest['public_token'] = '52434d36952f32a3bb43f67ea85c64';
+    // checkoutRequest['custom_css_url'] = 'http://localhost:3000/notnicknick/assets/css/integration_twotap.css'
+    checkoutRequest['confirm'] = { method: 'sms', sms_confirm_url: 'http://localhost:3000/purchase_confirm_callback' }
+    checkoutRequest['unique_token'] = (Math.floor(Math.random() * 9999999) + 1).toString();
+
+    axios.post('https://checkout.twotap.com/prepare_checkout', { checkout_request: checkoutRequest })
+      .then(res => {
+        console.log('GOT SOMETHING:', res.data);
+        this.setState({ checkout_request_id: res.data.checkout_request_id });
+      })
+      .catch(err => console.log('OOOPPPSS:', err))
+  }
+
+  renderPurchase() {
+    if (this.state.checkout_request_id) {
+      return <iframe src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={{width: '400px', height: '700px', zIndex: '1'}}></iframe>
+    }
   }
 
   renderUser() {
@@ -165,6 +191,10 @@ export default class Consumer extends Component {
             :
             (this.renderUser())
           }
+          <br />
+          <button onClick={this.buyProducts}>Buy Products</button>
+          <br />
+          {this.renderPurchase()}
           <br />
           {!this.state.mediaIsLoaded ?
             (<LoadingSpinner />)

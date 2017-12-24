@@ -18,7 +18,7 @@ export default class consumerPostItem extends Component {
         {this.props.currentPost.retailLinks.map((item, index) => {
           return (
             <div key={`boxAt${item.id}`}>
-              <li key={item.id}>{item.url}</li><button key={`buttonKeyAt${item.id}`} onClick={this.handleAddButton.bind(this, item.url)}>Add to cart</button>
+              <li key={item.id}>{item.url}</li><button key={`buttonKeyAt${item.id}`} onClick={this.handleAddButton.bind(this, item.url)}>Add Product</button>
             </div>
           )
         })}
