@@ -16,7 +16,8 @@ export default class Consumer extends Component {
       mediaIsLoaded: false,
       user: {},
       data: [],
-      currentPost: {}
+      currentPost: {},
+      localCart: []
     }
 
     this.renderUser = this.renderUser.bind(this);
@@ -25,6 +26,7 @@ export default class Consumer extends Component {
     this.addCurrentPost = this.addCurrentPost.bind(this);
     this.removeCurrentPost = this.removeCurrentPost.bind(this);
     this.currentPostIsEmpty = this.currentPostIsEmpty.bind(this);
+    this.addToLocalCart = this.addToLocalCart.bind(this);
 
   }
 
@@ -78,6 +80,10 @@ export default class Consumer extends Component {
     currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
     this.setState({ currentPost }, () => console.log('updated state value', this.state.currentPost));
+  }
+
+  addToLocalCart(item) {
+    this.setState({ localCart: [...this.state.localCart, item] }, () => console.log('local cart:', this.state.localCart));
   }
 
   removeCurrentPost() {
@@ -141,7 +147,8 @@ export default class Consumer extends Component {
     return (
       <ConsumerPostItem
         currentPost={this.state.currentPost}
-        removeCurrentPost={this.removeCurrentPost} 
+        removeCurrentPost={this.removeCurrentPost}
+        addToLocalCart={this.addToLocalCart} 
         {...this.props}
       />
     );
