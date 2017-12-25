@@ -4,6 +4,28 @@ import LoadingSpinner from '../components/loadingSpinner.react';
 export default class consumerPostItem extends Component {
   constructor(props) {
     super(props);
+
+    this.renderRetailList = this.renderRetailList.bind(this);
+  }
+
+  handleAddButton(item) {
+    this.props.addToLocalCart(item);
+  }
+
+  renderRetailList() {
+    if (this.props.currentPost.retailLinks) {
+      return (
+        <ul>
+          {this.props.currentPost.retailLinks.map((item, index) => {
+            return (
+              <div key={`boxAt${item.id}`}>
+                <li key={item.id}>{item.url}</li><button key={`buttonKeyAt${item.id}`} onClick={this.handleAddButton.bind(this, item.url)}>Add Product</button>
+              </div>
+            )
+          })}
+        </ul>
+      )
+    }
   }
 
   render() {
@@ -21,7 +43,7 @@ export default class consumerPostItem extends Component {
             <p>{this.props.currentPost.caption}</p>
           </div>
           <div className="col-md-4 col-sm-4 col-xs-4">
-            A BUNCH OF RETAIL IMAGES
+            {this.renderRetailList()}
           </div>
         </div>
       )
@@ -37,7 +59,7 @@ export default class consumerPostItem extends Component {
             <p>{this.props.currentPost.caption}</p>
           </div>
           <div className="col-md-4 col-sm-4 col-xs-4">
-            A BUNCH OF RETAIL STUFF
+            {this.renderRetailList()}
           </div>
         </div>
       )

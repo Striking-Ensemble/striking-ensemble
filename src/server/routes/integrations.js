@@ -1,21 +1,25 @@
 // =============== Purchase Controller ================ //
 
 const express = require('express');
+const request = require('request');
 
 exports.integration = (req, res) => {
+  console.log('Integration Controller:', process.env.TwoTap_public_token);
   const publicToken = process.env.TwoTap_public_token;
-  const cutomsCSSURL = req.query.custome_css_url || 'http://localhost:2500/stylesheets/integration_twotap.css';
+  const customCSSURL = req.query.custome_css_url || 'http://localhost:3000/notnicknick/assets/css/integration_twotap.css';
   const smsConfirmURL = 'http://localhost:3000/purchase_confirm_callback';
 
-  // need to work on client-side rendering
-  // res.render('integration', {
-  //   publicToken: publicToken,
-  //   customCSSURL: customCSSURL,
-  //   smsConfirmURL: smsConfirmURL
-  // });
+  res.send({
+    publicToken: publicToken,
+    customCSSURL: customCSSURL,
+    smsConfirmURL: smsConfirmURL
+  })
 };
 
 exports.purchaseConfirmCallback = (req, res) => {
+  console.log('THIS GOT USED, purchase confirm', req.body);
+  console.log('is this even?...', req.app.settings.private_token);
+  console.log('check for typeof env tokens:', typeof req.app.settings.private_token)
   let apiURL = 'https://api.twotap.com';
   let purchaseId = req.body.purchase_id;
   let testMode = req.body.test_mode;
@@ -30,8 +34,8 @@ exports.purchaseConfirmCallback = (req, res) => {
     }
   }
 
-
   request.post(apiURL + callPath, queryObj, function (error, response, body) {
+    console.log('in purchase confirm:', body)
     res.json(JSON.parse(body));
   });
 };

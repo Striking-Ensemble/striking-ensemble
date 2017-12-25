@@ -2,12 +2,6 @@ html, body {
   height: 100%;
 }
 
-iframe [seamless] {
-  background-color: transparent;
-  border: 0px none transparent;
-  padding: 0px;
-  overflow: hidden;
-}
 /* /////////////////////////////////////////////////////////// */
 .page-container {
   padding-right: 15px;
@@ -52,6 +46,8 @@ iframe [seamless] {
   margin-top: 0.5%;
   margin-right: 1.5%;
 }
+
+/* ///////////////////////// */
 
 /* Spinner */
 @keyframes lds-eclipse {

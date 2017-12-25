@@ -46,6 +46,7 @@
     "path": "^0.12.7",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-responsive-modal": "^2.0.0",
     "react-router-dom": "^4.2.2",
     "request": "^2.83.0",
     "store": "^2.0.12",
