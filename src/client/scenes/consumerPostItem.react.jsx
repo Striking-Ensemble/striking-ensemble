@@ -13,17 +13,19 @@ export default class consumerPostItem extends Component {
   }
 
   renderRetailList() {
-    return (
-      <ul>
-        {this.props.currentPost.retailLinks.map((item, index) => {
-          return (
-            <div key={`boxAt${item.id}`}>
-              <li key={item.id}>{item.url}</li><button key={`buttonKeyAt${item.id}`} onClick={this.handleAddButton.bind(this, item.url)}>Add Product</button>
-            </div>
-          )
-        })}
-      </ul>
-    )
+    if (this.props.currentPost.retailLinks) {
+      return (
+        <ul>
+          {this.props.currentPost.retailLinks.map((item, index) => {
+            return (
+              <div key={`boxAt${item.id}`}>
+                <li key={item.id}>{item.url}</li><button key={`buttonKeyAt${item.id}`} onClick={this.handleAddButton.bind(this, item.url)}>Add Product</button>
+              </div>
+            )
+          })}
+        </ul>
+      )
+    }
   }
 
   render() {
