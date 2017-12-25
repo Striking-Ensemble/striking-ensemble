@@ -5,7 +5,7 @@ import Footer from '../components/footer.react';
 import LoadingSpinner from '../components/loadingSpinner.react';
 import ConsumerPostList from './consumerPostList.react';
 import ConsumerPostItem from './consumerPostItem.react';
-import checkCredentials from '../services/checkCredentials';
+import Modal from 'react-responsive-modal';
 
 export default class Consumer extends Component {
   constructor(props) {
@@ -13,6 +13,7 @@ export default class Consumer extends Component {
 
     this.state = {
       error: null,
+      showModal: false,
       userIsLoaded: false,
       mediaIsLoaded: false,
       user: {},
@@ -31,6 +32,7 @@ export default class Consumer extends Component {
     this.addToLocalCart = this.addToLocalCart.bind(this);
     this.buyProducts = this.buyProducts.bind(this);
     this.renderPurchase = this.renderPurchase.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   componentDidMount() {
@@ -100,6 +102,10 @@ export default class Consumer extends Component {
     this.setState({ localCart: [...this.state.localCart, {url: item}] }, () => console.log('local cart:', this.state.localCart));
   }
 
+  handleCloseModal() {
+    this.setState({ showModal: false });
+  }
+
   buyProducts() {
     let checkoutRequest = {};
     checkoutRequest['products'] = this.state.localCart;
@@ -111,14 +117,22 @@ export default class Consumer extends Component {
     axios.post('https://checkout.twotap.com/prepare_checkout', { checkout_request: checkoutRequest })
       .then(res => {
         console.log('GOT SOMETHING:', res.data);
-        this.setState({ checkout_request_id: res.data.checkout_request_id });
+        this.setState({ showModal: true, checkout_request_id: res.data.checkout_request_id });
       })
       .catch(err => console.log('OOOPPPSS:', err))
   }
 
   renderPurchase() {
+    let customStyles = { 
+      width: '100%', 
+      height: '100%'
+    };
     if (this.state.checkout_request_id) {
-      return <iframe src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={{width: '400px', height: '700px', zIndex: '1'}}></iframe>
+      return (
+        <div className="iframeContainer">
+          <iframe src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={customStyles} frameBorder="0" ></iframe>
+        </div>
+      )
     }
   }
 
@@ -181,20 +195,27 @@ export default class Consumer extends Component {
   }
 
   render() {
-    console.log('OOOOOOO state of user:', this.state.user);
-    console.log('ahhhhhh state of media:', this.state.data)
     return (
       <div id="page-outer">
+        <Modal
+          open={this.state.showModal}
+          onClose={this.handleCloseModal}
+          closeOnEsc={true}
+          closeOnOverlayClick={true}
+          little={false}
+          showCloseIcon={true}
+        >
+          {this.renderPurchase()}
+        </Modal>
         <div className="page-container">
+          <button className="col-lg-2 col-lg-offset-10 col-md-2 col-md-offset-10 col-sm-3 col-sm-offset-9 col-xs-3 col-xs-offset-9" onClick={this.buyProducts}>
+            <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Check Cart
+          </button>
           {!this.state.userIsLoaded ?
             (<LoadingSpinner />)
             :
             (this.renderUser())
           }
-          <br />
-          <button onClick={this.buyProducts}>Buy Products</button>
-          <br />
-          {this.renderPurchase()}
           <br />
           {!this.state.mediaIsLoaded ?
             (<LoadingSpinner />)
