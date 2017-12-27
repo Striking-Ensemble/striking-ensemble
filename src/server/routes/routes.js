@@ -77,8 +77,8 @@ reqRoutes.get('/account/media', reqController.getMedia);
 
 // ======================== TwoTap API Routes ======================== //
 reqRoutes.get('/:username/cart', integrations.integration);
+reqRoutes.get('/purchase_status/id/:purchase_id', reqController.purchaseStatusController);
 reqRoutes.post('/purchase_confirm_callback', reqController.purchaseConfirmController);
-
 // Public route handlers here due to paths can be loosely associated with other paths
 
 // reqRoutes.get('/', (req, res) => {

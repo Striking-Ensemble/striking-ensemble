@@ -92,11 +92,14 @@ export default class Account extends Component {
     let user = this.props.user;
     return (
       <div className="main">
-        <h1>{user.full_name} is logged in.</h1>
-        <img src={user.profile_picture} className="img-circle" style={{'maxWidth': '15%'}} /><p>{user.username}</p>
-        <br />
-        <div className="post-container">
-          {this.currentPostIsEmpty() ? this.renderPosts.bind(this)() : this.renderPostItem.bind(this)()}
+        <div className="row">
+          <h1>{user.full_name} is logged in.</h1>
+          <img src={user.profile_picture} className="img-circle" style={{'maxWidth': '15%'}} /><p>{user.username}</p>
+        </div>
+        <div className="row">
+          <div className="post-container">
+            {this.currentPostIsEmpty() ? this.renderPosts.bind(this)() : this.renderPostItem.bind(this)()}
+          </div>
         </div>
       </div>
     )

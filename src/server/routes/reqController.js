@@ -12,9 +12,13 @@ const twoTapApiURL = 'https://checkout.twotap.com/prepare_checkout';
 const instaApiURL = 'https://api.instagram.com/v1/users/self/media/recent';
 
 exports.purchaseConfirmController = (req, res) => {
-  console.log('READY FOR CHECKOUT');
+  console.log('CHECKING OUT...');
   integrations.purchaseConfirmCallback(req, res);
 };
+
+exports.purchaseStatusController = (req, res) => {
+  integrations.purchaseStatus(req, res);
+}
 
 // ======================================================================= //
 

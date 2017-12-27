@@ -111,7 +111,7 @@ export default class Consumer extends Component {
     checkoutRequest['products'] = this.state.localCart;
     checkoutRequest['public_token'] = '52434d36952f32a3bb43f67ea85c64';
     // checkoutRequest['custom_css_url'] = 'http://localhost:3000/notnicknick/assets/css/integration_twotap.css'
-    checkoutRequest['confirm'] = { method: 'sms', sms_confirm_url: 'http://localhost:3000/purchase_confirm_callback' }
+    checkoutRequest['confirm'] = { method: 'sms', sms_confirm_url: 'http://d49a84ee.ngrok.io/purchase_confirm_callback' }
     checkoutRequest['unique_token'] = (Math.floor(Math.random() * 9999999) + 1).toString();
 
     axios.post('https://checkout.twotap.com/prepare_checkout', { checkout_request: checkoutRequest })
@@ -125,7 +125,7 @@ export default class Consumer extends Component {
   renderPurchase() {
     let customStyles = { 
       width: '100%', 
-      height: '100%'
+      height: '700px'
     };
     if (this.state.checkout_request_id) {
       return (
@@ -138,10 +138,11 @@ export default class Consumer extends Component {
 
   renderUser() {
     return (
-      <div className="user-info">
-        <h3>{this.state.user.full_name}</h3>
-        <img src={this.state.user.profile_picture} className="img-circle" style={{ 'maxWidth': '15%' }} />
-        <br />
+      <div id="user-info">
+        <div className="row">
+          <img src={this.state.user.profile_picture} className="col-xs-offset-5 img-circle" style={{ 'maxWidth': '15%' }} />
+          <br />
+        </div>
       </div>
     )
   }
@@ -208,20 +209,26 @@ export default class Consumer extends Component {
           {this.renderPurchase()}
         </Modal>
         <div className="page-container">
-          <button className="col-lg-2 col-lg-offset-10 col-md-2 col-md-offset-10 col-sm-3 col-sm-offset-9 col-xs-3 col-xs-offset-9" onClick={this.buyProducts}>
-            <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Check Cart
-          </button>
-          {!this.state.userIsLoaded ?
-            (<LoadingSpinner />)
-            :
-            (this.renderUser())
-          }
           <br />
-          {!this.state.mediaIsLoaded ?
-            (<LoadingSpinner />)
-            :
-            (this.currentPostIsEmpty() ? this.renderPosts() : this.renderPostItem())
-          }
+          <div className="row">
+            <button className="col-md-2 col-md-offset-10 col-sm-2 col-sm-offset-10 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts}>
+              <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span><span className="hidden-xs"> Check Cart</span>
+            </button>
+            <div class="clearfix visible-xs-block"></div>
+            {!this.state.userIsLoaded ?
+              (<LoadingSpinner />)
+              :
+              (this.renderUser())
+            }
+          </div>
+          <hr />
+          <div className="row">
+            {!this.state.mediaIsLoaded ?
+              (<LoadingSpinner />)
+              :
+              (this.currentPostIsEmpty() ? this.renderPosts() : this.renderPostItem())
+            }
+          </div>
         </div>
         <Footer />
       </div>

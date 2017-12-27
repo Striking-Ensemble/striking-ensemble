@@ -14,6 +14,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const store = require('store');
 const Influencer = require('./db/Influencer');
+// const request = require('request');
 
 // =================================================================== //
 
@@ -35,8 +36,9 @@ app.use(session({
 }));
 app.set('own_url', 'http://localhost:3000');
 app.set('mobile_url', 'https://checkout.twotap.com');
-app.set('twoTap_public_token', '');
-app.set('twoTap_private_token', '');
+app.set('twoTap_apiUrl', 'https://api.twotap.com');
+app.set('twoTap_public_token', process.env.TwoTap_public_token);
+app.set('twoTap_private_token', process.env.TwoTap_private_token);
 app.set('insta_accessToken', '');
 
 // create insta-pass config
@@ -68,6 +70,32 @@ passport.deserializeUser((id, done) => {
 app.use('/', reqRoutes);
 app.use('/api', router);
 app.use('/:username', express.static(path.join(__dirname, '../../public')));
+
+// const public_token = '52434d36952f32a3bb43f67ea85c64';
+// const site_id = '51dc206e55a0f9706f000002';
+// const sample = 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000211808'
+// const query = {
+//   // filter: {
+//   //   "keywords": "dress",
+//   //   "keywords_fields": ["brand"],
+//   //   "site_ids": [site_id],
+//   //   "genders": ["g-women"],
+//   //   "brands": ["Forever 21"]
+//   // },
+//   scroll_id: '',
+//   size: '10'
+// }
+
+// request.post(`https://api.twotap.com/v1.0/product/scroll?public_token=${public_token}`, query, (err, response, body) => {
+//   if (err) {
+//     console.log('Something went wrong...', err);
+//   }
+//   let productsList = JSON.parse(body);
+//   console.log('/product/search results:', productsList);
+//   // let result = productsList.products.filter(item => item.site_name == 'forever 21')
+//   // console.log('the goodies', result);
+// });
+
 
 // ************************************************************ //
 
