@@ -111,7 +111,7 @@ export default class Consumer extends Component {
     checkoutRequest['products'] = this.state.localCart;
     checkoutRequest['public_token'] = '52434d36952f32a3bb43f67ea85c64';
     // checkoutRequest['custom_css_url'] = 'http://localhost:3000/notnicknick/assets/css/integration_twotap.css'
-    checkoutRequest['confirm'] = { method: 'sms', sms_confirm_url: 'http://localhost:3000/purchase_confirm_callback' }
+    checkoutRequest['confirm'] = { method: 'sms', sms_confirm_url: 'http://d49a84ee.ngrok.io/purchase_confirm_callback' }
     checkoutRequest['unique_token'] = (Math.floor(Math.random() * 9999999) + 1).toString();
 
     axios.post('https://checkout.twotap.com/prepare_checkout', { checkout_request: checkoutRequest })
@@ -125,7 +125,7 @@ export default class Consumer extends Component {
   renderPurchase() {
     let customStyles = { 
       width: '100%', 
-      height: '100%'
+      height: '700px'
     };
     if (this.state.checkout_request_id) {
       return (
