@@ -2,12 +2,37 @@ html, body {
   height: 100%;
 }
 
+#footer {
+  position: relative;
+}
+
+.ellipses {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+ul {
+  padding-left: initial;
+}
+
+li {
+  list-style-type: none;
+}
+
+.img-responsive {
+  margin: auto;
+}
+
 /* /////////////////////////////////////////////////////////// */
 .page-container {
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+  margin-bottom: 10%;
+  position: relative;
+  height: 100%;
 }
 @media (min-width: 768px) {
   .page-container {
@@ -28,10 +53,6 @@ html, body {
 .container {
   overflow-y: auto;
   height: 100vh;
-}
-
-.container.footer {
-  height: auto;
 }
 
 .col-centered {

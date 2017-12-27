@@ -102,6 +102,7 @@ export default class Influencer extends Component {
             {...this.props} 
           />
           <div className="page-container">
+            <br />
             { !this.state.isLoaded ? 
               (<LoadingSpinner />) 
               : 
