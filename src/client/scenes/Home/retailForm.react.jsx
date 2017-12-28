@@ -27,7 +27,7 @@ export default class RetailForm extends Component {
 
     axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
       .then(response => console.log(response))
-      .catch(err => console.log(err));
+      .catch(err => console.log(err)); 
   }
 
   render() {
@@ -36,8 +36,15 @@ export default class RetailForm extends Component {
       <div>
         <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
           <legend>Add your retail links</legend>
-          <input type="submit" value="Save" /><input type="reset" value="Cancel" />
-          <br />
+          <div className="row">
+            <div className="col-sm-3 col-xs-2">
+              <button className="btn btn-success btn-sm" type="submit">Save</button>
+            </div>
+            <div className="col-sm-3 col-xs-3">
+              <button className="btn btn-danger btn-sm" type="reset">Cancel</button>
+            </div>
+          </div>
+          <div className="form-group">
           {
             this.props.retailLinks.map((item, index) => (
               <InputBox 
@@ -48,8 +55,8 @@ export default class RetailForm extends Component {
                 removeRetailLink={this.props.removeRetailLink}
               />
           ))}
-          <br />
-          <button onClick={this.props.addInputBox} value="retail-form" type="button">Add More Link Boxes</button>
+          </div>
+          <button className="btn btn-default" onClick={this.props.addInputBox} value="retail-form" type="button">Add More Link Boxes</button>
         </form>
       </div>
     )

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
 import axios from 'axios';
 import store from 'store';
+import React, { Component } from 'react';
 import Footer from '../components/footer.react';
 import LoadingSpinner from '../components/loadingSpinner.react';
 import ConsumerPostList from './consumerPostList.react';

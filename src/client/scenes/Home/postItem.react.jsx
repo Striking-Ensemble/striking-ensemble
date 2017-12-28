@@ -41,12 +41,12 @@ export default class PostItem extends Component {
     if (this.props.currentPost.video_low) {
       return (
         <div className="container">
-          <div id="post-item" className="col-md-8 col-sm-8 col-xs=8">
+          <div id="post-item" className="col-md-8 col-sm-8 col-xs=12">
             <iframe src={this.props.currentPost.video_low.url} className="embed-responsive-item" style={{ height: '536px' }} seamless>
             </iframe>
             <p>{this.props.currentPost.caption}</p>
           </div>
-          <div className="col-md-4 col-sm-4 col-xs-4">
+          <div className="col-md-4 col-sm-4 col-xs-12">
             <RetailForm
               instaId={this.props.currentPost.instaId}
               retailLinks={this.state.retailLinks}
@@ -60,11 +60,11 @@ export default class PostItem extends Component {
     } else {
       return (
         <div className="container">
-          <div id="post-item" className="col-md-8 col-sm-8 col-xs=8">
+          <div id="post-item" className="col-md-8 col-sm-8 col-xs=12">
             <img src={this.props.currentPost.image_norm.url} className="img-responsive" />
             <p>{this.props.currentPost.caption}</p>
           </div>
-          <div className="col-md-4 col-sm-4 col-xs-4">
+          <div className="col-md-4 col-sm-4 col-xs-12">
             <RetailForm
               instaId={this.props.currentPost.instaId}
               retailLinks={this.state.retailLinks}

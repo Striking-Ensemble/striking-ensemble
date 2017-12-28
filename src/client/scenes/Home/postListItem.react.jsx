@@ -1,6 +1,6 @@
+import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import PostItem from './postItem.react';
-import { Link } from 'react-router-dom';
 
 export default class PostListItem extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ export default class PostListItem extends Component {
     console.log('CLICKED!');
     console.log('what event?', this.props);
     this.props.addCurrentPost(this.props);
-    this.props.history.push(`/account/post/${this.props.instaId}`);
+    // this.props.history.push(`/account/post/${this.props.instaId}`);
   }
 
   render () {
@@ -22,7 +22,7 @@ export default class PostListItem extends Component {
     // console.log('WHATTABOUT changeCurrentPost', this.props.changeCurrentPost);
 
     return (
-      <div className="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+      <div className="col-lg-3 col-md-4 col-sm-4 col-xs-6">
         <Link to={{
           pathname: `/account/post/${this.props.instaId}`,
           state: {

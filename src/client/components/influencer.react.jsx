@@ -1,7 +1,7 @@
-import React, { Component } from 'react'; 
-import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import store from 'store';
+import React, { Component } from 'react'; 
+import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import Navigation from './navigation.react';
 import Account from '../scenes/Home/account.react';
 import Footer from './footer.react';
@@ -74,6 +74,7 @@ export default class Influencer extends Component {
     currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
+    // this.props.history.push(`/account/post/${post.instaId}`);
   }
   // for navigation use
   removeCurrentPost() {

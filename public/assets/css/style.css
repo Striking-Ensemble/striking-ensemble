@@ -2,6 +2,10 @@ html, body {
   height: 100%;
 }
 
+.row {
+  margin-bottom: 5px !important;
+}
+
 #footer {
   position: relative;
 }
@@ -10,6 +14,10 @@ html, body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+div > h4 {
+  padding-top: 18%;
 }
 
 ul {
@@ -50,6 +58,7 @@ li {
   }
 }
 /* ///////////////////////////////////////////////////////////// */
+
 .container {
   overflow-y: auto;
   height: 100vh;
