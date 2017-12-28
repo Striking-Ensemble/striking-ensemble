@@ -14,7 +14,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const store = require('store');
 const Influencer = require('./db/Influencer');
-// const request = require('request');
+const request = require('request');
 
 // =================================================================== //
 
@@ -75,18 +75,14 @@ app.use('/:username', express.static(path.join(__dirname, '../../public')));
 // const site_id = '51dc206e55a0f9706f000002';
 // const sample = 'https://www.forever21.com/us/shop/Catalog/Product/21men/mens-new-arrivals/2000211808'
 // const query = {
-//   // filter: {
-//   //   "keywords": "dress",
-//   //   "keywords_fields": ["brand"],
-//   //   "site_ids": [site_id],
-//   //   "genders": ["g-women"],
-//   //   "brands": ["Forever 21"]
-//   // },
-//   scroll_id: '',
-//   size: '10'
+//   'filter': {
+//     "keywords": "shoes",
+//     "site_ids": ['51dc206e55a0f9706f000002']
+//   },
+//   'destination_country': 'United States of America'
 // }
 
-// request.post(`https://api.twotap.com/v1.0/product/scroll?public_token=${public_token}`, query, (err, response, body) => {
+// request.post({url: `https://api.twotap.com/v1.0/product/search?public_token=${public_token}`, query }, (err, response, body) => {
 //   if (err) {
 //     console.log('Something went wrong...', err);
 //   }
