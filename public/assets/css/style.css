@@ -84,11 +84,6 @@ li {
 }
 /* ///////////////////////////////////////////////////////////// */
 
-.container {
-  /* overflow-y: auto; */
-  /* height: 100vh; */
-}
-
 .col-centered {
   float: none;
   margin: 0 auto;

@@ -81,23 +81,24 @@ app.use('/:username', express.static(path.join(__dirname, '../../public')));
 //   }
 // }
 
-// request.post({url: `https://api.twotap.com/v1.0/product/search?public_token=${public_token}`,
-//   form: {
-//     'filter': {
-//       "keywords": '2000211808',
-//       "keywords_fields": ['url'],
-//       "site_ids": ['51dc206e55a0f9706f000002']
+// request.post(
+//   {
+//     url: `https://api.twotap.com/v1.0/product/search?public_token=${public_token}`,
+//     form: {
+//       'filter': {
+//         "keywords": '2000211808',
+//         "keywords_fields": ['url'],
+//         "site_ids": ['51dc206e55a0f9706f000002']
+//       }
 //     }
+//   }, (err, response, body) => {
+//     if (err) {
+//       console.log('Err in /product/search:', err);
+//     }
+//     let productsList = JSON.parse(body);
+//     console.log('/product/search results:', productsList);
 //   }
-// }, (err, response, body) => {
-//   if (err) {
-//     console.log('Something went wrong...', err);
-//   }
-//   let productsList = JSON.parse(body);
-//   console.log('/product/search results:', productsList);
-//   // let result = productsList.products.filter(item => item.site_name == 'forever 21')
-//   // console.log('the goodies', result);
-// });
+// );
 
 
 // ************************************************************ //
