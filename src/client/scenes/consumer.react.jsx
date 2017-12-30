@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
 import axios from 'axios';
 import store from 'store';
+import React, { Component } from 'react';
 import Footer from '../components/footer.react';
 import LoadingSpinner from '../components/loadingSpinner.react';
 import ConsumerPostList from './consumerPostList.react';
@@ -124,12 +124,14 @@ export default class Consumer extends Component {
 
   renderPurchase() {
     let customStyles = { 
-      width: '100%', 
-      height: '700px'
+      width: '100%',
+      minHeight: '600px', 
+      maxHeight: '700px'
     };
     if (this.state.checkout_request_id) {
       return (
-        <div className="iframeContainer">
+        <div className="modal-content">
+          <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <iframe src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={customStyles} frameBorder="0" ></iframe>
         </div>
       )
@@ -197,24 +199,19 @@ export default class Consumer extends Component {
 
   render() {
     return (
-      <div id="page-outer">
-        <Modal
-          open={this.state.showModal}
-          onClose={this.handleCloseModal}
-          closeOnEsc={true}
-          closeOnOverlayClick={true}
-          little={false}
-          showCloseIcon={true}
-        >
-          {this.renderPurchase()}
-        </Modal>
+      <div id="page-outer" className="container-fluid">
         <div className="page-container">
           <br />
           <div className="row">
-            <button className="col-md-2 col-md-offset-10 col-sm-2 col-sm-offset-10 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts}>
+            <button type="button" className="col-md-2 col-md-offset-10 col-sm-2 col-sm-offset-10 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts} data-toggle="modal" data-target=".bs-example-modal-sm">
               <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span><span className="hidden-xs"> Check Cart</span>
             </button>
-            <div class="clearfix visible-xs-block"></div>
+            <div className="modal fade bs-example-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+              <div className="modal-dialog modal-sm" role="document">
+                {this.renderPurchase()}
+              </div>
+            </div>
+            <div className="clearfix visible-xs-block"></div>
             {!this.state.userIsLoaded ?
               (<LoadingSpinner />)
               :
@@ -230,7 +227,9 @@ export default class Consumer extends Component {
             }
           </div>
         </div>
-        <Footer />
+        <div className="row">
+          <Footer />
+        </div>
       </div>
     )
   }

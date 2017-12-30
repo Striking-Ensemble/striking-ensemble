@@ -1,7 +1,7 @@
-import React, { Component } from 'react'; 
-import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import store from 'store';
+import React, { Component } from 'react'; 
+import { Redirect } from 'react-router-dom';
 import Navigation from './navigation.react';
 import Account from '../scenes/Home/account.react';
 import Footer from './footer.react';
@@ -74,6 +74,7 @@ export default class Influencer extends Component {
     currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
+    // this.props.history.push(`/account/post/${post.instaId}`);
   }
   // for navigation use
   removeCurrentPost() {
@@ -94,26 +95,28 @@ export default class Influencer extends Component {
       )
     } else {
       return (
-        <div id="page-outer">
+        <div id="wrap">
           <Navigation 
             user={store.get('user').data} 
             removeUser={this.removeUser} 
             removeCurrentPost={this.removeCurrentPost}
             {...this.props} 
           />
-          <div className="page-container">
-            <br />
-            { !this.state.isLoaded ? 
-              (<LoadingSpinner />) 
-              : 
-              (<Account 
-                user={store.get('user').data}
-                currentPost={this.state.currentPost} 
-                addCurrentPost={this.addCurrentPost} 
-                removeCurrentPost={this.removeCurrentPost} 
-                {...this.props} 
-              />) 
-            }
+          <br />
+          <div id="main" className="container-fluid">
+            <div className="container">
+              { !this.state.isLoaded ? 
+                (<LoadingSpinner />) 
+                : 
+                (<Account 
+                  user={store.get('user').data}
+                  currentPost={this.state.currentPost} 
+                  addCurrentPost={this.addCurrentPost} 
+                  removeCurrentPost={this.removeCurrentPost} 
+                  {...this.props} 
+                />) 
+              }
+            </div>
           </div>
           <Footer />
         </div>

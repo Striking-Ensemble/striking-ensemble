@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import isAuthenticated from '../../services/isAuthenticated'
-import { Redirect } from 'react-router-dom';
-import PostListItem from './postListItem.react';
 import axios from 'axios';
 import store from 'store';
+import { Redirect } from 'react-router-dom';
+import React, { Component } from 'react';
+import isAuthenticated from '../../services/isAuthenticated'
+import PostListItem from './postListItem.react';
 import LoadingSpinner from '../../components/loadingSpinner.react';
 import PostItem from './postItem.react';
 
@@ -91,14 +91,21 @@ export default class Account extends Component {
     console.log('IN ACCOUNT:', this.state.data);
     let user = this.props.user;
     return (
-      <div className="main">
-        <div className="row">
-          <h1>{user.full_name} is logged in.</h1>
-          <img src={user.profile_picture} className="img-circle" style={{'maxWidth': '15%'}} /><p>{user.username}</p>
+      <div className="row">
+        <div>
+          <div className="row">
+            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+              <img src={user.profile_picture} className="img-responsive img-circle" />
+            </div>
+            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+              <h4>{user.username}</h4>
+            </div>
+          </div>
         </div>
-        <div className="row">
-          <div className="post-container">
-            {this.currentPostIsEmpty() ? this.renderPosts.bind(this)() : this.renderPostItem.bind(this)()}
+        <br />
+        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div className="row">
+              {this.currentPostIsEmpty() ? this.renderPosts.bind(this)() : this.renderPostItem.bind(this)()}
           </div>
         </div>
       </div>
