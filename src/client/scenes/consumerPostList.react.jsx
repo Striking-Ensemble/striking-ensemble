@@ -17,7 +17,7 @@ export default class ConsumerPostList extends Component {
 
   render() {
     return (
-      <div className="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+      <div className="col-lg-3 col-md-4 col-sm-4 col-xs-4 post-list">
         <Link to={{
           pathname: `/${this.props.username}/post/${this.props.instaId}`,
           state: {

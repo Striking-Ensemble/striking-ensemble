@@ -95,26 +95,28 @@ export default class Influencer extends Component {
       )
     } else {
       return (
-        <div id="page-outer">
+        <div id="wrap">
           <Navigation 
             user={store.get('user').data} 
             removeUser={this.removeUser} 
             removeCurrentPost={this.removeCurrentPost}
             {...this.props} 
           />
-          <div className="page-container">
-            <br />
-            { !this.state.isLoaded ? 
-              (<LoadingSpinner />) 
-              : 
-              (<Account 
-                user={store.get('user').data}
-                currentPost={this.state.currentPost} 
-                addCurrentPost={this.addCurrentPost} 
-                removeCurrentPost={this.removeCurrentPost} 
-                {...this.props} 
-              />) 
-            }
+          <br />
+          <div id="main" className="container-fluid">
+            <div className="container">
+              { !this.state.isLoaded ? 
+                (<LoadingSpinner />) 
+                : 
+                (<Account 
+                  user={store.get('user').data}
+                  currentPost={this.state.currentPost} 
+                  addCurrentPost={this.addCurrentPost} 
+                  removeCurrentPost={this.removeCurrentPost} 
+                  {...this.props} 
+                />) 
+              }
+            </div>
           </div>
           <Footer />
         </div>

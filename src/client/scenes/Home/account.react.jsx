@@ -91,19 +91,21 @@ export default class Account extends Component {
     console.log('IN ACCOUNT:', this.state.data);
     let user = this.props.user;
     return (
-      <div className="main">
-        <div className="row">
-          <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
-            <img src={user.profile_picture} className="img-responsive img-circle" />
-          </div>
-          <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
-            <h4>{user.username}</h4>
+      <div className="row">
+        <div>
+          <div className="row">
+            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+              <img src={user.profile_picture} className="img-responsive img-circle" />
+            </div>
+            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+              <h4>{user.username}</h4>
+            </div>
           </div>
         </div>
         <br />
-        <div className="row">
-          <div className="post-container">
-            {this.currentPostIsEmpty() ? this.renderPosts.bind(this)() : this.renderPostItem.bind(this)()}
+        <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div className="row">
+              {this.currentPostIsEmpty() ? this.renderPosts.bind(this)() : this.renderPostItem.bind(this)()}
           </div>
         </div>
       </div>

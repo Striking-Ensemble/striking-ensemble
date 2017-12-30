@@ -78,11 +78,18 @@ app.use('/:username', express.static(path.join(__dirname, '../../public')));
 //   'filter': {
 //     "keywords": "shoes",
 //     "site_ids": ['51dc206e55a0f9706f000002']
-//   },
-//   'destination_country': 'United States of America'
+//   }
 // }
 
-// request.post({url: `https://api.twotap.com/v1.0/product/search?public_token=${public_token}`, query }, (err, response, body) => {
+// request.post({url: `https://api.twotap.com/v1.0/product/search?public_token=${public_token}`,
+//   form: {
+//     'filter': {
+//       "keywords": '2000211808',
+//       "keywords_fields": ['url'],
+//       "site_ids": ['51dc206e55a0f9706f000002']
+//     }
+//   }
+// }, (err, response, body) => {
 //   if (err) {
 //     console.log('Something went wrong...', err);
 //   }
