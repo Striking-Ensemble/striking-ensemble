@@ -141,10 +141,8 @@ export default class Consumer extends Component {
   renderUser() {
     return (
       <div id="user-info">
-        <div className="row">
-          <img src={this.state.user.profile_picture} className="col-xs-offset-5 img-circle" style={{ 'maxWidth': '15%' }} />
-          <br />
-        </div>
+        <img src={this.state.user.profile_picture} className="col-md-offset-5 col-xs-offset-5 img-circle" style={{ 'maxWidth': '15%' }} />
+        <br />
       </div>
     )
   }
@@ -200,32 +198,30 @@ export default class Consumer extends Component {
   render() {
     return (
       <div id="page-outer" className="container-fluid">
-        <div className="page-container">
-          <br />
-          <div className="row">
-            <button type="button" className="col-md-2 col-md-offset-10 col-sm-2 col-sm-offset-10 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts} data-toggle="modal" data-target=".bs-example-modal-sm">
-              <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span><span className="hidden-xs"> Check Cart</span>
-            </button>
-            <div className="modal fade bs-example-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-              <div className="modal-dialog modal-sm" role="document">
-                {this.renderPurchase()}
-              </div>
+        <br />
+        <div className="row">
+          <button type="button" className="col-md-2 col-md-offset-10 col-sm-2 col-sm-offset-10 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts} data-toggle="modal" data-target=".bs-example-modal-sm">
+            <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span><span className="hidden-xs"> Check Cart</span>
+          </button>
+          <div className="modal fade bs-example-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div className="modal-dialog modal-sm" role="document">
+              {this.renderPurchase()}
             </div>
-            <div className="clearfix visible-xs-block"></div>
-            {!this.state.userIsLoaded ?
-              (<LoadingSpinner />)
-              :
-              (this.renderUser())
-            }
           </div>
-          <hr />
-          <div className="row">
-            {!this.state.mediaIsLoaded ?
-              (<LoadingSpinner />)
-              :
-              (this.currentPostIsEmpty() ? this.renderPosts() : this.renderPostItem())
-            }
-          </div>
+          <div className="clearfix visible-xs-block"></div>
+          {!this.state.userIsLoaded ?
+            (<LoadingSpinner />)
+            :
+            (this.renderUser())
+          }
+        </div>
+        <hr />
+        <div className="row">
+          {!this.state.mediaIsLoaded ?
+            (<LoadingSpinner />)
+            :
+            (this.currentPostIsEmpty() ? this.renderPosts() : this.renderPostItem())
+          }
         </div>
         <div className="row">
           <Footer />

@@ -67,9 +67,23 @@ li {
   position: relative;
   height: 100%;
 }
+
+#user-info > .col-md-offset-5 {
+  margin-left: 45%;
+}
+
+/* Mobile Devices */
+@media (max-width: 425px) {
+  .navbar-right {
+    margin: 5px 0px !important;
+  }
+}
 @media (min-width: 768px) {
   .page-container {
     width: 750px;
+  }
+  .navbar-right {
+    margin-right: 0px;
   }
 }
 @media (min-width: 992px) {
@@ -91,10 +105,14 @@ li {
 }
 
 /* NAV */
-.navbar .nav.pull-right {
+/* .navbar .nav.pull-right {
   float: right;
   margin-top: 0.5%;
   margin-right: 1.5%;
+} */
+
+.navbar-right {
+  margin: 7px 15px;
 }
 
 /* ///////////////////////// */

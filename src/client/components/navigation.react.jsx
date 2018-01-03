@@ -49,7 +49,7 @@ export default class Navigation extends Component {
                 <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in">Stats</Link>
               </li>
             </ul>
-            <ul className="nav navbar-nav pull-right">
+            <ul className="nav navbar-nav navbar-right">
               <li>
                 <button className="btn btn-danger log" onClick={this.handleRedirect.bind(this)}>Logout</button>
               </li>
