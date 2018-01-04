@@ -14,9 +14,7 @@ const FourOhFour = () => {
             </div>
             <br />
             <div className="error-actions">
-              <Link to="/" className="btn btn-primary btn-lg"><span className="glyphicon glyphicon-home"></span>
-                  Take Me Home 
-              </Link>
+              <Link to="/" className="btn btn-primary btn-lg"><span className="glyphicon glyphicon-home"></span> Take Me Home </Link>
               {/* <Link to="/contact" className="btn btn-default btn-lg"><span className="glyphicon glyphicon-envelope"></span> 
                 Contact Support 
               </Link> */}

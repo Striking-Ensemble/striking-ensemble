@@ -1,6 +1,7 @@
 import axios from 'axios';
 import store from 'store';
 import React, { Component } from 'react';
+import FourOhFour from '../components/fourOhFour.react';
 import Footer from '../components/footer.react';
 import LoadingSpinner from '../components/loadingSpinner.react';
 import ConsumerPostList from './consumerPostList.react';
@@ -41,6 +42,9 @@ export default class Consumer extends Component {
       res => {
         console.log('I NEED TO FIND res.data for user', res.data);
         if (res.data) {
+          if(!res.data[0]) {
+            this.setState({error: true});
+          }
           const newObj = res.data[0];
           // update user state
           this.setState({
@@ -196,6 +200,9 @@ export default class Consumer extends Component {
   }
 
   render() {
+    if (this.state.error) {
+      return (<FourOhFour />);
+    }
     return (
       <div id="page-outer" className="container-fluid">
         <br />

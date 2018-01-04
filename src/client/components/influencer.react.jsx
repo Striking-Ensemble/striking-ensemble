@@ -8,6 +8,7 @@ import Footer from './footer.react';
 import LoadingSpinner from './loadingSpinner.react';
 import isAuthenticated from '../services/isAuthenticated';
 import checkCredentials from '../services/checkCredentials';
+import FourOhFour from './fourOhFour.react';
 
 export default class Influencer extends Component {
   constructor(props) {
@@ -85,7 +86,9 @@ export default class Influencer extends Component {
 
   render() {
     // console.log('what\'s current user state', store.get('user').data);
-    if (!isAuthenticated()) {
+    if (this.state.error) {
+      return (<FourOhFour />)
+    } else if (!isAuthenticated()) {
       console.log('NO USER Authenticated... REDIRECTING TO /login');
       return (
         <Redirect to={{
