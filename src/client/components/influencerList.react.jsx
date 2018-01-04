@@ -44,8 +44,8 @@ export default class InfluencerList extends Component {
       this.state.influencerLists.map(item => {
         return (
           <li key={`index_${item.id}`}>
-            <Link to={`/${item.username}`}>
-              <img src={item.profile_picture} className="img-circle" />
+            <Link to={`/${item.username}`} className="col-lg-10 col-md-12 col-xs-8">
+              <img src={item.profile_picture} className="img-circle img-responsive" />
               <p className="lead text-center">{item.username}</p>
             </Link>
           </li>
@@ -63,7 +63,7 @@ export default class InfluencerList extends Component {
       return (
         <div className="container-fluid">
           <div className="row">
-            <div className="col-md-2 col-md-offset-5 col-sm-2">
+            <div className="col-md-3 col-md-offset-5 col-sm-4 col-sm-offset-5 col-xs-offset-2">
               <h2>Our Influencers!</h2>
             </div>
           </div>
