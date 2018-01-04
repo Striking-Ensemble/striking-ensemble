@@ -39,25 +39,26 @@ export default class Consumer extends Component {
   componentDidMount() {
     axios.get(store.get('URL').root_url + `/user${this.props.location.pathname}`)
       .then(
-      res => {
-        console.log('I NEED TO FIND res.data for user', res.data);
-        if (res.data) {
-          if(!res.data[0]) {
-            this.setState({error: true});
+        res => {
+          console.log('I NEED TO FIND res.data for user', res.data);
+          if (res.data) {
+            if(!res.data[0]) {
+              this.setState({error: true});
+            }
+            const newObj = res.data[0];
+            // update user state
+            this.setState({
+              userIsLoaded: true,
+              user: newObj
+            });
           }
-          const newObj = res.data[0];
-          // update user state
-          this.setState({
-            userIsLoaded: true,
-            user: newObj
-          });
         }
-      })
+      )
       .catch(err => {
         console.log(err);
       });
 
-    axios.get(store.get('URL').root_url + `${this.props.location.pathname}media`)
+    axios.get(store.get('URL').root_url + `/${this.props.match.params.username}/media`)
       .then(
       res => {
         console.log('I NEED TO FIND res.data for user MEDIA', res);
