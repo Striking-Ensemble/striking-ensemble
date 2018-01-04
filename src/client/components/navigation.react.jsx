@@ -39,17 +39,17 @@ export default class Navigation extends Component {
           </div>
           <div className="collapse navbar-collapse" id="navbar-header-content">
             <ul className="nav navbar-nav">
-              <li role="presentation" className="active">
-                <Link to="/" onClick={this.handleHome.bind(this)}>Home <span className="sr-only">(current)</span></Link>
+              <li role="button" className="active">
+                <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in" onClick={this.handleHome.bind(this)}>Home <span className="sr-only">(current)</span></Link>
               </li>
-              <li role="presentation">
-                <Link to="/">Billing Info</Link>
+              <li role="button">
+                <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in">Billing Info</Link>
               </li>
-              <li role="presentation">
-                <Link to="/">Stats</Link>
+              <li role="button">
+                <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in">Stats</Link>
               </li>
             </ul>
-            <ul className="nav navbar-nav pull-right">
+            <ul className="nav navbar-nav navbar-right">
               <li>
                 <button className="btn btn-danger log" onClick={this.handleRedirect.bind(this)}>Logout</button>
               </li>

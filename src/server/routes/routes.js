@@ -18,7 +18,6 @@ reqRoutes.use(function timeLog(req, res, next) {
 // reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 
 // Account route handlers
-reqRoutes.get('/login', reqController.getFrontEnd);
 reqRoutes.get('/account/post/:id', reqController.getFrontEnd);
 reqRoutes.post('/account/submit_media', reqController.submitMedia);
 reqRoutes.post('/account/post/:id/submit_links', reqController.submitLinks);
@@ -92,6 +91,7 @@ reqRoutes.post('/purchase_confirm_callback', reqController.purchaseConfirmContro
 
 // reqRoutes.get('/:username', reqController.getFrontEnd);
 reqRoutes.get('/user/:username', influencerController.retrieveOne);
+reqRoutes.get('/users', influencerController.retrieve);
 reqRoutes.get('/:username/media', reqController.getInfluencerPosts);
 reqRoutes.get('/:username/post/:instaId', reqController.getPostCatalog);
 

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import store from 'store';
 import React, { Component } from 'react';
+import FourOhFour from '../components/fourOhFour.react';
 import Footer from '../components/footer.react';
 import LoadingSpinner from '../components/loadingSpinner.react';
 import ConsumerPostList from './consumerPostList.react';
@@ -38,22 +39,26 @@ export default class Consumer extends Component {
   componentDidMount() {
     axios.get(store.get('URL').root_url + `/user${this.props.location.pathname}`)
       .then(
-      res => {
-        console.log('I NEED TO FIND res.data for user', res.data);
-        if (res.data) {
-          const newObj = res.data[0];
-          // update user state
-          this.setState({
-            userIsLoaded: true,
-            user: newObj
-          });
+        res => {
+          console.log('I NEED TO FIND res.data for user', res.data);
+          if (res.data) {
+            if(!res.data[0]) {
+              this.setState({error: true});
+            }
+            const newObj = res.data[0];
+            // update user state
+            this.setState({
+              userIsLoaded: true,
+              user: newObj
+            });
+          }
         }
-      })
+      )
       .catch(err => {
         console.log(err);
       });
 
-    axios.get(store.get('URL').root_url + `${this.props.location.pathname}media`)
+    axios.get(store.get('URL').root_url + `/${this.props.match.params.username}/media`)
       .then(
       res => {
         console.log('I NEED TO FIND res.data for user MEDIA', res);
@@ -141,10 +146,8 @@ export default class Consumer extends Component {
   renderUser() {
     return (
       <div id="user-info">
-        <div className="row">
-          <img src={this.state.user.profile_picture} className="col-xs-offset-5 img-circle" style={{ 'maxWidth': '15%' }} />
-          <br />
-        </div>
+        <img src={this.state.user.profile_picture} className="col-md-offset-5 col-xs-offset-5 img-circle" style={{ 'maxWidth': '15%' }} />
+        <br />
       </div>
     )
   }
@@ -198,34 +201,35 @@ export default class Consumer extends Component {
   }
 
   render() {
+    if (this.state.error) {
+      return (<FourOhFour />);
+    }
     return (
       <div id="page-outer" className="container-fluid">
-        <div className="page-container">
-          <br />
-          <div className="row">
-            <button type="button" className="col-md-2 col-md-offset-10 col-sm-2 col-sm-offset-10 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts} data-toggle="modal" data-target=".bs-example-modal-sm">
-              <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span><span className="hidden-xs"> Check Cart</span>
-            </button>
-            <div className="modal fade bs-example-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-              <div className="modal-dialog modal-sm" role="document">
-                {this.renderPurchase()}
-              </div>
+        <br />
+        <div className="row">
+          <button type="button" className="col-lg-1 col-lg-offset-9 col-md-2 col-md-offset-9 col-sm-2 col-sm-offset-9 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts} data-toggle="modal" data-target=".bs-example-modal-sm">
+            <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span><span className="hidden-xs"> Check Cart</span>
+          </button>
+          <div className="modal fade bs-example-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div className="modal-dialog modal-sm" role="document">
+              {this.renderPurchase()}
             </div>
-            <div className="clearfix visible-xs-block"></div>
-            {!this.state.userIsLoaded ?
-              (<LoadingSpinner />)
-              :
-              (this.renderUser())
-            }
           </div>
-          <hr />
-          <div className="row">
-            {!this.state.mediaIsLoaded ?
-              (<LoadingSpinner />)
-              :
-              (this.currentPostIsEmpty() ? this.renderPosts() : this.renderPostItem())
-            }
-          </div>
+          <div className="clearfix visible-xs-block"></div>
+          {!this.state.userIsLoaded ?
+            (<LoadingSpinner />)
+            :
+            (this.renderUser())
+          }
+        </div>
+        <hr />
+        <div className="row">
+          {!this.state.mediaIsLoaded ?
+            (<LoadingSpinner />)
+            :
+            (this.currentPostIsEmpty() ? this.renderPosts() : this.renderPostItem())
+          }
         </div>
         <div className="row">
           <Footer />
