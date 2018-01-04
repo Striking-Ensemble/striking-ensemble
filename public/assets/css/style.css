@@ -96,16 +96,15 @@ li {
   .page-container {
     width: 1170px;
   }
-  .container-fluid {
+  nav > .container-fluid {
     margin-left: 140px;
     margin-right: 140px;
   }
 }
-
-@media (min-width: 2560px) {
-  .container-fluid {
-    margin-left: 400px;
-    margin-right: 400px;
+@media (min-width: 1680px) {
+  nav > .container-fluid {
+    margin-left: 348px;
+    margin-right: 348px;
   }
 }
 /* ///////////////////////////////////////////////////////////// */
