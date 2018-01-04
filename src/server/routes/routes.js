@@ -91,6 +91,7 @@ reqRoutes.post('/purchase_confirm_callback', reqController.purchaseConfirmContro
 
 // reqRoutes.get('/:username', reqController.getFrontEnd);
 reqRoutes.get('/user/:username', influencerController.retrieveOne);
+reqRoutes.get('/users', influencerController.retrieve);
 reqRoutes.get('/:username/media', reqController.getInfluencerPosts);
 reqRoutes.get('/:username/post/:instaId', reqController.getPostCatalog);
 

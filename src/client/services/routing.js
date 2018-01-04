@@ -9,6 +9,7 @@ import Footer from '../components/footer.react';
 import PostListItem from '../scenes/Home/postListItem.react';
 import FourOhFour from '../components/fourOhFour.react';
 import Consumer from '../scenes/consumer.react';
+import InfluencerList from '../components/influencerList.react';
 
 const Routing = () => {
   return (
@@ -16,6 +17,7 @@ const Routing = () => {
       <Route exact path="/login" component={Landing} />
       <Route exact path="/account" component={Influencer} />
       <Route exact path="/account/post/:id" component={Account} />
+      <Route exact path="/influencer-list" component={InfluencerList} />
       <Route exact path="/:username" component={Consumer} />
       <Route exact path="/:username/post/:id" component={Consumer} />
       <Route exact path="/" component={Influencer} />
