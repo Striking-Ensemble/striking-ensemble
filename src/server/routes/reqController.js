@@ -123,7 +123,7 @@ exports.submitMedia = (req, res) => {
 // Let the front-end handle the rendering
 exports.getFrontEnd = (req, res) => {
   console.log('get Front End route');
-  res.app.use(express.static(path.join(__dirname, '../../../public')));
+  req.app.use(express.static(path.join(__dirname, '../../../public')));
   res.end();
 };
 
