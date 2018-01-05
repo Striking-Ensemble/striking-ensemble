@@ -89,6 +89,7 @@ export default class Consumer extends Component {
     currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
     this.setState({ currentPost }, () => console.log('updated state value', this.state.currentPost));
+    this.props.history.push(`/${this.state.user.username}/post/${post.instaId}`);
   }
 
   

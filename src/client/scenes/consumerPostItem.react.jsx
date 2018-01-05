@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import LoadingSpinner from '../components/loadingSpinner.react';
 
-export default class consumerPostItem extends Component {
+export default class ConsumerPostItem extends Component {
   constructor(props) {
     super(props);
 
     this.renderRetailList = this.renderRetailList.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.props.removeCurrentPost();
+    }
   }
 
   handleAddButton(item) {
