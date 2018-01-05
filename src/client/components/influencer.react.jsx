@@ -75,7 +75,7 @@ export default class Influencer extends Component {
     currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
-    // this.props.history.push(`/account/post/${post.instaId}`);
+    this.props.history.push(`/account/post/${post.instaId}`);
   }
   // for navigation use
   removeCurrentPost() {
@@ -85,7 +85,6 @@ export default class Influencer extends Component {
   }
 
   render() {
-    // console.log('what\'s current user state', store.get('user').data);
     if (this.state.error) {
       return (<FourOhFour />)
     } else if (!isAuthenticated()) {

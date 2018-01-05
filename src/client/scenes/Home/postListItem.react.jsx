@@ -14,13 +14,9 @@ export default class PostListItem extends Component {
     console.log('CLICKED!');
     console.log('what event?', this.props);
     this.props.addCurrentPost(this.props);
-    // this.props.history.push(`/account/post/${this.props.instaId}`);
   }
 
   render () {
-    // console.log('GIVE ME THESE', this.props);
-    // console.log('WHATTABOUT changeCurrentPost', this.props.changeCurrentPost);
-
     return (
       <div className="col-lg-3 col-md-4 col-sm-4 col-xs-6">
         <Link to={{

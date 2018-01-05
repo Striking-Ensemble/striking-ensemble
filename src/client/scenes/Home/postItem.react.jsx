@@ -20,6 +20,12 @@ export default class PostItem extends Component {
       this.setState({ retailLinks: this.props.currentPost.retailLinks })
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.props.removeCurrentPost();
+    }
+  }
+
   editRetailLink(links) {
     this.setState({ retailLinks: links }, () => console.log('Retail so far...', this.state.retailLinks));
   }
