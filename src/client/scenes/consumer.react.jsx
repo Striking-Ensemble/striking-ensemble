@@ -20,6 +20,7 @@ export default class Consumer extends Component {
       user: {},
       data: [],
       currentPost: {},
+      postLog: {},
       localCart: [],
       checkout_request_id: ''
     }
@@ -51,7 +52,7 @@ export default class Consumer extends Component {
               userIsLoaded: true,
               user: newObj
             });
-            this.props.history.push(`/${this.state.user.username}`);
+            // this.props.history.push(`/${this.state.user.username}`);
           }
         }
       )
@@ -77,6 +78,14 @@ export default class Consumer extends Component {
       });
   }
 
+  componentWillReceiveProps(nextProps) {
+    // this serves as the basis for browser forward
+    // which will assign currentPost again based on postLog
+    if (nextProps.location.pathname === this.state.postLog.pathname) {
+      this.setState({currentPost: this.state.postLog});
+    }
+  }
+
   addCurrentPost(post) {
     console.log('WE ARE ADDING CURRENT POST FROM ROOT', post);
     let currentPost = { ...this.state.currentPost };
@@ -90,14 +99,12 @@ export default class Consumer extends Component {
     currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
     this.setState({ currentPost }, () => console.log('updated state value', this.state.currentPost));
-    this.props.history.push(`/${this.state.user.username}/post/${post.instaId}`);
   }
 
   
-  removeCurrentPost() {
-    console.log('REMOVING CURRENT POST FROM ROOT');
-    this.setState({ currentPost: {} }, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost))
-    this.props.history.goBack();
+  removeCurrentPost(post) {
+    console.log('REMOVING CURRENT POST FROM ROOT', this.props);
+    this.setState({ currentPost: {}, postLog:  post ? post : null}, () => console.log('UPDATE ON postLog', this.state.postLog));
   }
   
   currentPostIsEmpty() {
@@ -203,6 +210,8 @@ export default class Consumer extends Component {
   }
 
   render() {
+    console.log('CHECK LENGTH of history:', this.props);
+    console.log('uhhhhh hmm?', window.history.length);
     if (this.state.error) {
       return (<FourOhFour />);
     }

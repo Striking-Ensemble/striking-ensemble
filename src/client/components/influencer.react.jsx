@@ -36,7 +36,9 @@ export default class Influencer extends Component {
   componentWillReceiveProps(nextProps) {
     console.log('WILL RECEIVE:', nextProps);
     console.log('im supposed to compare: this.props,', this.props.location);
+    // location changed
     // if (nextProps.location !== this.props.location) {
+    //  check if user is authenticated
     //  this.checkAuthentication(nextProps);
     // }
   }

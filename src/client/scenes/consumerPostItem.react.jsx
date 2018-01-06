@@ -6,16 +6,28 @@ export default class ConsumerPostItem extends Component {
     super(props);
 
     this.renderRetailList = this.renderRetailList.bind(this);
+    this.handleBackButton = this.handleBackButton.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.location.pathname !== nextProps.location.pathname) {
-      this.props.removeCurrentPost();
+  shouldComponentUpdate(nextProps, nextState) {
+    // change in url will not trigger re-render for this component
+    // then, we set the postLog at parent to the currentPost here
+    // through removeCurrentPost fn
+    if (this.props.location !== nextProps.location) {
+      let tempPost = this.props.currentPost;
+      tempPost.pathname = this.props.location.pathname;
+      this.props.removeCurrentPost(tempPost);
+      return false;
     }
   }
 
   handleAddButton(item) {
     this.props.addToLocalCart(item);
+  }
+
+  handleBackButton() {
+    this.props.removeCurrentPost(this.props.currentPost);
+    this.props.history.goBack();
   }
 
   renderRetailList() {
@@ -43,7 +55,7 @@ export default class ConsumerPostItem extends Component {
       return (
         <div className="container-fluid">
           <div className="row">
-            <button className="col-lg-offset-2 col-md-offset-1 btn btn-default" onClick={this.props.removeCurrentPost}>Back</button>
+            <button className="col-lg-offset-2 col-md-offset-1 btn btn-default" onClick={this.handleBackButton}>Back</button>
           </div>
           <br />
           <div className="row">
@@ -62,7 +74,7 @@ export default class ConsumerPostItem extends Component {
       return (
         <div className="container-fluid">
           <div className="row">
-            <button className="col-lg-offset-2 col-md-offset-1 btn btn-default" onClick={this.props.removeCurrentPost}>Back</button>
+            <button className="col-lg-offset-2 col-md-offset-1 btn btn-default" onClick={this.handleBackButton}>Back</button>
           </div>
           <br />
           <div className="row">
@@ -77,6 +89,5 @@ export default class ConsumerPostItem extends Component {
         </div>
       )
     }
-
   }
 };
