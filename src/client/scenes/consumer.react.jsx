@@ -51,6 +51,7 @@ export default class Consumer extends Component {
               userIsLoaded: true,
               user: newObj
             });
+            this.props.history.push(`/${this.state.user.username}`);
           }
         }
       )
@@ -210,7 +211,7 @@ export default class Consumer extends Component {
         <br />
         <div className="row">
           <button type="button" className="col-lg-1 col-lg-offset-9 col-md-2 col-md-offset-9 col-sm-2 col-sm-offset-9 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts} data-toggle="modal" data-target=".bs-example-modal-sm">
-            <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span><span className="hidden-xs"> Check Cart</span>
+            <span className={`${this.state.localCart.length == 0 ? 'hidden' : 'badge'}`}>{this.state.localCart.length } </span> <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> <span className="hidden-xs">Check Cart</span>
           </button>
           <div className="modal fade bs-example-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
             <div className="modal-dialog modal-sm" role="document">
