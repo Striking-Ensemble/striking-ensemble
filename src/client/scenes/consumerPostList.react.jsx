@@ -9,6 +9,9 @@ export default class ConsumerPostList extends Component {
   }
 
   handleClick(e) {
+    // preventDefault is not used here where it would undermine
+    // how Link component works, so onClick must be set on Link
+    // rather than the element tag itself like <img />
     console.log('what event?', this.props);
     this.props.addCurrentPost(this.props);
   }

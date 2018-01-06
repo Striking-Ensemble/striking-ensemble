@@ -80,9 +80,10 @@ export default class Consumer extends Component {
 
   componentWillReceiveProps(nextProps) {
     // this serves as the basis for browser forward
-    // which will assign currentPost again based on postLog
+    // which will assign currentPost again based on postLog's pathname
+    // and next pathname match
     if (nextProps.location.pathname === this.state.postLog.pathname) {
-      this.setState({currentPost: this.state.postLog});
+      this.setState({ currentPost: this.state.postLog });
     }
   }
 

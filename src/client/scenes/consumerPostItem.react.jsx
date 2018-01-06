@@ -10,7 +10,7 @@ export default class ConsumerPostItem extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // change in url will not trigger re-render for this component
+    // change in url will not trigger re-render for this component lifecycle
     // then, we set the postLog at parent to the currentPost here
     // through removeCurrentPost fn
     if (this.props.location !== nextProps.location) {
