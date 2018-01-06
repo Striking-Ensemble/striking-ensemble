@@ -17,7 +17,8 @@ export default class Influencer extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      currentPost: {}
+      currentPost: {},
+      postLog: {}
     }
 
     this.removeUser = this.removeUser.bind(this);
@@ -28,30 +29,72 @@ export default class Influencer extends Component {
   }
 
   componentWillMount() {
-    console.log('REVAMP!!', this.props);
+    console.log('Initial Props!!', this.props);
     this.checkAuthentication(this.props);
-    this.setState({ isLoaded: true });
+  }
+
+  componentDidMount() {
+    console.log('DID MOUNT');
+    !isAuthenticated() ? 
+      <Redirect to={{
+        pathname: '/login',
+        state: { from: this.props.location }
+      }}/> : 
+      this.setState({ isLoaded: true });
   }
 
   componentWillReceiveProps(nextProps) {
     console.log('WILL RECEIVE:', nextProps);
     console.log('im supposed to compare: this.props,', this.props.location);
     // location changed
-    // if (nextProps.location !== this.props.location) {
-    //  check if user is authenticated
-    //  this.checkAuthentication(nextProps);
-    // }
+    if (nextProps.location !== this.props.location) {
+      // check user is authenticated
+      // this.checkAuthentication(nextProps);
+      if (!isAuthenticated()) {
+        <Redirect to={{
+          pathname: '/login',
+          state: { from: this.props.location }
+        }} />
+      }
+    }
+    // this serves as the basis for browser forward
+    // which will assign currentPost again based on postLog's pathname
+    // and next pathname match
+    if (nextProps.location.pathname === this.state.postLog.pathname) {
+      this.setState({ currentPost: this.state.postLog })
+    }
   }
 
   checkAuthentication(params) {
     const { history } = params;
-    return checkCredentials(params);
-      // .catch(e => history.replace({ pathname: '/login' }));
+    // return checkCredentials(params);
+    //   // .catch(e => history.replace({ pathname: '/login' }));
+    axios.get(store.get('URL').root_url + '/account')
+      .then(
+      res => {
+        if (res.data.username) {
+          console.log('LOG IN SUCCESS, Retrieving user info...');
+          store.set('user', { data: res.data });
+          store.set('isAuthenticated', true);
+          this.setState({ isLoaded: true });
+          // history.push('/');
+          console.log('ARE WE CLEAR in checkAuth?', store.get('user'));
+        } else {
+          store.clearAll();
+          console.log('PLEASE LOG IN 1st');
+          history.replace({ pathname: '/login' });
+        }
+      })
+      .catch(err => {
+        console.log('ERROR IN CHECK checkAuth');
+        console.log(err);
+        store.each((value, key) => {
+          console.log('WHATs IN STORE:', key, '==', value);
+        });
+        history.replace({ pathname: '/login' });
+      });
   }
 
-  componentWillUnmount() {
-
-  }
   // for logout nav use
   removeUser() {
     // this.setState({ user: {}, loggedIn: false }, () => console.log('back in app, loggedIn:', this.state.loggedIn));
@@ -77,31 +120,28 @@ export default class Influencer extends Component {
     currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
-    this.props.history.push(`/account/post/${post.instaId}`);
+    // this.props.history.push(`/account/post/${post.instaId}`); // let Link component do the work
   }
-  // for navigation use
-  removeCurrentPost() {
+
+  // for browser & navigation use
+  removeCurrentPost(post) {
     console.log('REMOVING CURRENT POST FROM ROOT');
-    this.setState({currentPost: {}}, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost))
-    this.props.history.push('/');
+    this.setState({ currentPost: {}, postLog: post ? post: null }, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost))
+    // this.props.history.push('/'); // let child component do the work
   }
 
   render() {
+    console.log('STACK #:', window.history.length);
+    console.log('Router Count:', this.props);
     if (this.state.error) {
       return (<FourOhFour />)
-    } else if (!isAuthenticated()) {
-      console.log('NO USER Authenticated... REDIRECTING TO /login');
-      return (
-        <Redirect to={{
-          pathname: '/login',
-          state: { from: this.props.location } 
-        }}/>
-      )
+    }
+    if (!this.state.isLoaded) {
+      return <LoadingSpinner />
     } else {
       return (
         <div id="wrap">
           <Navigation 
-            user={store.get('user').data} 
             removeUser={this.removeUser} 
             removeCurrentPost={this.removeCurrentPost}
             {...this.props} 
@@ -109,17 +149,13 @@ export default class Influencer extends Component {
           <br />
           <div id="main" className="container-fluid">
             <div className="container">
-              { !this.state.isLoaded ? 
-                (<LoadingSpinner />) 
-                : 
-                (<Account 
-                  user={store.get('user').data}
-                  currentPost={this.state.currentPost} 
-                  addCurrentPost={this.addCurrentPost} 
-                  removeCurrentPost={this.removeCurrentPost} 
-                  {...this.props} 
-                />) 
-              }
+              <Account 
+                user={store.get('user').data}
+                currentPost={this.state.currentPost} 
+                addCurrentPost={this.addCurrentPost} 
+                removeCurrentPost={this.removeCurrentPost} 
+                {...this.props} 
+              />
             </div>
           </div>
           <Footer />

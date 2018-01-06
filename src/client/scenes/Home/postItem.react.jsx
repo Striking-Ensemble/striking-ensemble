@@ -22,7 +22,9 @@ export default class PostItem extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.location.pathname !== nextProps.location.pathname) {
-      this.props.removeCurrentPost();
+      let tempPost = this.props.currentPost;
+      tempPost.pathname = this.props.location.pathname;
+      this.props.removeCurrentPost(tempPost);
     }
   }
 
@@ -43,7 +45,6 @@ export default class PostItem extends Component {
 
   render() {
     console.log('HERE WE ARE NOW FOR PROPS*************', this.props);
-    // location.state is being set in postListItem component on Link
     if (this.props.currentPost.video_low) {
       return (
         <div className="container">
