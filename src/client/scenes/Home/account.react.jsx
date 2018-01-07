@@ -14,6 +14,9 @@ export default class Account extends Component {
       isLoaded: false,
       data: [],
     }
+
+    this.renderPosts = this.renderPosts.bind(this);
+    this.renderPostItem = this.renderPostItem.bind(this);
   }
 
   componentDidMount() {
@@ -105,7 +108,7 @@ export default class Account extends Component {
         <br />
         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <div className="row">
-              {this.currentPostIsEmpty() ? this.renderPosts.bind(this)() : this.renderPostItem.bind(this)()}
+              {this.currentPostIsEmpty() ? this.renderPosts() : this.renderPostItem()}
           </div>
         </div>
       </div>

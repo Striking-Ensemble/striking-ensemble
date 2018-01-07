@@ -22,9 +22,7 @@ export default class PostItem extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.location.pathname !== nextProps.location.pathname) {
-      let tempPost = this.props.currentPost;
-      tempPost.pathname = this.props.location.pathname;
-      this.props.removeCurrentPost(tempPost);
+      this.props.removeCurrentPost();
     }
   }
 

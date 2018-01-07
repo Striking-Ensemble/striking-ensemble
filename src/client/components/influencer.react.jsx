@@ -7,7 +7,6 @@ import Account from '../scenes/Home/account.react';
 import Footer from './footer.react';
 import LoadingSpinner from './loadingSpinner.react';
 import isAuthenticated from '../services/isAuthenticated';
-import checkCredentials from '../services/checkCredentials';
 import FourOhFour from './fourOhFour.react';
 
 export default class Influencer extends Component {
@@ -34,7 +33,6 @@ export default class Influencer extends Component {
   }
 
   componentDidMount() {
-    console.log('DID MOUNT');
     !isAuthenticated() ? 
       <Redirect to={{
         pathname: '/login',
@@ -44,8 +42,6 @@ export default class Influencer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('WILL RECEIVE:', nextProps);
-    console.log('im supposed to compare: this.props,', this.props.location);
     // location changed
     if (nextProps.location !== this.props.location) {
       // check user is authenticated
@@ -55,20 +51,16 @@ export default class Influencer extends Component {
           pathname: '/login',
           state: { from: this.props.location }
         }} />
+        // next pathname relates to postLog id?
+      } else if (nextProps.location.pathname === `/account/post/${this.state.postLog.instaId}`) {
+        // set it as the new currentPost
+        this.setState({ currentPost: this.state.postLog });
       }
-    }
-    // this serves as the basis for browser forward
-    // which will assign currentPost again based on postLog's pathname
-    // and next pathname match
-    if (nextProps.location.pathname === this.state.postLog.pathname) {
-      this.setState({ currentPost: this.state.postLog })
     }
   }
 
   checkAuthentication(params) {
     const { history } = params;
-    // return checkCredentials(params);
-    //   // .catch(e => history.replace({ pathname: '/login' }));
     axios.get(store.get('URL').root_url + '/account')
       .then(
       res => {
@@ -77,7 +69,6 @@ export default class Influencer extends Component {
           store.set('user', { data: res.data });
           store.set('isAuthenticated', true);
           this.setState({ isLoaded: true });
-          // history.push('/');
           console.log('ARE WE CLEAR in checkAuth?', store.get('user'));
         } else {
           store.clearAll();
@@ -97,7 +88,6 @@ export default class Influencer extends Component {
 
   // for logout nav use
   removeUser() {
-    // this.setState({ user: {}, loggedIn: false }, () => console.log('back in app, loggedIn:', this.state.loggedIn));
     store.clearAll();
     this.props.history.push('/login');
   }
@@ -120,14 +110,12 @@ export default class Influencer extends Component {
     currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
-    // this.props.history.push(`/account/post/${post.instaId}`); // let Link component do the work
   }
 
   // for browser & navigation use
-  removeCurrentPost(post) {
+  removeCurrentPost() {
     console.log('REMOVING CURRENT POST FROM ROOT');
-    this.setState({ currentPost: {}, postLog: post ? post: null }, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost))
-    // this.props.history.push('/'); // let child component do the work
+    this.setState({ postLog: this.state.currentPost, currentPost: {} }, () => console.log('UPDATE ON CURRENTPOST & POSTLOG:', this.state));
   }
 
   render() {
@@ -144,6 +132,7 @@ export default class Influencer extends Component {
           <Navigation 
             removeUser={this.removeUser} 
             removeCurrentPost={this.removeCurrentPost}
+            currentPost={this.state.currentPost}
             {...this.props} 
           />
           <br />
