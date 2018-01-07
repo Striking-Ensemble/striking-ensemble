@@ -4,6 +4,13 @@ import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 export default class Navigation extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleRedirect = this.handleRedirect.bind(this);
+    this.handleHome = this.handleHome.bind(this);
+  }
+
   handleRedirect(e) {
     console.log('redirect props', this.props);
     axios.get(store.get('URL').root_url + '/logout')
@@ -18,9 +25,6 @@ export default class Navigation extends Component {
   }
 
   handleHome(e) {
-    // should change currentPost state to empty
-    e.preventDefault();
-    console.log('LET ME SEE fn', this.props);
     this.props.removeCurrentPost();
   }
 
@@ -35,12 +39,12 @@ export default class Navigation extends Component {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <Link className="navbar-brand" to="/" onClick={this.handleHome.bind(this)}>Striking Ensemble</Link>
+            <Link className="navbar-brand" to='/' onClick={this.handleHome}>Striking Ensemble</Link>
           </div>
           <div className="collapse navbar-collapse" id="navbar-header-content">
             <ul className="nav navbar-nav">
               <li role="button" className="active">
-                <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in" onClick={this.handleHome.bind(this)}>Home <span className="sr-only">(current)</span></Link>
+                <Link to='/' onClick={this.handleHome} data-toggle="collapse" data-target=".navbar-collapse.in">Home <span className="sr-only">(current)</span></Link>
               </li>
               <li role="button">
                 <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in">Billing Info</Link>
@@ -51,7 +55,7 @@ export default class Navigation extends Component {
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <button className="btn btn-danger log" onClick={this.handleRedirect.bind(this)}>Logout</button>
+                <button className="btn btn-danger log" onClick={this.handleRedirect}>Logout</button>
               </li>
             </ul>
           </div>

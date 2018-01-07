@@ -20,6 +20,7 @@ export default class Consumer extends Component {
       user: {},
       data: [],
       currentPost: {},
+      postLog: {},
       localCart: [],
       checkout_request_id: ''
     }
@@ -51,6 +52,7 @@ export default class Consumer extends Component {
               userIsLoaded: true,
               user: newObj
             });
+            // this.props.history.push(`/${this.state.user.username}`);
           }
         }
       )
@@ -76,6 +78,15 @@ export default class Consumer extends Component {
       });
   }
 
+  componentWillReceiveProps(nextProps) {
+    // this serves as the basis for browser forward
+    // which will assign currentPost again based on postLog's pathname
+    // and next pathname match
+    if (nextProps.location.pathname === this.state.postLog.pathname) {
+      this.setState({ currentPost: this.state.postLog });
+    }
+  }
+
   addCurrentPost(post) {
     console.log('WE ARE ADDING CURRENT POST FROM ROOT', post);
     let currentPost = { ...this.state.currentPost };
@@ -92,10 +103,9 @@ export default class Consumer extends Component {
   }
 
   
-  removeCurrentPost() {
-    console.log('REMOVING CURRENT POST FROM ROOT');
-    this.setState({ currentPost: {} }, () => console.log('UPDATE ON CURRENTPOST', this.state.currentPost))
-    this.props.history.goBack();
+  removeCurrentPost(post) {
+    console.log('REMOVING CURRENT POST FROM ROOT', this.props);
+    this.setState({ currentPost: {}, postLog:  post ? post : null}, () => console.log('UPDATE ON postLog', this.state.postLog));
   }
   
   currentPostIsEmpty() {
@@ -201,6 +211,8 @@ export default class Consumer extends Component {
   }
 
   render() {
+    console.log('CHECK LENGTH of history:', this.props);
+    console.log('uhhhhh hmm?', window.history.length);
     if (this.state.error) {
       return (<FourOhFour />);
     }
@@ -209,7 +221,7 @@ export default class Consumer extends Component {
         <br />
         <div className="row">
           <button type="button" className="col-lg-1 col-lg-offset-9 col-md-2 col-md-offset-9 col-sm-2 col-sm-offset-9 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts} data-toggle="modal" data-target=".bs-example-modal-sm">
-            <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span><span className="hidden-xs"> Check Cart</span>
+            <span className={`${this.state.localCart.length == 0 ? 'hidden' : 'badge'}`}>{this.state.localCart.length } </span> <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> <span className="hidden-xs">Check Cart</span>
           </button>
           <div className="modal fade bs-example-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
             <div className="modal-dialog modal-sm" role="document">

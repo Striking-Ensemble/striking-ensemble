@@ -9,26 +9,18 @@ export default class ConsumerPostList extends Component {
   }
 
   handleClick(e) {
-    e.preventDefault();
+    // preventDefault is not used here where it would undermine
+    // how Link component works, so onClick must be set on Link
+    // rather than the element tag itself like <img />
     console.log('what event?', this.props);
     this.props.addCurrentPost(this.props);
-    this.props.history.push(`/${this.props.username}/post/${this.props.instaId}`);
   }
 
   render() {
     return (
       <div className="col-lg-3 col-md-4 col-sm-4 col-xs-4 post-list">
-        <Link to={{
-          pathname: `/${this.props.username}/post/${this.props.instaId}`,
-          state: {
-            key: this.props.instaId,
-            caption: this.props.caption,
-            image_norm: this.props.image_norm ? this.props.image_norm.url : null,
-            video_low: null || this.props.video_low,
-            video_norm: null || this.props.video_norm
-          }
-        }}>
-          <img src={this.props.image_thumb.url} className="img-responsive" onClick={this.handleClick} />
+        <Link to={`/${this.props.username}/post/${this.props.instaId}`} onClick={this.handleClick}>
+          <img src={this.props.image_thumb.url} className="img-responsive" />
         </Link>
       </div>
     )

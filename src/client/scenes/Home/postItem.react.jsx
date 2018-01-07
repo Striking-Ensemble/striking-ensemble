@@ -20,6 +20,12 @@ export default class PostItem extends Component {
       this.setState({ retailLinks: this.props.currentPost.retailLinks })
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.props.removeCurrentPost();
+    }
+  }
+
   editRetailLink(links) {
     this.setState({ retailLinks: links }, () => console.log('Retail so far...', this.state.retailLinks));
   }
@@ -37,7 +43,6 @@ export default class PostItem extends Component {
 
   render() {
     console.log('HERE WE ARE NOW FOR PROPS*************', this.props);
-    // location.state is being set in postListItem component on Link
     if (this.props.currentPost.video_low) {
       return (
         <div className="container">
