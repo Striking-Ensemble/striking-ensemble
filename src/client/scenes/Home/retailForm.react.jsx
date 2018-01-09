@@ -1,12 +1,44 @@
-import React, { Component } from 'react';
-import InputBox from './inputBox.react';
 import axios from 'axios';
+import React, { Component } from 'react';
+import { Link, Prompt } from 'react-router-dom';
+import InputBox from './inputBox.react';
 
 export default class RetailForm extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      changesDetected: false,
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleChangesUnsaved = this.handleChangesUnsaved.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.renderModal = this.renderModal.bind(this);
+  }
+
+  handleChange() {
+    console.log('state on changesDetected:', this.state.changesDetected);
+    if (!this.state.changesDetected) {
+      this.setState({ changesDetected: true });
+    }
+  }
+  // part of modal prompt
+  handleChangesUnsaved(e) {
+    if (this.state.changesDetected) {
+      // pop modal w/ ok & cancel choices
+      this.renderModal()
+        // if ok
+          // changesDetected === false
+          // close modal
+          // redirect or link to '/' or send to what was clicked
+        // else 'cancel'
+          // close modal and stay on the same page
+    } else {
+      return (
+        <Redirect to='/' />
+      )
+    }
   }
 
   handleSubmit(e) {
@@ -23,17 +55,43 @@ export default class RetailForm extends Component {
     }
 
     console.log('json would be body:', body);
-    this.props.editRetailLink(body);
-
     axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
-      .then(response => console.log(response))
-      .catch(err => console.log(err)); 
+    .then(response => {
+      console.log(response);
+      this.setState({ changesDetected: false });
+    })
+    .catch(err => console.log(err));
+
+    this.props.editRetailLink(body);
+  }
+  // part of modal prompt
+  renderModal(redirectPath) {
+    return (
+      <div id="alertModal" className="modal fade" tabindex="-1" role="dialog">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 className="modal-title">Changes Detected!</h4>
+            </div>
+            <div className="modal-body">
+              <p>Oops! You still haven't saved your edited URL links. Click 'Close' to stay and save OR 'Ignore' to move on&hellip;</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+              <Link to="/" className="btn btn-primary">Ignore</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   render() {
     console.log('CONTENTS OF LOCAL RETAIL LINKS', this.props.retailLinks);
     return (
       <div>
+
         <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
           <legend>Add your retail links</legend>
           <div className="row">
@@ -41,7 +99,7 @@ export default class RetailForm extends Component {
               <button className="btn btn-success btn-sm" type="submit">Save</button>
             </div>
             <div className="col-md-2 col-sm-3 col-xs-3">
-              <button className="btn btn-default btn-sm" type="reset">Cancel</button>
+              <Link to='/' className="btn btn-default btn-sm" >Cancel</Link>
             </div>
           </div>
           <div className="form-group">
@@ -53,11 +111,20 @@ export default class RetailForm extends Component {
                 retailLink={item.url}
                 editRetailLink={this.props.editRetailLink}
                 removeRetailLink={this.props.removeRetailLink}
+                handleChange={this.handleChange}
               />
           ))}
           </div>
           <button className="btn btn-default" onClick={this.props.addInputBox} value="retail-form" type="button">Add More Link Boxes</button>
         </form>
+        <Prompt
+          when={this.state.changesDetected}
+          message={location => {
+            return (
+            `Changes have not been saved yet. Are you sure you want to go to 
+            ${location.pathname == '/' ? 'Home' : location.pathname.slice(0)}?`
+          )}}
+        />
       </div>
     )
   }
