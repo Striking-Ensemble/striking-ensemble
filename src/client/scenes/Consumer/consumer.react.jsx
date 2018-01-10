@@ -1,9 +1,9 @@
 import axios from 'axios';
 import store from 'store';
 import React, { Component } from 'react';
-import FourOhFour from '../components/fourOhFour.react';
-import Footer from '../components/footer.react';
-import LoadingSpinner from '../components/loadingSpinner.react';
+import FourOhFour from '../../components/fourOhFour.react';
+import Footer from '../../components/footer.react';
+import LoadingSpinner from '../../components/loadingSpinner.react';
 import ConsumerPostList from './consumerPostList.react';
 import ConsumerPostItem from './consumerPostItem.react';
 import Modal from 'react-responsive-modal';

@@ -2,12 +2,12 @@ import axios from 'axios';
 import store from 'store';
 import React, { Component } from 'react'; 
 import { Redirect } from 'react-router-dom';
-import Navigation from './navigation.react';
-import Account from '../scenes/Home/account.react';
-import Footer from './footer.react';
-import LoadingSpinner from './loadingSpinner.react';
-import isAuthenticated from '../services/isAuthenticated';
-import FourOhFour from './fourOhFour.react';
+import Navigation from '../../components/navigation.react';
+import Account from '../Home/account.react';
+import Footer from '../../components/footer.react';
+import LoadingSpinner from '../../components/loadingSpinner.react';
+import isAuthenticated from '../../services/isAuthenticated';
+import FourOhFour from '../../components/fourOhFour.react';
 
 export default class Influencer extends Component {
   constructor(props) {
@@ -37,8 +37,8 @@ export default class Influencer extends Component {
       <Redirect to={{
         pathname: '/login',
         state: { from: this.props.location }
-      }}/> : 
-      this.setState({ isLoaded: true });
+      }}/> 
+      : this.setState({ isLoaded: true });
   }
 
   componentWillReceiveProps(nextProps) {

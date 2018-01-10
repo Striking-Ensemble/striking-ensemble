@@ -26,6 +26,8 @@ export default class PostItem extends Component {
     }
   }
 
+  // Quick setting up of url links
+  // not necessarily saved in the DB yet
   editRetailLink(links) {
     this.setState({ retailLinks: links }, () => console.log('Retail so far...', this.state.retailLinks));
   }

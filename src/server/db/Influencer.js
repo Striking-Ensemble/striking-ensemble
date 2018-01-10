@@ -22,7 +22,8 @@ const influencerSchema = Schema({
     followed_by: Number
   },
   is_business: Boolean,
-  media: [{type: String}]
+  media: [{type: String}],
+  stripeAccountId: String
 });
 
 // Register the schema with Mongoose as the Influencer collection

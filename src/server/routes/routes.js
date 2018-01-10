@@ -7,15 +7,13 @@ const passport = require('passport');
 const path = require('path');
 const integrations = require('./integrations');
 const Influencer = require('../db/Influencer');
+const influencerRequired = require('../middleware/influencerRequired');
 
-// middleware that is specific to this router
+// middleware that is logs time to this router
 reqRoutes.use(function timeLog(req, res, next) {
   console.log('Time in Routes file: ', Date.now());
   next();
 });
-
-
-// reqRoutes.post('/:username/checkout', reqController.prepareCheckout);
 
 // Account route handlers
 reqRoutes.post('/account/submit_media', reqController.submitMedia);
@@ -41,7 +39,7 @@ passport.authenticate('instagram', { failureRedirect: '/login' }),
 }
 );
 
-reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
+reqRoutes.get('/account', influencerRequired, (req, res) => {
   // FINDING INFLUENCER on /account endpoint req.session.passport;
   // WITH ACCESS TOKEN: req.app.settings.insta_accessToken;
   Influencer.findById(req.session.passport.user, (err, user) => { 
@@ -49,24 +47,15 @@ reqRoutes.get('/account', ensureAuthenticated, (req, res) => {
       console.log(err);
     } else {
       console.log('SENDING USER from routes /account', user);
+      if (user === null) {
+        res.redirect('/login');
+      }
       let temp = user;
       temp.media = undefined;
       res.send(temp);
     }
   });
 });
-
-
-
-// test authentication
-function ensureAuthenticated(req, res, next) {
-  console.log('ENSURE AUTH:', req.isAuthenticated());
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  console.log('GOING TO REDIRECT:');
-  res.redirect('/login');
-}
 
 // =================================================================== //
 
@@ -77,6 +66,15 @@ reqRoutes.get('/account/media', reqController.getMedia);
 reqRoutes.get('/:username/cart', integrations.integration);
 reqRoutes.get('/purchase_status/id/:purchase_id', reqController.purchaseStatusController);
 reqRoutes.post('/purchase_confirm_callback', reqController.purchaseConfirmController);
+
+// =================================================================== //
+
+// ========================= Stripe Endpoints ======================== //
+reqRoutes.get('/billing/stripe/authorize', influencerRequired, reqController.setupPayment);
+reqRoutes.get('/billing/stripe/token', influencerRequired, reqController.getStripeToken);
+reqRoutes.get('/billing/stripe/transfers', influencerRequired, reqController.getStripeTransfers);
+reqRoutes.post('/billing/stripe/payout', influencerRequired, reqController.payout);
+
 // Public route handlers here due to paths can be loosely associated with other paths
 
 // reqRoutes.get('/', (req, res) => {

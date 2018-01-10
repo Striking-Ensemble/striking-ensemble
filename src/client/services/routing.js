@@ -1,10 +1,11 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Influencer from '../components/influencer.react';
+import Influencer from '../scenes/Home/influencer.react';
 import Landing from '../scenes/Sign/landing.react';
 import FourOhFour from '../components/fourOhFour.react';
-import Consumer from '../scenes/consumer.react';
-import InfluencerList from '../components/influencerList.react';
+import Consumer from '../scenes/Consumer/consumer.react';
+import InfluencerList from '../scenes/Consumer/influencerList.react';
+import Billing from '../scenes/Billing/billing.react';
 
 const Routing = () => {
   return (
@@ -12,6 +13,7 @@ const Routing = () => {
       <Route exact path="/login" component={Landing} />
       <Route exact path="/account" component={Influencer} />
       <Route exact path="/account/post/:id" component={Influencer} />
+      <Route path="/billing" component={Billing} />
       <Route exact path="/influencer-list" component={InfluencerList} />
       <Route exact path="/:username" component={Consumer} />
       <Route exact path="/:username/post/:id" component={Consumer} />
