@@ -47,7 +47,7 @@ export default class Navigation extends Component {
                 <Link to='/' onClick={this.handleHome} data-toggle="collapse" data-target=".navbar-collapse.in">Home <span className="sr-only">(current)</span></Link>
               </li>
               <li role="button">
-                <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in">Billing Info</Link>
+                <Link to="/billing" data-toggle="collapse" data-target=".navbar-collapse.in">Billing Info</Link>
               </li>
               <li role="button">
                 <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in">Stats</Link>

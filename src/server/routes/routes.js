@@ -47,6 +47,9 @@ reqRoutes.get('/account', influencerRequired, (req, res) => {
       console.log(err);
     } else {
       console.log('SENDING USER from routes /account', user);
+      if (user === null) {
+        res.redirect('/login');
+      }
       let temp = user;
       temp.media = undefined;
       res.send(temp);

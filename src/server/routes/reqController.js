@@ -1,12 +1,15 @@
 const config = require('../config/keys');
+const stripe = require('stripe')(config.stripe.secretKey);
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const querystring = require('querystring');
 const request = require('request');
 const Promise = require('bluebird');
 const passport = require('passport');
 const Media = require('../db/media');
 const mediaController = require('../db/mediaController');
+const Influencer = require('../db/Influencer');
 const integrations = require('./integrations');
 const twoTapApiURL = 'https://checkout.twotap.com/prepare_checkout';
 const instaApiURL = 'https://api.instagram.com/v1/users/self/media/recent';
@@ -72,12 +75,14 @@ exports.getStripeToken = async (req, res) => {
       console.log('The Stripe onboarding process has not succeeded.');
     } else {
       // Update the user model and store the Stripe account ID in the datastore.
-      // This Stripe account ID will be used to pay out to the pilot.
+      // This Stripe account ID will be used to pay out to the influencer.
+      let query = { username: req.user.username };
+      Influencer.update(query, { stripeAccountId: body.stripe_user_id }).exec();
       req.user.stripeAccountId = body.stripe_user_id;
       req.user.save();
+      // Redirect to the final stage.
+      res.redirect('/billing');
     }
-    // Redirect to the final stage.
-    res.redirect('/login');
   });
 };
 
@@ -90,6 +95,7 @@ exports.getStripeTransfers = async (req, res) => {
   const influencer = req.user;
   // Make sure the logged-in influencer had completed the Stripe onboarding.
   if (!influencer.stripeAccountId) {
+    console.log('stripe on-boarding?', influencer.stripeAccountId);
     return res.redirect('/login');
   }
   try {

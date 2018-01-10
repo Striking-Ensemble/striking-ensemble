@@ -37,8 +37,8 @@ export default class Influencer extends Component {
       <Redirect to={{
         pathname: '/login',
         state: { from: this.props.location }
-      }}/> : 
-      this.setState({ isLoaded: true });
+      }}/> 
+      : this.setState({ isLoaded: true });
   }
 
   componentWillReceiveProps(nextProps) {
