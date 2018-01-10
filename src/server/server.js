@@ -64,7 +64,8 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
   console.log('DESERIALIZE, should be obj id:', id);
   Influencer.findById(id, (err, user) => {
-    (!err) ? done(null, user) : done(err, null);
+    // (!err) ? done(null, user) : done(err, null);
+    done(err, user);
   })
 });
 
