@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import LoadingSpinner from '../components/loadingSpinner.react';
+import LoadingSpinner from '../../components/loadingSpinner.react';
 
 export default class ConsumerPostItem extends Component {
   constructor(props) {

@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Influencer from '../components/influencer.react';
 import Landing from '../scenes/Sign/landing.react';
 import FourOhFour from '../components/fourOhFour.react';
-import Consumer from '../scenes/consumer.react';
+import Consumer from '../scenes/Consumer/consumer.react';
 import InfluencerList from '../components/influencerList.react';
 
 const Routing = () => {
