@@ -12,7 +12,7 @@ module.exports = {
   stripe: {
     secretKey: process.env.Stripe_secretKey,
     publishableKey: process.env.Stripe_publishableKey,
-    clientId: 'YOUR_STRIPE_CLIENT_ID',
+    clientId: process.env.Stripe_clientId,
     authorizeUri: 'https://connect.stripe.com/express/oauth/authorize',
     tokenUri: 'https://connect.stripe.com/oauth/token'
   },
