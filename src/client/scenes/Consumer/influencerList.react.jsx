@@ -2,9 +2,9 @@ import axios from 'axios';
 import store from 'store';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Footer from './footer.react';
-import LoadingSpinner from './loadingSpinner.react';
-import FourOhFour from './fourOhFour.react';
+import Footer from '../../components/footer.react';
+import LoadingSpinner from '../../components/loadingSpinner.react';
+import FourOhFour from '../../components/fourOhFour.react';
 
 export default class InfluencerList extends Component {
   constructor(props) {
