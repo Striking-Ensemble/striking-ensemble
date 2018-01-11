@@ -1,7 +1,7 @@
 const influencerRequired = (req, res, next) => {
   console.log('ENSURE AUTH:', req.isAuthenticated());
   if (!req.isAuthenticated()) {
-    res.redirect('/login');
+    return res.redirect(401, '/login');
   }
   next();
 }
