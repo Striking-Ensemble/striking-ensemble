@@ -71,7 +71,8 @@ export default class Influencer extends Component {
           this.setState({ isLoaded: true });
           console.log('ARE WE CLEAR in checkAuth?', store.get('user'));
         } else {
-          store.clearAll();
+          store.remove('user');
+          store.remove('isAuthenticated');
           console.log('PLEASE LOG IN 1st');
           history.replace({ pathname: '/login' });
         }
@@ -88,7 +89,8 @@ export default class Influencer extends Component {
 
   // for logout nav use
   removeUser() {
-    store.clearAll();
+    store.remove('user');
+    store.remove('isAuthenticated');
     this.props.history.push('/login');
   }
 
