@@ -56,10 +56,10 @@ export default class Billing extends Component {
             <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
               <img src={this.state.user.profile_picture} className="img-responsive img-circle" />
             </div>
-            <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
+            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
               <h4>{this.state.user.username}</h4>
             </div>
-            <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
+            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-3">
               <a href="/billing/stripe/transfers" className="btn btn-default">View Transfers</a>
               <form method="post" onSubmit={this.handlePayoutNow}>
                 <button className="btn btn-success" type="submit">Pay Out Now</button>
@@ -74,7 +74,15 @@ export default class Billing extends Component {
     if (!this.state.user.stripeAccountId) {
       return (
         <header>
-          <a href="/billing/stripe/authorize" className="btn btn-default">Connect Stripe</a>
+          <div className="row">
+            <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
+              <img src={this.state.user.profile_picture} className="img-responsive img-circle" />
+            </div>
+            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+              <h4>{this.state.user.username}</h4>
+            </div>
+            <a href="/billing/stripe/authorize" className="col-lg-1 col-md-2 col-sm-2 col-xs-3 btn btn-default">Connect Stripe</a>
+          </div>
         </header>
       )
     } else {
@@ -89,21 +97,7 @@ export default class Billing extends Component {
     if (!this.state.isLoaded) {
       return <LoadingSpinner />
     } else {
-      return (
-        <div id="wrap">
-          <Navigation
-            removeUser={this.removeUser}
-            removeCurrentPost={this.removeCurrentPost}
-            {...this.props}
-          />
-          <br />
-          <div id="main" className="container-fluid">
-            <div className="container">
-              {this.renderStripeOnboarding()}
-            </div>
-          </div>
-        </div>
-      )
+      return this.renderStripeOnboarding();
     }
   }
 };

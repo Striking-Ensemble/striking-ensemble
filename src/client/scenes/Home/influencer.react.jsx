@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import Navigation from '../../components/navigation.react';
 import Account from '../Home/account.react';
+import Billing from '../Billing/billing.react'
 import Footer from '../../components/footer.react';
 import LoadingSpinner from '../../components/loadingSpinner.react';
 import isAuthenticated from '../../services/isAuthenticated';
@@ -68,7 +69,7 @@ export default class Influencer extends Component {
           console.log('LOG IN SUCCESS, Retrieving user info...');
           store.set('user', { data: res.data });
           store.set('isAuthenticated', true);
-          this.setState({ isLoaded: true });
+          this.setState({ isLoaded: true }); // is this still necessary? check #41
           console.log('ARE WE CLEAR in checkAuth?', store.get('user'));
         } else {
           store.remove('user');
@@ -140,13 +141,13 @@ export default class Influencer extends Component {
           <br />
           <div id="main" className="container-fluid">
             <div className="container">
-              <Account 
-                user={store.get('user').data}
-                currentPost={this.state.currentPost} 
-                addCurrentPost={this.addCurrentPost} 
-                removeCurrentPost={this.removeCurrentPost} 
-                {...this.props} 
-              />
+              {this.props.location.pathname.includes('/billing') ? <Billing /> : <Account 
+                  user={store.get('user').data}
+                  currentPost={this.state.currentPost} 
+                  addCurrentPost={this.addCurrentPost} 
+                  removeCurrentPost={this.removeCurrentPost} 
+                  {...this.props} 
+                />}
             </div>
           </div>
           <Footer />
