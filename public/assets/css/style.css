@@ -2,6 +2,15 @@ html, body {
   height: 100%;
 }
 
+.jumbotron {
+  color: #423c36;
+  background-color: #FFF0DC;
+}
+
+.btn-instagram {
+  background-color: #486C7F;
+}
+
 .post-list {
   padding-left: 2px;
   padding-right: 2px;

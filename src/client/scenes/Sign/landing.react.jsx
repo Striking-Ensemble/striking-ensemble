@@ -7,7 +7,10 @@ export default class Landing extends Component {
       <div id="page-outer">
         <div className="container">
         <div className="jumbotron">
-          <h1>Welcome!</h1>
+          <div className="row page-header">
+            <img src="/assets/images/striking_ensemble_logo.png" className="col-lg-2 col-lg-offset-3 col-md-3 col-md-offset-2 col-sm-3 col-sm-offset-1 col-xs-4 col-xs-offset-4" alt='SE_Logo' />
+            <h1 className="col-md-4 col-sm-8 col-xs-12">Striking Ensemble</h1>
+          </div>
           <h3>Join Striking Ensemble now and headline your social media posts with retail products to give them easy checkout process for your followers.</h3> 
         </div>
         </div>
