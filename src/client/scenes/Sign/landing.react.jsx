@@ -31,7 +31,7 @@ export default class Landing extends Component {
           </div>
         </div>
         <div className="the-void">
-          <div className="jumbotron" style={{height: '19vh', backgroundColor: 'white'}}>
+          <div className="jumbotron" style={{height: '35vh', backgroundColor: 'white'}}>
           </div>
         </div>
         <Footer />
