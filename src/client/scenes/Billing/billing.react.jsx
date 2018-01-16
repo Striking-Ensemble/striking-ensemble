@@ -78,10 +78,10 @@ export default class Billing extends Component {
             <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
               <img src={this.state.user.profile_picture} className="img-responsive img-circle" />
             </div>
-            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-5">
               <h4>{this.state.user.username}</h4>
             </div>
-            <a href="/billing/stripe/authorize" className="col-lg-1 col-md-2 col-sm-2 col-xs-3 btn btn-default">Connect Stripe</a>
+            <a href="/billing/stripe/authorize" className="col-lg-1 col-md-2 col-sm-2 col-xs-5 btn btn-default">Connect Stripe</a>
           </div>
         </header>
       )
