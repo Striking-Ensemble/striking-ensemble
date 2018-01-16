@@ -45,12 +45,21 @@ export default class RetailForm extends Component {
     e.preventDefault();
     let elements = e.target.elements;
     let body = [];
+    let lastUrl = 0;
+    // iterate through the entire form element content
     for (let i = 0; i < elements.length - 1; i++) {
+      console.log('NEW AFFILIATE FIELD FORM:', elements[i]);
       let item = elements[i];
-      if (item.type == 'url') {
+      if (item.name.includes('link')) {
         if (item.value !== '') {
           body.push({id: `link_${body.length}`, url: item.value});
         }
+      }
+      if (item.name.includes('affiliate')) {
+        if (item.value !== '') {
+          body[lastUrl].affiliateLink = item.value;
+        }
+        lastUrl++;
       }
     }
 
@@ -109,6 +118,7 @@ export default class RetailForm extends Component {
                 key={item.id ? item.id : `link_${index}`}
                 retailIndex={index}
                 retailLink={item.url}
+                affiliateLink={item.affiliateLink}
                 editRetailLink={this.props.editRetailLink}
                 removeRetailLink={this.props.removeRetailLink}
                 handleChange={this.handleChange}
