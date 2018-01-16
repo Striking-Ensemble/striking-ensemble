@@ -21,8 +21,8 @@ export default class ConsumerPostItem extends Component {
     }
   }
 
-  handleAddButton(item) {
-    this.props.addToLocalCart(item);
+  handleAddButton(product, affiliate) {
+    this.props.addToLocalCart(product, affiliate);
   }
 
   handleBackButton() {
@@ -38,7 +38,7 @@ export default class ConsumerPostItem extends Component {
             return (
               <div key={`boxAt${item.id}`} className="row">
                 <li key={item.id} className="col-md-11 col-sm-10 col-xs-10"><p className="ellipses">{item.url}</p></li>
-                <button key={`buttonKeyAt${item.id}`} className="col-md-1 col-sm-1 col-xs-1 btn btn-default btn-xs" onClick={this.handleAddButton.bind(this, item.url)}>
+                <button key={`buttonKeyAt${item.id}`} className="col-md-1 col-sm-1 col-xs-1 btn btn-default btn-xs" onClick={this.handleAddButton.bind(this, item.url, item.affiliateLink)}>
                   <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
               </div>

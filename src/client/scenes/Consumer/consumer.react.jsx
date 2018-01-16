@@ -112,9 +112,9 @@ export default class Consumer extends Component {
     return Object.keys(this.state.currentPost).length === 0 && this.state.currentPost.constructor === Object;
   }
   
-  addToLocalCart(item) {
+  addToLocalCart(productLink, affiliateLink) {
     // might need to use store instead
-    this.setState({ localCart: [...this.state.localCart, {url: item}] }, () => console.log('local cart:', this.state.localCart));
+    this.setState({ localCart: [...this.state.localCart, { url: productLink, affiliate_link: affiliateLink }] }, () => console.log('local cart:', this.state.localCart));
   }
 
   handleCloseModal() {
@@ -125,8 +125,8 @@ export default class Consumer extends Component {
     let checkoutRequest = {};
     checkoutRequest['products'] = this.state.localCart;
     checkoutRequest['public_token'] = '52434d36952f32a3bb43f67ea85c64';
-    // checkoutRequest['custom_css_url'] = 'http://localhost:3000/notnicknick/assets/css/integration_twotap.css'
-    checkoutRequest['confirm'] = { method: 'sms', sms_confirm_url: 'http://d49a84ee.ngrok.io/purchase_confirm_callback' }
+    // checkoutRequest['custom_css_url'] = `${store.get('URL').root_url}/assets/css/integration_twotap.css`
+    checkoutRequest['confirm'] = { method: 'sms', sms_confirm_url: `${store.get('URL').root_url}/purchase_confirm_callback` }
     checkoutRequest['unique_token'] = (Math.floor(Math.random() * 9999999) + 1).toString();
 
     axios.post('https://checkout.twotap.com/prepare_checkout', { checkout_request: checkoutRequest })
