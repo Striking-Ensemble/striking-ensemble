@@ -35,13 +35,20 @@ export default class ConsumerPostItem extends Component {
   }
 
   renderRetailList() {
+    const imgStyle = {
+      width: '100px',
+      height: 'auto'
+    };
+
     if (this.props.currentPost.retailLinks) {
       return (
         <ul>
           {this.props.currentPost.retailLinks.map((item, index) => {
             return (
               <div key={`boxAt${item.id}`} className="row">
-                <li key={item.id} className="col-md-11 col-sm-10 col-xs-10"><p className="ellipses">{item.url}</p></li>
+                <li key={item.id} className="col-lg-3 col-md-4 col-sm-6 col-xs-4">
+                  <img style={imgStyle} src={item.image} alt={item.title} />
+                </li>
                 <button key={`buttonKeyAt${item.id}`} className="col-md-1 col-sm-1 col-xs-1 btn btn-default btn-xs" onClick={this.handleAddButton.bind(this, item.url, item.affiliateLink)}>
                   <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
