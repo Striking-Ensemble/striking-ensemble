@@ -67,6 +67,10 @@ li {
   margin: auto;
 }
 
+#retail-form > .row {
+  margin-bottom: 10px;
+}
+
 /* /////////////////////////////////////////////////////////// */
 .page-container {
   /* padding-right: 15px;

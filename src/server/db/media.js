@@ -55,7 +55,10 @@ const mediaSchema = Schema({
   }},
   retailLinks: { type: { 
     index: String, 
-    url: String
+    url: String,
+    title: String,
+    image: String,
+    price: String
   }}
 });
 

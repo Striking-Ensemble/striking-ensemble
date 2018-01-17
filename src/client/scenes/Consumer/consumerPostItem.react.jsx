@@ -19,9 +19,13 @@ export default class ConsumerPostItem extends Component {
       this.props.removeCurrentPost(tempPost);
       return false;
     }
+    // we could use more utility here.
+    return false;
   }
 
   handleAddButton(product, affiliate) {
+    console.log('adding product...', product);
+    console.log('adding affiliate...', affiliate);
     this.props.addToLocalCart(product, affiliate);
   }
 
