@@ -5,13 +5,17 @@ export default class ConsumerPostItem extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      currentProductImage: ''
+    };
+
     this.renderRetailList = this.renderRetailList.bind(this);
     this.handleBackButton = this.handleBackButton.bind(this);
+    this.handleImageSetter = this.handleImageSetter.bind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // change in url will not trigger re-render for this component lifecycle
-    // then, we set the postLog at parent to the currentPost here
+  componentWillReceiveProps(nextProps) {
+    // we set the postLog at parent to the currentPost here
     // through removeCurrentPost fn
     if (this.props.location !== nextProps.location) {
       let tempPost = this.props.currentPost;
@@ -34,6 +38,10 @@ export default class ConsumerPostItem extends Component {
     this.props.history.goBack();
   }
 
+  handleImageSetter(src) {
+    this.setState({ currentProductImage: src })
+  }
+
   renderRetailList() {
     const imgStyle = {
       width: '100px',
@@ -47,7 +55,7 @@ export default class ConsumerPostItem extends Component {
             return (
               <div key={`boxAt${item.id}`} className="row">
                 <li key={item.id} className="col-lg-3 col-md-4 col-sm-6 col-xs-4">
-                  <img style={imgStyle} src={item.image} alt={item.title} />
+                  <img style={imgStyle} src={item.image} onClick={this.handleImageSetter.bind(this, item.image)} alt={item.title} data-toggle="modal" data-target=".product-image-modal-sm" />
                 </li>
                 <button key={`buttonKeyAt${item.id}`} className="col-md-1 col-sm-1 col-xs-1 btn btn-default btn-xs" onClick={this.handleAddButton.bind(this, item.url, item.affiliateLink)}>
                   <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -58,6 +66,20 @@ export default class ConsumerPostItem extends Component {
         </ul>
       )
     }
+  }
+
+  renderProductImage() {
+    const imgModalStyle = {
+      width: '291px',
+      height: 'auto'
+    };
+
+    return (
+      <div className="modal-content">
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <img src={this.state.currentProductImage} style={imgModalStyle} alt="image modal" />
+      </div>
+    )
   }
 
   render() {
@@ -78,6 +100,11 @@ export default class ConsumerPostItem extends Component {
             <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12">
               {this.renderRetailList()}
             </div>
+            <div className="modal fade product-image-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+              <div className="modal-dialog modal-sm" role="document">
+                {this.renderProductImage()}
+              </div>
+            </div>
           </div>
         </div>
       )
@@ -95,6 +122,11 @@ export default class ConsumerPostItem extends Component {
             </div>
             <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12">
               {this.renderRetailList()}
+            </div>
+            <div className="modal fade product-image-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+              <div className="modal-dialog modal-sm" role="document">
+                {this.renderProductImage()}
+              </div>
             </div>
           </div>
         </div>
