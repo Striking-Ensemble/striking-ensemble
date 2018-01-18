@@ -103,19 +103,6 @@ export default class RetailForm extends Component {
 
         <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
           <legend>Add your retail links</legend>
-<<<<<<< HEAD
-          <input type="submit" value="Save" /><input type="reset" value="Cancel" />
-          <br />
-          {this.props.retailLinks.map((item, index) => (
-            <InputBox 
-              key={item.id ? item.id : index}
-              retailIndex={index}
-              retailLink={item.url}
-              editRetailLink={this.props.editRetailLink}
-              removeRetailLink={this.props.removeRetailLink}
-              handleLinkFields={this.handleLinkFields}
-            />
-=======
           <div className="row">
             <div className="col-md-2 col-sm-3 col-xs-3">
               <button className="btn btn-success btn-sm" type="submit">Save</button>
@@ -136,7 +123,6 @@ export default class RetailForm extends Component {
                 removeRetailLink={this.props.removeRetailLink}
                 handleChange={this.handleChange}
               />
->>>>>>> deb94e29c83328812956d8982f7111e7f96b494b
           ))}
           </div>
           <button className="btn btn-default" onClick={this.props.addInputBox} value="retail-form" type="button">Add More Link Boxes</button>
