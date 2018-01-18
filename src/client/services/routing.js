@@ -1,46 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import App from '../components/app.react';
-import Signin from '../scenes/Sign/signin.react';
-import Account from '../scenes/Home/account.react';
-import PostItem from '../scenes/Home/postItem.react';
+import { Route, Switch } from 'react-router-dom';
 import Navigation from '../components/navigation.react';
-import Footer from '../components/footer.react';
-import PostListItem from '../scenes/Home/postListItem.react';
-import NotFound from '../components/notFound.react';
-
-// const routes = [
-//   { path:'/login',
-//     mainContent: () => <Signin />
-//   },
-//   { path: '/account/post/:id',
-//     exact: true,
-//     nav: () => <Navigation />,
-//     mainContent: () => <PostItem />,
-//     footer: () => <Footer />
-//   },
-//   {
-//     path: '/',
-//     nav: () => <Navigation />,
-//     mainContent: () => <App />,
-//     footer: () => <Footer />
-//   },
-//   {
-//     path: '/account',
-//     nav: () => <Navigation />,
-//     mainContent: () => <App />,
-//     footer: () => <Footer />
-//   }
-// ];
+import Influencer from '../scenes/Home/influencer.react';
+import Landing from '../scenes/Sign/landing.react';
+import FourOhFour from '../components/fourOhFour.react';
+import Consumer from '../scenes/Consumer/consumer.react';
+import InfluencerList from '../scenes/Consumer/influencerList.react';
+import Billing from '../scenes/Billing/billing.react';
 
 const Routing = () => {
   return (
     <Switch>
-      <Route exact path="/login" component={Signin} />
-      <Route exact path="/account" component={App} />
-      <Route exact path="/account/post/:id" component={Account} />
-      <Route exact path="/404" component={NotFound} />
-      <Route exact path="/" component={App} />
+      <Route exact path="/login" component={Landing} />
+      <Route exact path="/account" component={Influencer} />
+      <Route exact path="/account/post/:id" component={Influencer} />
+      <Route path="/billing" component={Influencer} />
+      <Route exact path="/influencer-list" component={InfluencerList} />
+      <Route exact path="/:username" component={Consumer} />
+      <Route exact path="/:username/post/:id" component={Consumer} />
+      <Route exact path="/" component={Influencer} />
+      <Route component={FourOhFour} />
     </Switch>
   )
 }

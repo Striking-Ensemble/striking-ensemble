@@ -5,6 +5,12 @@ const Influencer = require('../db/Influencer');
 module.exports = (passport) => {
   passport.use(new InstagramStrategy( instagramAuth,
     function (accessToken, refreshToken, profile, done) {
+      // will be used under req.authInfo
+      // only accessible up until passport finishes auth
+      let info = {
+        accessToken: accessToken
+      }
+
       Influencer.findOne({
         _id: profile.id 
       }, function (err, user) {
@@ -22,15 +28,15 @@ module.exports = (passport) => {
             website: data.website,
             is_business: data.is_business
           });
+          info.newUser = true;
           user.save((err) => {
             if (err) {
               console.log(err);
             }
-            let info = accessToken;
             return done(err, user, info);
           });
         } else {
-          let info = accessToken;
+          info.newUser = false;
           return done(err, user, info);
         }
       });

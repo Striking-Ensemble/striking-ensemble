@@ -1,11 +1,14 @@
 'use strict';
 
 // ===================== Module Dependencies ========================= //
+const config = require('./config/keys');
 const express = require('express');
 // extracts the entire body portion of incoming req to be used as req.body
 const bodyParser = require('body-parser');
 const path = require('path');
 const logger = require('morgan');
+// Sets HTTP headers appropriately for protection
+const helmet = require('helmet');
 const router = require('./db/influencerRouter');
 const reqRoutes = require('./routes/routes');
 const passport = require('passport');
@@ -14,30 +17,40 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const store = require('store');
 const Influencer = require('./db/Influencer');
+const request = require('request');
+const stripe = require('stripe')(config.stripe.secretKey);
 
 // =================================================================== //
 
 // Create the Express application
 const app = express();
 
-
 // **************** Express Setup Below ***************** //
 
 // revisit this after thinking it over whether to use jade
 // app.set('views', path.join(__dirname, '../client/views'));
 // app.set('view engine', 'jade');
+app.use(helmet());
+
+// If node.js behind a proxy and are using secure: true for session cookies, 
+// need to set "trust proxy" in express:
+app.set('trust proxy', 1) // trust first proxy
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(session({
-  secret: 'sessionSecret',
+  secret: config.secret,
   name: 'cookie-cookie',
-  resave: true,
-  saveUninitialized: true
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    path: '/', httpOnly: true, secure: false, maxAge: null // changes needed for production
+  }
 }));
 app.set('own_url', 'http://localhost:3000');
 app.set('mobile_url', 'https://checkout.twotap.com');
-app.set('twoTap_public_token', '');
-app.set('twoTap_private_token', '');
+app.set('twoTap_apiUrl', 'https://api.twotap.com');
+app.set('twoTap_public_token', config.twoTap.publicToken);
+app.set('twoTap_private_token', config.twoTap.privateToken);
 app.set('insta_accessToken', '');
 
 // create insta-pass config
@@ -61,13 +74,17 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
   console.log('DESERIALIZE, should be obj id:', id);
   Influencer.findById(id, (err, user) => {
-    (!err) ? done(null, user) : done(err, null);
+    // (!err) ? done(null, user) : done(err, null);
+    done(err, user);
   })
 });
 
 // set up API routes
+app.use('/login', express.static(path.join(__dirname, '../../public')));
 app.use('/', reqRoutes);
-app.use('/api', router);
+app.use('/api/*', router);
+app.use('/account/post/:id', express.static(path.join(__dirname, '../../../public')));
+app.use('/:username', express.static(path.join(__dirname, '../../public')));
 
 // ************************************************************ //
 

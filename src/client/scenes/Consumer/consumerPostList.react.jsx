@@ -1,8 +1,7 @@
-import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
-import PostItem from './postItem.react';
+import { Link } from 'react-router-dom';
 
-export default class PostListItem extends Component {
+export default class ConsumerPostList extends Component {
   constructor(props) {
     super(props);
 
@@ -13,14 +12,15 @@ export default class PostListItem extends Component {
     // preventDefault is not used here where it would undermine
     // how Link component works, so onClick must be set on Link
     // rather than the element tag itself like <img />
+    console.log('what event?', this.props);
     this.props.addCurrentPost(this.props);
   }
 
-  render () {
+  render() {
     return (
-      <div className="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-        <Link to={`/account/post/${this.props.instaId}`} onClick={this.handleClick}>
-          <img src={this.props.image_thumb.url} className="img-responsive" alt="instagram post" />
+      <div className="col-lg-3 col-md-4 col-sm-4 col-xs-4 post-list">
+        <Link to={`/${this.props.username}/post/${this.props.instaId}`} onClick={this.handleClick}>
+          <img src={this.props.image_thumb.url} className="img-responsive" />
         </Link>
       </div>
     )
