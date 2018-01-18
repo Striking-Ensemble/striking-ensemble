@@ -59,7 +59,7 @@ exports.setupPayment = (req, res) => {
 exports.getStripeToken = async (req, res) => {
   // Check the state we got back equals the one we generated before proceeding.
   if (req.session.state != req.query.state) {
-    res.redirect('/login');
+    res.redirect(401, '/login');
   }
   // Post the authorization code to Stripe to complete the authorization flow.
   request.post(config.stripe.tokenUri, {
@@ -96,7 +96,7 @@ exports.getStripeTransfers = async (req, res) => {
   // Make sure the logged-in influencer had completed the Stripe onboarding.
   if (!influencer.stripeAccountId) {
     console.log('stripe on-boarding?', influencer.stripeAccountId);
-    return res.redirect('/login');
+    return res.redirect(401, '/login');
   }
   try {
     // Generate a unique login link for the associated Stripe account.
@@ -143,6 +143,10 @@ exports.payout = async (req, res) => {
 // Controller methods for Instagram
 
 exports.getMedia = (req, res) => {
+  if (!req.app.settings.authInfo) {
+    console.log('please log in 1st');
+    res.redirect(401, '/login');
+  }
   let options = {
     url: instaApiURL + '/?access_token=' + req.app.settings.authInfo.accessToken
   };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import Navigation from '../components/navigation.react';
 import Influencer from '../scenes/Home/influencer.react';
 import Landing from '../scenes/Sign/landing.react';
 import FourOhFour from '../components/fourOhFour.react';
@@ -13,7 +14,7 @@ const Routing = () => {
       <Route exact path="/login" component={Landing} />
       <Route exact path="/account" component={Influencer} />
       <Route exact path="/account/post/:id" component={Influencer} />
-      <Route path="/billing" component={Billing} />
+      <Route path="/billing" component={Influencer} />
       <Route exact path="/influencer-list" component={InfluencerList} />
       <Route exact path="/:username" component={Consumer} />
       <Route exact path="/:username/post/:id" component={Consumer} />

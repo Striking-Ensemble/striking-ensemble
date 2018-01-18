@@ -15,7 +15,7 @@ export default class PostItem extends Component {
 
   componentDidMount() {
     this.props.currentPost.retailLinks === null ? (
-      this.setState({ retailLinks: [{ id: `link_${Date.now()}`, url: '' }] }))
+      this.setState({ retailLinks: [{ id: `link_${Date.now()}`, url: '', affiliateLink: '' }] }))
       :
       this.setState({ retailLinks: this.props.currentPost.retailLinks })
   }
@@ -40,7 +40,7 @@ export default class PostItem extends Component {
   }
 
   addInputBox() {
-    this.setState({ retailLinks: [...this.state.retailLinks, {id: `link_${Date.now()}`, url: '' }] }, () => console.log('ADDING NEW BOX', this.state.retailLinks));
+    this.setState({ retailLinks: [...this.state.retailLinks, {id: `link_${Date.now()}`, url: '', affiliateLink: '' }] }, () => console.log('ADDING NEW BOX', this.state.retailLinks));
   }
 
   render() {

@@ -30,7 +30,7 @@ export default class Navigation extends Component {
 
   render() {
     return (
-      <nav className="navbar navbar-fixed-top navbar-default">
+      <nav className="navbar navbar-inverse navbar-fixed-top">
         <div className="container-fluid">
           <div className="navbar-header">
             <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-header-content" aria-expanded="false">
@@ -43,13 +43,13 @@ export default class Navigation extends Component {
           </div>
           <div className="collapse navbar-collapse" id="navbar-header-content">
             <ul className="nav navbar-nav">
-              <li role="button" className="active">
+              <li role="button" className={this.props.location.pathname == '/' || this.props.location.pathname.includes('account') ? "active" : ""}>
                 <Link to='/' onClick={this.handleHome} data-toggle="collapse" data-target=".navbar-collapse.in">Home <span className="sr-only">(current)</span></Link>
               </li>
-              <li role="button">
+              <li role="button" className={this.props.location.pathname.includes('/billing') ? "active" : ""}>
                 <Link to="/billing" data-toggle="collapse" data-target=".navbar-collapse.in">Billing Info</Link>
               </li>
-              <li role="button">
+              <li role="button" className={this.props.location.pathname.includes('/stats') ? "active" : ""}>
                 <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in">Stats</Link>
               </li>
             </ul>
