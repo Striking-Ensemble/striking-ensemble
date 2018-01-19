@@ -74,7 +74,7 @@ reqRoutes.get('/billing/stripe/authorize', influencerRequired, reqController.set
 reqRoutes.get('/billing/stripe/token', influencerRequired, reqController.getStripeToken);
 reqRoutes.get('/billing/stripe/transfers', influencerRequired, reqController.getStripeTransfers);
 reqRoutes.post('/billing/stripe/payout', influencerRequired, reqController.payout);
-
+reqRoutes.post('/billing/stripe/deactivate', influencerRequired, reqController.deactivate);
 // Public route handlers here due to paths can be loosely associated with other paths
 
 // reqRoutes.get('/', (req, res) => {

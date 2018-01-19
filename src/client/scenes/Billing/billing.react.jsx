@@ -53,7 +53,9 @@ export default class Billing extends Component {
     e.preventDefault();
     axios.post('/billing/stripe/deactivate')
       .then(response => {
-        console.log('billing deactivate Stripe:', response)
+        console.log('billing deactivate Stripe:', response);
+        store.set('user', response);
+        this.setState({ user: response.data });
       })
       .catch(err => console.log(err))
   }
@@ -66,16 +68,16 @@ export default class Billing extends Component {
             <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
               <img src={this.state.user.profile_picture} className="img-responsive img-circle" />
             </div>
-            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+            <div className="col-lg-2 col-md-2 col-sm-2 col-xs-4">
               <h4>{this.state.user.username}</h4>
             </div>
-            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-3">
+            <div className="col-lg-2 col-md-2 col-sm-3 col-xs-5">
               <a href="/billing/stripe/transfers" className="btn btn-default">View Transfers</a>
               <form method="post" onSubmit={this.handlePayoutNow}>
                 <button className="btn btn-success" type="submit">Pay Out Now</button>
               </form>
             </div>
-            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-3">
+            <div className="col-lg-2 col-md-2 col-sm-3 col-xs-7">
               <form method="post" onSubmit={this.handleStripeDeactivate}>
                 <button className="btn btn-danger" type="submit">Deactivate Stripe</button>
               </form>

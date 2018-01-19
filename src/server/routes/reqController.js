@@ -56,7 +56,7 @@ exports.setupPayment = (req, res) => {
  *
  * Connect the new Stripe account to the platform account.
  */
-exports.getStripeToken = async (req, res) => {
+exports.getStripeToken = (req, res) => {
   // Check the state we got back equals the one we generated before proceeding.
   if (req.session.state != req.query.state) {
     res.redirect(401, '/login');
@@ -136,6 +136,36 @@ exports.payout = async (req, res) => {
   }
   // Redirect to the pilot dashboard.
   res.redirect('/billing');
+};
+
+/**
+ * POST /billing/stripe/deactivate
+ *
+ * This endpoint is used for revoking access of an app to an account.
+ */
+exports.deactivate = (req, res) => {
+  const influencer = req.user;
+
+  request.post({
+    url: 'https://connect.stripe.com/oauth/deauthorize',
+    headers: {
+      Authorization: `Bearer ${config.stripe.secretKey}`
+    },
+    form: {
+      client_id: config.stripe.clientId,
+      stripe_user_id: influencer.stripeAccountId
+    }
+  }, (err, response, body) => {
+    if (err || body.error) {
+      console.log('The Stripe deauthorize process has not succeeded.', err || body.error);
+    } else {
+      let query = { username: req.user.username };
+      Influencer.update(query, { stripeAccountId: '' }).exec();
+      req.user.stripeAccountId = '';
+      console.log('Deactivated Acct:', body);
+      res.send(req.user);
+    }
+  })
 };
 
 // ======================================================================== //
