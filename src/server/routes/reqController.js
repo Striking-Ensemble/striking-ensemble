@@ -160,7 +160,7 @@ exports.deactivate = (req, res) => {
       console.log('The Stripe deauthorize process has not succeeded.', err || body.error);
     } else {
       let query = { username: req.user.username };
-      Influencer.update(query, { stripeAccountId: '' }).exec();
+      Influencer.update(query, { $unset: { stripeAccountId: 1 } }).exec();
       req.user.stripeAccountId = '';
       console.log('Deactivated Acct:', body);
       res.send(req.user);
