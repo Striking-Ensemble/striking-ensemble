@@ -89,6 +89,7 @@ reqRoutes.post('/billing/stripe/deactivate', influencerRequired, reqController.d
 reqRoutes.get('/user/:username', influencerController.retrieveOne);
 reqRoutes.get('/users', influencerController.retrieve);
 reqRoutes.get('/:username/media', reqController.getInfluencerPosts);
+reqRoutes.get('/:username/media-products', reqController.getMediaProducts);
 reqRoutes.get('/:username/post/:instaId', reqController.getPostCatalog);
 
 module.exports = reqRoutes;

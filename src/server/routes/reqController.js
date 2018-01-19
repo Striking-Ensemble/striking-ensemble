@@ -260,6 +260,7 @@ exports.getMedia = (req, res) => {
   });
 }
 
+
 // submit media to specified influencer in db
 exports.submitMedia = (req, res) => {
   console.log('USER CONTENTS IN reqController by submitMedia', req.user);
@@ -288,6 +289,24 @@ exports.submitLinks = (req, res) => {
 exports.getInfluencerPosts = (req, res) => {
   console.log('GET INFLUENCER POSTS controller');
   mediaController.getInfluencerMedia(req, res);
+};
+
+/**
+ * GET /:username/media-products
+ *
+ * Get media that has retailLinks only
+ */
+exports.getMediaProducts = (req, res) => {
+  let query = { 
+    username: req.params.username,
+    retailLinks: { $exists: true }
+  };
+  Media.find(query, (err, response) => {
+    if (err) {
+      console.log('Error in getMediaProducts controller:', err);
+    }
+    res.send(response);
+  });
 };
 
 exports.getPostCatalog = (req, res) => {

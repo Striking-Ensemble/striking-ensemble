@@ -60,7 +60,7 @@ export default class Consumer extends Component {
         console.log(err);
       });
 
-    axios.get(store.get('URL').root_url + `/${this.props.match.params.username}/media`)
+    axios.get(store.get('URL').root_url + `/${this.props.match.params.username}/media-products`)
       .then(
       res => {
         console.log('I NEED TO FIND res.data for user MEDIA', res);
