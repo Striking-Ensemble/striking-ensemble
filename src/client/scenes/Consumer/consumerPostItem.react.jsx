@@ -6,12 +6,12 @@ export default class ConsumerPostItem extends Component {
     super(props);
 
     this.state = {
-      currentProductImage: ''
+      currentProduct: {}
     };
 
     this.renderRetailList = this.renderRetailList.bind(this);
     this.handleBackButton = this.handleBackButton.bind(this);
-    this.handleImageSetter = this.handleImageSetter.bind(this);
+    this.handleImageModal = this.handleImageModal.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,8 +38,8 @@ export default class ConsumerPostItem extends Component {
     this.props.history.goBack();
   }
 
-  handleImageSetter(src) {
-    this.setState({ currentProductImage: src })
+  handleImageModal(product) {
+    this.setState({ currentProduct: product })
   }
 
   renderRetailList() {
@@ -55,7 +55,7 @@ export default class ConsumerPostItem extends Component {
             return (
               <div key={`boxAt${item.id}`} className="row">
                 <li key={item.id} className="col-lg-3 col-md-4 col-sm-6 col-xs-4">
-                  <img style={imgStyle} src={item.image} onClick={this.handleImageSetter.bind(this, item.image)} alt={item.title} data-toggle="modal" data-target=".product-image-modal-sm" />
+                  <img style={imgStyle} src={item.image} onClick={this.handleImageModal.bind(this, item)} alt={item.title} data-toggle="modal" data-target=".product-image-modal-sm" />
                 </li>
                 <button key={`buttonKeyAt${item.id}`} className="col-md-1 col-sm-1 col-xs-1 btn btn-default btn-xs" onClick={this.handleAddButton.bind(this, item.url, item.affiliateLink)}>
                   <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -69,15 +69,12 @@ export default class ConsumerPostItem extends Component {
   }
 
   renderProductImage() {
-    const imgModalStyle = {
-      width: '291px',
-      height: 'auto'
-    };
-
     return (
       <div className="modal-content">
         <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <img src={this.state.currentProductImage} style={imgModalStyle} alt="image modal" />
+        <h4 className="text-center">{this.state.currentProduct.title}</h4>
+        <h5 className="text-center"><strong>{this.state.currentProduct.price}</strong></h5>
+        <img src={this.state.currentProduct.image} className="img-responsive" alt="image modal" />
       </div>
     )
   }
