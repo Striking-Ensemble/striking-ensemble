@@ -51,7 +51,7 @@ html, body {
   text-overflow: ellipsis;
 }
 
-div > h4 {
+.username-text {
   padding-top: 18%;
 }
 
