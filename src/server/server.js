@@ -3,11 +3,11 @@
 // ===================== Module Dependencies ========================= //
 const config = require('./config/keys');
 const express = require('express');
+const favicon = require('serve-favicon');
 // extracts the entire body portion of incoming req to be used as req.body
 const bodyParser = require('body-parser');
 const path = require('path');
 const logger = require('morgan');
-// Sets HTTP headers appropriately for protection
 const helmet = require('helmet');
 const router = require('./db/influencerRouter');
 const reqRoutes = require('./routes/routes');
@@ -30,11 +30,15 @@ const app = express();
 // revisit this after thinking it over whether to use jade
 // app.set('views', path.join(__dirname, '../client/views'));
 // app.set('view engine', 'jade');
+
+// Sets HTTP headers appropriately for protection
 app.use(helmet());
 
 // If node.js behind a proxy and are using secure: true for session cookies, 
 // need to set "trust proxy" in express:
 app.set('trust proxy', 1) // trust first proxy
+
+app.use(favicon(path.join(__dirname, '../../public', 'assets', 'images', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(session({
