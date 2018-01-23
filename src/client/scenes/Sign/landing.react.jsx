@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
+import LoadingBars from '../../components/loadingBars.react';
 import Footer from '../../components/footer.react';
 
 export default class Landing extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      logClicked: false
+    }
+    this.handleLogClicked = this.handleLogClicked.bind(this);
+  }
+
+  handleLogClicked() {
+    this.setState({ logClicked: true });
+  }
+
   render() {
     return (
       <div id="page-outer">
@@ -18,8 +32,9 @@ export default class Landing extends Component {
           <div className="row">
             <div className="col-lg-5 col-md-5 col-sm-5 col-xs-12 col-md-offset-1">
               <h3>Synchronize your Instagram posts here:</h3>
-              <a href="/auth/instagram" className="btn btn-block btn-lg btn-social btn-instagram">
-                <span className="fa fa-instagram"></span> Sign in with Instagram
+              <a href="/auth/instagram" onClick={this.handleLogClicked} className="btn btn-block btn-lg btn-social btn-instagram">
+                <span className="fa fa-instagram"></span>
+                {this.state.logClicked ? <LoadingBars /> : `Sign in with Instagram`}
               </a>
             </div>
             <div className="col-lg-5 col-md-5 col-sm-5 col-xs-12 col-md-offset-1">
