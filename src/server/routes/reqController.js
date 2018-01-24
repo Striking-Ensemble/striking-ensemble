@@ -172,9 +172,54 @@ exports.deactivate = (req, res) => {
 
 // Controller methods for Instagram
 
+/**
+ * GET /account/media
+ *
+ * Get media from insta for logged in users & sent to client
+**/
+// exports.getMedia = (req, res) => {
+//   if (!req.app.settings.authInfo) {
+//     console.log('Missing authInfo... please log in 1st');
+//     res.redirect(401, '/login');
+//   }
+//   // set options to insta api path for request use
+//   let options = {
+//     url: instaApiURL + '/?access_token=' + req.app.settings.authInfo.accessToken
+//   };
+//   if (req.params.count) {
+//     // set options.url with post count returned to also receive pagination url
+//     options.url = options.url + '&count=' + req.params.count;
+//   }
+//   if (req.params.max_id) {
+//     // request for next page
+//     options.url = options.url + '&max_id=' + req.params.max_id;
+//   }
+
+//   request.get(options, (err, response, body) => {
+//     if (err) {
+//       throw err;
+//     }
+//     let parsedBody = JSON.parse(body);
+//     console.log('GOT IT COACH! in reqController getMedia');
+//     if (req.app.settings.authInfo.newUser) {
+//       console.log('NEW USER DETECTED IN SAVING MEDIA');
+//       req.app.settings.authInfo.newUser = false;
+//     }
+//     // need separate logic for returning users
+//       res.send(parsedBody.data);
+//   });
+// };
+
+/**
+ * Post /account/media
+ *
+ * Post media from insta for logged in users & sent to client
+**/
+// update db with new insta
+
 exports.getMedia = (req, res) => {
   if (!req.app.settings.authInfo) {
-    console.log('please log in 1st');
+    console.log('Missing authInfo... please log in 1st');
     res.redirect(401, '/login');
   }
   let options = {
@@ -184,11 +229,11 @@ exports.getMedia = (req, res) => {
     if (err) {
       throw err;
     }
-    let nowBody = JSON.parse(body);
+    let parsedBody = JSON.parse(body);
     console.log('GOT IT COACH! in reqController getMedia');
     if (req.app.settings.authInfo.newUser) {
       console.log('NEW USER DETECTED IN SAVING MEDIA');
-      let mediaArr = nowBody.data.map(obj => {
+      let mediaArr = parsedBody.data.map(obj => {
         if (obj.type == 'video') {
           console.log('HEAVY CHECKING #54', obj.id);
           return {
@@ -224,7 +269,7 @@ exports.getMedia = (req, res) => {
         .catch(err => console.log('ERROR IN INSERTING MEDIA #81!', err));
 
       req.app.settings.authInfo.newUser = false;
-      res.send(nowBody.data);
+      res.send(parsedBody.data);
     } else {
       console.log('USER EXISTS in getMedia. Now saving in a special way...');
       let mediaArr = [];
@@ -238,7 +283,7 @@ exports.getMedia = (req, res) => {
               }
             })), Promise.resolve())
       }
-      mediaCount(nowBody.data).then(() => {
+      mediaCount(parsedBody.data).then(() => {
         if (mediaArr.length == 0) {
           Media.find({_creator: req.user._id}, (err, response) => {
             if (err) {
@@ -248,7 +293,7 @@ exports.getMedia = (req, res) => {
             res.send(response);
           })
         } else {
-          let arrToSend = [...mediaArr, ...nowBody.data];
+          let arrToSend = [...mediaArr, ...parsedBody.data];
           Media
             .insertMany(mediaArr)
             .then(response => console.log('GOT THEM UPDATED!'))

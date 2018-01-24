@@ -69,7 +69,7 @@ export default class Influencer extends Component {
           console.log('LOG IN SUCCESS, Retrieving user info...');
           store.set('user', { data: res.data });
           store.set('isAuthenticated', true);
-          this.setState({ isLoaded: true }); // is this still necessary? check #41
+          this.setState({ isLoaded: true }); // is this still necessary? check setState on DidMount
           console.log('ARE WE CLEAR in checkAuth?', store.get('user'));
         } else {
           store.remove('user');

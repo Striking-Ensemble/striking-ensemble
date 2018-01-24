@@ -38,6 +38,7 @@ app.use(helmet());
 // need to set "trust proxy" in express:
 app.set('trust proxy', 1) // trust first proxy
 
+// caches the icon in memory to improve performance by skipping disk access.
 app.use(favicon(path.join(__dirname, '../../public', 'assets', 'images', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(cookieParser());
