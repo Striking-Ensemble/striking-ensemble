@@ -79,8 +79,9 @@ export default class Influencer extends Component {
         }
       })
       .catch(err => {
-        console.log('ERROR IN CHECK checkAuth');
-        console.log(err);
+        console.log('ERROR IN CHECK checkAuth', err);
+        store.remove('user');
+        store.remove('isAuthenticated');
         store.each((value, key) => {
           console.log('WHATs IN STORE:', key, '==', value);
         });

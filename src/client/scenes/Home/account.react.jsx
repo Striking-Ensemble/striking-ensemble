@@ -35,6 +35,9 @@ export default class Account extends Component {
       })
       .catch(err => {
         console.log(err);
+        store.remove('user');
+        store.remove('isAuthenticated');
+        this.props.history.replace({ pathname: '/login' });
       });
   }
 
