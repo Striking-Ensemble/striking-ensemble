@@ -133,6 +133,7 @@ export default class Influencer extends Component {
       return (
         <div id="wrap">
           <Navigation 
+            user={store.get('user').data}
             removeUser={this.removeUser} 
             removeCurrentPost={this.removeCurrentPost}
             currentPost={this.state.currentPost}

@@ -22,7 +22,7 @@ reqRoutes.post('/account/post/:id/submit_links', reqController.submitLinks);
 // ================= Passport Instagram Endpoints ================= //
 
 reqRoutes.post('/logout', (req, res) => {
-  console.log('LOGGING OUT USER:', req.user.username);
+  console.log('LOGGING OUT USER:', req.body.username);
   req.logOut();
   res.redirect(200, '/');
 });

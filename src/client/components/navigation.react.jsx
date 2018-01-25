@@ -7,13 +7,13 @@ export default class Navigation extends Component {
   constructor(props) {
     super(props);
 
-    this.handleRedirect = this.handleRedirect.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
     this.handleHome = this.handleHome.bind(this);
   }
 
-  handleRedirect(e) {
+  handleLogout(e) {
     console.log('redirect props', this.props);
-    axios.get(store.get('URL').root_url + '/logout')
+    axios.post(store.get('URL').root_url + '/logout', { username: this.props.user.username })
       .then(
         res => {
           this.props.removeUser();
@@ -55,7 +55,7 @@ export default class Navigation extends Component {
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <button className="btn btn-danger log" onClick={this.handleRedirect}>Logout</button>
+                <button className="btn btn-danger log" onClick={this.handleLogout}>Logout</button>
               </li>
             </ul>
           </div>
