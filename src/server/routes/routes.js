@@ -60,7 +60,7 @@ reqRoutes.get('/account', influencerRequired, (req, res) => {
 // =================================================================== //
 
 // ======================= Instagram Endpoints ======================== //
-reqRoutes.get('/account/media', influencerRequired, reqController.getMedia);
+reqRoutes.post('/account/media', influencerRequired, reqController.getMedia);
 
 // ======================== TwoTap API Routes ======================== //
 reqRoutes.get('/:username/cart', integrations.integration);

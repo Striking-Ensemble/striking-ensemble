@@ -20,7 +20,7 @@ export default class Account extends Component {
   }
 
   componentDidMount() {
-    axios.get(store.get('URL').root_url + '/account/media')
+    axios.post(store.get('URL').root_url + '/account/media', { username: this.props.user.username })
       .then(
       res => {
         console.log('I NEED TO FIND res.data', res.data);
