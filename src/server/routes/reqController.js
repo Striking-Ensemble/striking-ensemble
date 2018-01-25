@@ -199,7 +199,6 @@ exports.getMedia = (req, res) => {
     if (err) {
       throw err;
     }
-    console.log('GOT IT COACH! in reqController getMedia');
     let parsedBody = JSON.parse(body);
     if (req.app.settings.authInfo.newUser) {
       console.log('NEW USER DETECTED IN SAVING MEDIA');
@@ -239,106 +238,60 @@ exports.getMedia = (req, res) => {
       res.send(mediaArr);
     } else {
       // do returning user logic
+      console.log('USER EXISTS in getMedia. Now saving in a special way...');
+      let newMediaList = [];
+      let oldMediaList = [];
+      // add post to media list after mediaCount fn resolves the queries
+      function mediaCount(arr) {
+        return arr.reduce((promise, item) =>
+          promise.then(() => Media.count({ _id: item.id })
+            .then((count) => {
+              console.log('CAN I EVEN SEE??', count);
+              // if item does not exists in Media db
+              if (count <= 0) {
+                let tempItem = item;
+                let tempImages = item.images;
+                for (let key in item.images) {
+                  // remove the signatures on url images
+                  tempImages[key].url = item.images[key].url.replace(/vp.*\/.{32}\/.{8}\//, '');
+                }
+
+                let tempVideos = item.type == 'video' ? item.videos : null;
+                if (tempVideos) {
+                  for (let prop in item.videos) {
+                    // remove the signatures on url videos
+                    tempVideos[prop].url = item.videos[prop].url.replace(/vp.*\/.{32}\/.{8}\//, '');
+                  }
+                }
+                tempItem.images = tempImages;
+                tempItem.videos = tempVideos;
+                newMediaList.push(tempItem);
+              } else {
+                oldMediaList.push(item);
+              }
+            })), Promise.resolve())
+      }
+      mediaCount(parsedBody.data).then(() => {
+        if (newMediaList.length == 0) {
+          Media.find({ _creator: req.user._id }, (err, response) => {
+            if (err) {
+              console.log('IN MEDIA COUNT #78', err);
+            }
+            console.log('NO NEW MEDIA TO ADD FOR USER... sending oldies');
+            res.send(response);
+          })
+        } else {
+          let arrToSend = [...newMediaList, ...oldMediaList];
+          Media
+            .insertMany(newMediaList)
+            .then(response => console.log('GOT THEM UPDATED!'))
+            .catch(err => console.log('ERR in reqController #89', err));
+          res.send(arrToSend);
+        }
+      })
     }
   });
-
 };
-
-/**
- * Post /account/media
- *
- * Post media from insta for logged in users & sent to client
-**/
-// update db with new insta
-
-// exports.getMedia = (req, res) => {
-//   if (!req.app.settings.authInfo) {
-//     console.log('Missing authInfo... please log in 1st');
-//     res.redirect(401, '/login');
-//   }
-//   let options = {
-//     url: instaApiURL + '/?access_token=' + req.app.settings.authInfo.accessToken
-//   };
-//   request.get(options, (err, response, body) => {
-//     if (err) {
-//       throw err;
-//     }
-//     let parsedBody = JSON.parse(body);
-//     console.log('GOT IT COACH! in reqController getMedia');
-//     if (req.app.settings.authInfo.newUser) {
-//       console.log('NEW USER DETECTED IN SAVING MEDIA');
-//       let mediaArr = parsedBody.data.map(obj => {
-//         if (obj.type == 'video') {
-//           console.log('HEAVY CHECKING #54', obj.id);
-//           return {
-//             _id: obj.id,
-//             _creator: req.user.id,
-//             username: req.user.username,
-//             caption: obj.caption,
-//             created_time: obj.created_time,
-//             images: obj.images,
-//             link: obj.link,
-//             tags: obj.tags,
-//             post_type: obj.type,
-//             videos: obj.videos
-//           }
-//         } else {
-//           return {
-//             _id: obj.id,
-//             _creator: req.user.id,
-//             username: req.user.username,
-//             caption: obj.caption,
-//             created_time: obj.created_time,
-//             images: obj.images,
-//             link: obj.link,
-//             tags: obj.tags,
-//             post_type: obj.type
-//           }
-//         }
-//       });
-
-//       Media
-//         .insertMany(mediaArr)
-//         .then((response) => console.log('INSERTED MANY #84'))
-//         .catch(err => console.log('ERROR IN INSERTING MEDIA #81!', err));
-
-//       req.app.settings.authInfo.newUser = false;
-//       res.send(parsedBody.data);
-//     } else {
-//       console.log('USER EXISTS in getMedia. Now saving in a special way...');
-//       let mediaList = [];
-//       function mediaCount(arr) {
-//         return arr.reduce((promise, item) => 
-//           promise.then(() => Media.count({_id: item.id})
-//             .then((count) => {
-//               console.log('CAN I EVEN SEE??', count);
-//               if (count <= 0) {
-//                 mediaList.push(item);
-//               }
-//             })), Promise.resolve())
-//       }
-//       mediaCount(parsedBody.data).then(() => {
-//         if (mediaList.length == 0) {
-//           Media.find({_creator: req.user._id}, (err, response) => {
-//             if (err) {
-//               console.log('IN MEDIA COUNT #78', err);
-//             }
-//             console.log('NO NEW MEDIA TO ADD FOR USER... sending oldies');
-//             res.send(response);
-//           })
-//         } else {
-//           let arrToSend = [...mediaList, ...parsedBody.data];
-//           Media
-//             .insertMany(mediaList)
-//             .then(response => console.log('GOT THEM UPDATED!'))
-//             .catch(err => console.log('ERR in reqController #89', err));
-//           res.send(arrToSend);
-//         }
-//       })
-//     }
-//   });
-// }
-
 
 // submit media to specified influencer in db
 exports.submitMedia = (req, res) => {
