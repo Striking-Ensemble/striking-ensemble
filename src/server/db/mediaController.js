@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const Promise = require('bluebird');
 const request = require('request');
 const rp = require('request-promise');
+const normalizeUrl = require('normalize-url');
+
 // media methods to db
 const lookUpSites = [
   {
@@ -121,7 +123,10 @@ exports.updateRetailLinks = (req, res) => {
   let dataTemp = req.body.map(item => {
     let temp = item.url.split('/');
     let result = temp[2].split('www.')[1];
-    let productQuery = temp[temp.length - 1];
+    // normalize, then replace=> removes all params, then split '.' to slice out suffix(ex: .html)
+    let normUrl = normalizeUrl(item.url).replace(/\?.*$/, '').split('.').slice(0, -1).join('.');
+    // take the product id from normUrl to use for query
+    let productQuery = normUrl.split('/').pop();
     let siteInfo = lookUpSites.filter(item => item.url == result);
     let twoTapPath = `https://api.twotap.com/v1.0/product/search?public_token=${req.app.get('twoTap_public_token')}`;
     let queryObj = {
