@@ -25,62 +25,86 @@ export default class ProfileSettings extends Component {
 
   renderForm() {
     return (
-      <form>
-        <div className="row">
-          <div className="col-lg-4 col-lg-offset-1 col-md-6 col-sm-6">
-            <div className="form-group">
-              <label htmlFor="businessName">Business Name <span id="helpBlock" className="help-block">(If none, provide your full name)</span></label>
-              <input type="text" className="form-control" placeholder="Jane Doe" aria-describedby="helpBlock" required />
+      <form className="form-horizontal">
+        <div className="box-it">
+          <h3>Company Info</h3>
+          <div className="row">
+            <div className="col-lg-6 col-md-6 col-sm-6">
+              <div className="form-group">
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="businessName">Business Name</label>
+                <div className="col-md-9 col-sm-9">
+                  <input type="text" className="form-control" placeholder="Jane Doe" aria-describedby="helpBlock" required />
+                </div>
+                <p className="help-block">(If none, provide your full name)</p>
+              </div>
+              <div className="form-group">
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="legalEntityType">Legal Entity Type</label>
+                <div className="col-md-9 col-sm-9">
+                  <select className="form-control">
+                    <option>Please Select</option>
+                    <option>Individual</option>
+                    <option>Partnership</option>
+                    <option>Corporation</option>
+                    <option>Sole Proprietorship</option>
+                    <option>Other</option>
+                    <option>LLC</option>
+                    <option>LLP</option>
+                    <option>Non-Profit</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="socialSecurity">Social Security</label>
+                <div className="col-md-9 col-sm-9">
+                  <input type="password" className="form-control" id="socialSecurity" placeholder="xxx-xx-xxxx" required />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="retypeSocialSecurity">Re-type Social Security</label>
+                <div className="col-md-9 col-sm-9">
+                  <input type="password" className="form-control" id="retypeSocialSecurity" placeholder="xxx-xx-xxxx" required />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="taxForm">Tax Form</label>
+                <div className="col-md-9 col-sm-9">
+                  <select className="form-control">
+                    <option>Please Select</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="legalEntityType">Legal Entity Type</label>
-              <select className="form-control">
-                <option>Please Select</option>
-                <option>Individual</option>
-                <option>Partnership</option>
-                <option>Corporation</option>
-                <option>Sole Proprietorship</option>
-                <option>Other</option>
-                <option>LLC</option>
-                <option>LLP</option>
-                <option>Non-Profit</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="socialSecurity">Social Security</label>
-              <input type="password" className="form-control" id="socialSecurity" placeholder="xxx-xx-xxxx" required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="retypeSocialSecurity">Re-type Social Security</label>
-              <input type="password" className="form-control" id="retypeSocialSecurity" placeholder="xxx-xx-xxxx" required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="taxForm">Tax Form</label>
-              <select className="form-control">
-                <option>Please Select</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-lg-4 col-lg-offset-2 col-md-6 col-sm-6">
-            <div className="form-group">
-              <label htmlFor="address">Address</label>
-              <input type="text" className="form-control" id="addressInput" placeholder="1234 GoldFish St" required/>
-            </div>
-            <div className="form-group">
-              <label htmlFor="address2">Address 2<span id="helpBlock" className="help-block">(Optional)</span></label>
-              <input type="text" className="form-control" id="address2Input" placeholder="Apt. 101" />
-            </div>
-            <div className="form-group">
-              <label htmlFor="city">City</label>
-              <input type="email" className="form-control" id="cityInput" placeholder="Bakedfield" />
-            </div>
-            <div className="form-group">
-              <label htmlFor="postalCode">Postal Code</label>
-              <input type="text" className="form-control" id="postalCodeInput" placeholder="12345" />
-            </div>
-            <div className="form-group">
-              <label htmlFor="phone">Phone</label>
-              <input type="number" className="form-control" id="phoneInput" placeholder="(123) 456-7890" />
+            <div className="col-lg-5 col-lg-offset-1 col-md-6 col-sm-6">
+              <div className="form-group">
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="address">Address</label>
+                <div className="col-md-9 col-sm-9">
+                  <input type="text" className="form-control" id="addressInput" placeholder="1234 GoldFish St" required/>
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="address2">Address 2<span id="helpBlock" className="help-block">(Optional)</span></label>
+                <div className="col-md-9 col-sm-9">
+                  <input type="text" className="form-control" id="address2Input" placeholder="Apt. 101" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="city">City</label>
+                <div className="col-md-9 col-sm-9">
+                  <input type="email" className="form-control" id="cityInput" placeholder="Bakedfield" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="postalCode">Postal Code</label>
+                <div className="col-md-9 col-sm-9">
+                  <input type="text" className="form-control" id="postalCodeInput" placeholder="12345" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="phone">Phone</label>
+                <div className="col-md-9 col-sm-9">
+                  <input type="number" className="form-control" id="phoneInput" placeholder="(123) 456-7890" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
