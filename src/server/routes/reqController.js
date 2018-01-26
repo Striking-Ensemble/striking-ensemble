@@ -202,6 +202,7 @@ exports.getMedia = (req, res) => {
     let parsedBody = JSON.parse(body);
     if (req.app.settings.authInfo.newUser) {
       console.log('NEW USER DETECTED IN SAVING MEDIA');
+      // create an array of posts from insta query results to save in db
       let mediaArr = parsedBody.data.map(obj => {
         let tempImages = obj.images;
         for (let key in obj.images) {

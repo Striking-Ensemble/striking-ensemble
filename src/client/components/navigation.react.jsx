@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import store from 'store';
-import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import store from 'store';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class Navigation extends Component {
   constructor(props) {
@@ -50,7 +50,7 @@ export default class Navigation extends Component {
                 <Link to="/billing" data-toggle="collapse" data-target=".navbar-collapse.in">Billing Info</Link>
               </li>
               <li role="button" className={this.props.location.pathname.includes('/stats') ? "active" : ""}>
-                <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in">Stats</Link>
+                <Link to="/settings" data-toggle="collapse" data-target=".navbar-collapse.in">Settings</Link>
               </li>
             </ul>
             <ul className="nav navbar-nav navbar-right">

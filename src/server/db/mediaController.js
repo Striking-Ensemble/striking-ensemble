@@ -116,7 +116,7 @@ exports.updateMedia = async (req, res) => {
 };
 
 exports.updateRetailLinks = (req, res) => {
-  console.log('in UPDATE RETAIL LINK #96:', req.body);
+  console.log('in UPDATE RETAIL LINK #119:', req.body);
   // find individual post through req.params given
   let query = { _id: req.params.id };
   

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from 'store';
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import LoadingSpinner from '../../components/loadingSpinner.react';
 import FourOhFour from '../../components/fourOhFour.react';
 import Navigation from '../../components/navigation.react';

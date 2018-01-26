@@ -6,6 +6,7 @@ import Navigation from '../../components/navigation.react';
 import Account from '../Home/account.react';
 import Billing from '../Billing/billing.react'
 import Footer from '../../components/footer.react';
+import ProfileSettings from '../Profile-Settings/profileSettings.react';
 import LoadingSpinner from '../../components/loadingSpinner.react';
 import isAuthenticated from '../../services/isAuthenticated';
 import FourOhFour from '../../components/fourOhFour.react';
@@ -26,6 +27,7 @@ export default class Influencer extends Component {
     this.removeCurrentPost = this.removeCurrentPost.bind(this);
     this.currentUserIsEmpty = this.currentUserIsEmpty.bind(this);
     this.checkAuthentication = this.checkAuthentication.bind(this);
+    this.renderPathname = this.renderPathname.bind(this);
   }
 
   componentWillMount() {
@@ -122,6 +124,24 @@ export default class Influencer extends Component {
     this.setState({ postLog: this.state.currentPost, currentPost: {} }, () => console.log('UPDATE ON CURRENTPOST & POSTLOG:', this.state));
   }
 
+  renderPathname(location) {
+    console.log('OOOOOOHHHHHH TASTY....', location);
+    let { pathname } = location;
+    if (pathname.includes('/billing')) {
+      return <Billing />
+    } else if (pathname.includes('/settings')) {
+      return <ProfileSettings />
+    } else {
+      return (<Account
+        user={store.get('user').data}
+        currentPost={this.state.currentPost}
+        addCurrentPost={this.addCurrentPost}
+        removeCurrentPost={this.removeCurrentPost}
+        {...this.props}
+        />)
+    }
+  }
+
   render() {
     console.log('STACK #:', window.history.length);
     console.log('Router Count:', this.props);
@@ -143,13 +163,7 @@ export default class Influencer extends Component {
           <br />
           <div id="main" className="container-fluid">
             <div className="container">
-              {this.props.location.pathname.includes('/billing') ? <Billing /> : <Account 
-                  user={store.get('user').data}
-                  currentPost={this.state.currentPost} 
-                  addCurrentPost={this.addCurrentPost} 
-                  removeCurrentPost={this.removeCurrentPost} 
-                  {...this.props} 
-                />}
+              {this.renderPathname(this.props.location)}
             </div>
           </div>
           <Footer />
