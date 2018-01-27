@@ -31,11 +31,10 @@ export default class ProfileSettings extends Component {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-sm-6">
               <div className="form-group">
-                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="businessName">Business Name</label>
+                <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="businessName">Business Name<span className="help-block">(If none, provide your full name)</span></label>
                 <div className="col-md-9 col-sm-9">
                   <input type="text" className="form-control" placeholder="Jane Doe" aria-describedby="helpBlock" required />
                 </div>
-                <p className="help-block">(If none, provide your full name)</p>
               </div>
               <div className="form-group">
                 <label className="col-md-3 col-sm-3 col-xs-8" htmlFor="legalEntityType">Legal Entity Type</label>
