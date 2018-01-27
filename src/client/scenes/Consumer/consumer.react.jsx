@@ -35,6 +35,7 @@ export default class Consumer extends Component {
     this.buyProducts = this.buyProducts.bind(this);
     this.renderPurchase = this.renderPurchase.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.tTHandleEvents = this.tTHandleEvents.bind(this);
   }
 
   componentDidMount() {
@@ -76,6 +77,8 @@ export default class Consumer extends Component {
       .catch(err => {
         console.log(err);
       });
+    // events for TwoTap cart API
+    window.addEventListener('message', this.tTHandleEvents, false);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -84,6 +87,22 @@ export default class Consumer extends Component {
     // and next pathname match
     if (nextProps.location.pathname === this.state.postLog.pathname) {
       this.setState({ currentPost: this.state.postLog });
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('message', this.tTHandleEvents);
+  }
+
+  tTHandleEvents(event) {
+    // sample events from the cart API
+    if (event.data['action'] == 'cart_contents_changed') {
+    }
+    if (event.data['action'] == 'cart_finalized') {
+    }
+    if (event.data['action'] == 'place_order_button_pressed') {
+    }
+    if (event.data['action'] == 'close_pressed') {
     }
   }
 
