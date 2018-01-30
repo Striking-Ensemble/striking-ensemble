@@ -78,7 +78,7 @@ export default class Consumer extends Component {
         console.log(err);
       });
     // events for TwoTap cart API
-    window.addEventListener('message', this.tTHandleEvents, false);
+    window.addEventListener('message', this.tTHandleEvents);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -88,6 +88,7 @@ export default class Consumer extends Component {
     if (nextProps.location.pathname === this.state.postLog.pathname) {
       this.setState({ currentPost: this.state.postLog });
     }
+    console.log('NEW STUFF:', nextProps);
   }
 
   componentWillUnmount() {
@@ -96,16 +97,31 @@ export default class Consumer extends Component {
 
   tTHandleEvents(event) {
     // sample events from the cart API
-    if (event.data['action'] == 'cart_contents_changed') {
-      console.log('things changed...', event.data);
+    let { data } = event;
+    if (data['action'] == 'cart_contents_changed') {
+      console.log('things changed...', data);
+      // data.cart_event == 'product_removed'
+      if(data.cart_event == 'product_removed') {
+        let productLinksToUpdate = [];
+        for (let key in data.cart_contents) {
+          let siteId = data.cart_contents[key];
+          for (let deepKey in siteId) {
+            let productId = siteId[deepKey];
+            productLinksToUpdate.push({url: productId.url, affiliate_link: productId.affiliate_link})
+          }
+        }
+        let updatedLocalCart = {...productLinksToUpdate};
+        this.setState({ localCart: updatedLocalCart }, () => console.log('GIMME THE UPPSSS:', this.state.localCart));
+      }
     }
-    if (event.data['action'] == 'cart_finalized') {
+    if (data['action'] == 'cart_finalized') {
     }
-    if (event.data['action'] == 'place_order_button_pressed') {
+    if (data['action'] == 'place_order_button_pressed') {
     }
-    if (event.data['action'] == 'close_pressed') {
-      console.log('things close...', event.data);
+    if (data['action'] == 'close_pressed') {
+      console.log('things close...', data);
     }
+    return;
   }
 
   addCurrentPost(post) {
@@ -135,7 +151,8 @@ export default class Consumer extends Component {
   
   addToLocalCart(productLink, affiliateLink) {
     // might need to use store instead
-    this.setState({ localCart: [...this.state.localCart, { url: productLink, affiliate_link: affiliateLink }] }, () => console.log('local cart:', this.state.localCart));
+    let itemsToAdd = [...this.state.localCart, { url: productLink, affiliate_link: affiliateLink }];
+    this.setState({ localCart: itemsToAdd }, () => console.log('local cart:', this.state.localCart));
   }
 
   handleCloseModal() {
@@ -167,7 +184,7 @@ export default class Consumer extends Component {
     if (this.state.checkout_request_id) {
       return (
         <div className="modal-content">
-          <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;  </span></button>
           <iframe src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={customStyles} frameBorder="0" ></iframe>
         </div>
       )
@@ -225,7 +242,7 @@ export default class Consumer extends Component {
       <ConsumerPostItem
         currentPost={this.state.currentPost}
         removeCurrentPost={this.removeCurrentPost}
-        addToLocalCart={this.addToLocalCart} 
+        addToLocalCart={this.addToLocalCart}
         {...this.props}
       />
     );
@@ -233,7 +250,7 @@ export default class Consumer extends Component {
 
   render() {
     console.log('CHECK LENGTH of history:', this.props);
-    console.log('uhhhhh hmm?', window.history.length);
+    console.log('LOCALCART!!', this.state.localCart);
     if (this.state.error) {
       return (<FourOhFour />);
     }
@@ -242,7 +259,7 @@ export default class Consumer extends Component {
         <br />
         <div className="row">
           <button type="button" className="col-lg-1 col-lg-offset-9 col-md-2 col-md-offset-9 col-sm-2 col-sm-offset-9 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts} data-toggle="modal" data-target=".bs-example-modal-sm">
-            <span className={`${this.state.localCart.length == 0 ? 'hidden' : 'badge'}`}>{this.state.localCart.length } </span> <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> <span className="hidden-xs">Check Cart</span>
+            <span className={`${this.state.localCart.length == 0 ? 'hidden' : 'badge'}`}>{this.state.localCart.length} </span> <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> <span className="hidden-xs">Check Cart </span>
           </button>
           <div className="modal fade bs-example-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
             <div className="modal-dialog modal-sm" role="document">
