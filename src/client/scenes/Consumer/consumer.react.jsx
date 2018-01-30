@@ -257,7 +257,7 @@ export default class Consumer extends Component {
           }
         </div>
         <hr />
-        <div className="row">
+        <div id="main" className="row">
           {!this.state.mediaIsLoaded ?
             (<LoadingSpinner />)
             :
