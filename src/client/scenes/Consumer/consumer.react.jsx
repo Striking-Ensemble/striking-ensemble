@@ -42,7 +42,7 @@ export default class Consumer extends Component {
     axios.get(store.get('URL').root_url + `/user${this.props.location.pathname}`)
       .then(
         res => {
-          console.log('I NEED TO FIND res.data for user', res.data);
+          // console.log('I NEED TO FIND res.data for user', res.data);
           if (res.data) {
             if(!res.data[0]) {
               this.setState({error: true});
@@ -64,7 +64,7 @@ export default class Consumer extends Component {
     axios.get(store.get('URL').root_url + `/${this.props.match.params.username}/media-products`)
       .then(
       res => {
-        console.log('I NEED TO FIND res.data for user MEDIA', res);
+        // console.log('I NEED TO FIND res.data for user MEDIA', res);
         if (res.data) {
           const newArr = res.data.map(post => post);
           // update media state
@@ -110,8 +110,7 @@ export default class Consumer extends Component {
             productLinksToUpdate.push({url: productId.url, affiliate_link: productId.affiliate_link})
           }
         }
-        let updatedLocalCart = {...productLinksToUpdate};
-        this.setState({ localCart: updatedLocalCart }, () => console.log('GIMME THE UPPSSS:', this.state.localCart));
+        this.setState({ localCart: productLinksToUpdate });
       }
     }
     if (data['action'] == 'cart_finalized') {
@@ -121,7 +120,6 @@ export default class Consumer extends Component {
     if (data['action'] == 'close_pressed') {
       console.log('things close...', data);
     }
-    return;
   }
 
   addCurrentPost(post) {
@@ -136,13 +134,12 @@ export default class Consumer extends Component {
     currentPost.video_norm = post.video_norm ? post.video_norm : null;
     currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
 
-    this.setState({ currentPost }, () => console.log('updated state value', this.state.currentPost));
+    this.setState({ currentPost });
   }
 
   
   removeCurrentPost(post) {
-    console.log('REMOVING CURRENT POST FROM ROOT', this.props);
-    this.setState({ currentPost: {}, postLog:  post ? post : null}, () => console.log('UPDATE ON postLog', this.state.postLog));
+    this.setState({ currentPost: {}, postLog:  post ? post : null });
   }
   
   currentPostIsEmpty() {
@@ -151,8 +148,9 @@ export default class Consumer extends Component {
   
   addToLocalCart(productLink, affiliateLink) {
     // might need to use store instead
+    console.log('TRIGGERED....');
     let itemsToAdd = [...this.state.localCart, { url: productLink, affiliate_link: affiliateLink }];
-    this.setState({ localCart: itemsToAdd }, () => console.log('local cart:', this.state.localCart));
+    this.setState({ localCart: itemsToAdd });
   }
 
   handleCloseModal() {
@@ -169,7 +167,6 @@ export default class Consumer extends Component {
 
     axios.post('https://checkout.twotap.com/prepare_checkout', { checkout_request: checkoutRequest })
       .then(res => {
-        console.log('GOT SOMETHING:', res.data);
         this.setState({ showModal: true, checkout_request_id: res.data.checkout_request_id });
       })
       .catch(err => console.log('OOOPPPSS:', err))
@@ -237,7 +234,6 @@ export default class Consumer extends Component {
   }
 
   renderPostItem() {
-    console.log('SHOTS FIRED SINGLE POST');
     return (
       <ConsumerPostItem
         currentPost={this.state.currentPost}
@@ -249,8 +245,7 @@ export default class Consumer extends Component {
   }
 
   render() {
-    console.log('CHECK LENGTH of history:', this.props);
-    console.log('LOCALCART!!', this.state.localCart);
+    console.log(`LOCALCART!! @${Date.now() / 1000 | 0}`, this.state.localCart);
     if (this.state.error) {
       return (<FourOhFour />);
     }
