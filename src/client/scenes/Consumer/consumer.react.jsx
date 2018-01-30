@@ -97,12 +97,14 @@ export default class Consumer extends Component {
   tTHandleEvents(event) {
     // sample events from the cart API
     if (event.data['action'] == 'cart_contents_changed') {
+      console.log('things changed...', event.data);
     }
     if (event.data['action'] == 'cart_finalized') {
     }
     if (event.data['action'] == 'place_order_button_pressed') {
     }
     if (event.data['action'] == 'close_pressed') {
+      console.log('things close...', event.data);
     }
   }
 

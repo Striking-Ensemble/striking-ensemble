@@ -47,6 +47,14 @@ html, body {
 #main {
   margin-top: 50px;
   margin-bottom: 50px;
+  /*
+   * get the viewport height of the device screen size
+   * then subtract the height that is used to fill
+   * the rest of the screen
+  */
+  height: -webkit-calc(100vh - 100px);
+  height: -moz-calc(100vh - 100px);
+  height: calc(100vh - 100px);
 }
 
 #footer {
@@ -81,6 +89,9 @@ li {
 }
 
 /* /////////////////////////////////////////////////////////// */
+.container {
+  flex: 1 0 auto;
+}
 .page-container {
   /* padding-right: 15px;
   padding-left: 15px; */

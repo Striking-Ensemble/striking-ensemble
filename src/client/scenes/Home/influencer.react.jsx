@@ -161,8 +161,8 @@ export default class Influencer extends Component {
             {...this.props} 
           />
           <br />
-          <div id="main" className="container-fluid">
-            <div className="container">
+          <div className="container-fluid">
+            <div id="main" className="container">
               {this.renderPathname(this.props.location)}
             </div>
           </div>
