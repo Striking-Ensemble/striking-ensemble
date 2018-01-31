@@ -128,7 +128,8 @@ export default class Consumer extends Component {
       console.log('things ordered...', data);
     }
     if (data['action'] == 'close_pressed') {
-      console.log('things close...', data);
+      $('.modal.in').modal('hide');
+      this.setState({ showModal: false });
     }
   }
 
@@ -178,7 +179,7 @@ export default class Consumer extends Component {
 
     axios.post('https://checkout.twotap.com/prepare_checkout', { checkout_request: checkoutRequest })
       .then(res => {
-        this.setState({ showModal: true, checkout_request_id: res.data.checkout_request_id });
+        this.setState({ checkout_request_id: res.data.checkout_request_id });
       })
       .catch(err => console.log('OOOPPPSS:', err))
   }
@@ -191,8 +192,8 @@ export default class Consumer extends Component {
     };
     if (this.state.checkout_request_id) {
       return (
-        <div className="modal-content">
-          <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;  </span></button>
+        <div id="purchaseModal" className="modal-content" ref={el => this.el = el}>
+          {/* <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;  </span></button> */}
           <iframe src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={customStyles} frameBorder="0" ></iframe>
         </div>
       )
@@ -256,7 +257,7 @@ export default class Consumer extends Component {
   }
 
   render() {
-    console.log(`LOCALCART!! @${Date.now() / 1000 | 0}`, this.state.localCart);
+    console.log(`localCart!! @${Date.now() / 1000 | 0}`, this.state.localCart);
     if (this.state.error) {
       return (<FourOhFour />);
     }
