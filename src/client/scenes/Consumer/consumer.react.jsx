@@ -96,13 +96,13 @@ export default class Consumer extends Component {
   }
 
   tTHandleEvents(event) {
-    // sample events from the cart API
     let { data } = event;
     if (data['action'] == 'cart_contents_changed') {
       console.log('things changed...', data);
-      // data.cart_event == 'product_removed'
-      if(data.cart_event == 'product_removed') {
-        let productLinksToUpdate = [];
+      let productLinksToUpdate = [];
+      // listening for product_removed event since its cart_contents prop 
+      // returns updated list, the same as listening for cart_loaded
+      if (data.cart_event == 'product_removed') {
         for (let key in data.cart_contents) {
           let siteId = data.cart_contents[key];
           for (let deepKey in siteId) {
@@ -112,10 +112,20 @@ export default class Consumer extends Component {
         }
         this.setState({ localCart: productLinksToUpdate });
       }
+      // order is completed, update Influencer's db to track purchases
+      if (data.cart_event == 'cart_finalized') {
+        productLinksToUpdate.push({ ...data.cart_contents, cart_id: data.cart_id, purchase_id: data.purchase_id })
+        // axios.post('/update-influencer-purchase-tracker', productLinksToUpdate);
+        console.log('stuff to update for influencer\'s db:', productLinksToUpdate);
+        this.setState({ localCart: [] });
+      }
     }
+    // does not show cart contents
     if (data['action'] == 'cart_finalized') {
+      console.log('things finalized...', data);
     }
     if (data['action'] == 'place_order_button_pressed') {
+      console.log('things ordered...', data);
     }
     if (data['action'] == 'close_pressed') {
       console.log('things close...', data);
@@ -137,7 +147,6 @@ export default class Consumer extends Component {
     this.setState({ currentPost });
   }
 
-  
   removeCurrentPost(post) {
     this.setState({ currentPost: {}, postLog:  post ? post : null });
   }
@@ -147,8 +156,8 @@ export default class Consumer extends Component {
   }
   
   addToLocalCart(productLink, affiliateLink) {
-    // might need to use store instead
-    console.log('TRIGGERED....');
+    // might need to use store instead so that users can switch to different influencers
+    // as well as reopening the web app to come back to the cart
     let itemsToAdd = [...this.state.localCart, { url: productLink, affiliate_link: affiliateLink }];
     this.setState({ localCart: itemsToAdd });
   }
@@ -164,6 +173,8 @@ export default class Consumer extends Component {
     // checkoutRequest['custom_css_url'] = `${store.get('URL').root_url}/assets/css/integration_twotap.css`
     checkoutRequest['confirm'] = { method: 'sms', sms_confirm_url: `${store.get('URL').root_url}/purchase_confirm_callback` }
     checkoutRequest['unique_token'] = (Math.floor(Math.random() * 9999999) + 1).toString();
+    checkoutRequest['test_mode'] = 'fake_confirm';
+    checkoutRequest['close_button'] = { show: 'true' };
 
     axios.post('https://checkout.twotap.com/prepare_checkout', { checkout_request: checkoutRequest })
       .then(res => {
