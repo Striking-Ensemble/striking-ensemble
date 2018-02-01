@@ -66,7 +66,7 @@ reqRoutes.post('/account/media', influencerRequired, reqController.getMedia);
 reqRoutes.get('/:username/cart', integrations.integration);
 reqRoutes.get('/purchase_status/id/:purchase_id', reqController.purchaseStatusController);
 reqRoutes.post('/purchase_confirm_callback', reqController.purchaseConfirmController);
-
+reqRoutes.post('/purchase_updated_callback', integrations.purchaseUpdatedCallback)
 // =================================================================== //
 
 // ========================= Stripe Endpoints ======================== //

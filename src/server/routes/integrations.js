@@ -49,6 +49,12 @@ exports.purchaseConfirmCallback = (req, res) => {
   });
 };
 
+exports.purchaseUpdatedCallback = (req, res) => {
+  console.log('Requesting UPDATES from 2Tap:', req.body);
+  let purchaseId = req.body.purchase_id;
+  res.send(req.body);
+};
+
 exports.purchaseStatus = (req, res) => {
   console.log('CHECK STATUS OF PURCHASE');
   let apiURL = req.app.settings.twoTap_apiUrl;
