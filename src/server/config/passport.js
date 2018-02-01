@@ -27,7 +27,7 @@ module.exports = (passport) => {
             bio: data.bio,
             website: data.website,
             is_business: data.is_business
-          });
+          }, { bufferCommands: false });
           info.newUser = true;
           user.save((err) => {
             if (err) {
