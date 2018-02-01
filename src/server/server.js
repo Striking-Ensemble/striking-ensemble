@@ -51,7 +51,7 @@ app.use(session({
     path: '/', httpOnly: true, secure: false, maxAge: null // changes needed for production
   }
 }));
-app.set('own_url', 'http://localhost:3000');
+app.set('own_url', process.env.HOST || 'http://localhost:3000');
 app.set('mobile_url', 'https://checkout.twotap.com');
 app.set('twoTap_apiUrl', 'https://api.twotap.com');
 app.set('twoTap_public_token', config.twoTap.publicToken);

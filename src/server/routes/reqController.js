@@ -15,8 +15,12 @@ const twoTapApiURL = 'https://checkout.twotap.com/prepare_checkout';
 const instaApiURL = 'https://api.instagram.com/v1/users/self/media/recent';
 
 // Controller methods for TwoTap
+/**
+ * POST /purchase_confirm_callback
+ *
+ * Callback to confirm the purchase before Two Tap finalizes it.
+ */
 exports.purchaseConfirmController = (req, res) => {
-  console.log('CHECKING OUT...');
   integrations.purchaseConfirmCallback(req, res);
 };
 
