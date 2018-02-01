@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const mongoUri = 'mongodb://localhost/influencers'
+const mongoUri = `mongodb://${process.env.DBUser}:${process.env.DBPass}@ds249707.mlab.com:49707/striking-ensemble-sandbox-db/influencers`
 
 const dbOptions = {
   useMongoClient: true,
