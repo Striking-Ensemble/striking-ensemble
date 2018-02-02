@@ -6,9 +6,10 @@
   "scripts": {
     "test": "jasmine",
     "build": "node_modules/.bin/webpack -w",
-    "start": "NODE_ENV=development nodemon ./src/server/index.js",
-    "start_db": "NODE_ENV=demo_db nodemon ./src/server/index.js",
-    "start_production": "NODE_ENV=production node ./src/server/index.js"
+    "start": "NODE_ENV=development HostedDB=false nodemon ./src/server/index.js",
+    "start:db": "NODE_ENV=development HostedDB=true nodemon ./src/server/index.js",
+    "start:prod": "NODE_ENV=production node ./src/server/index.js",
+    "start:heroku": "NODE_ENV=development HostedDB=true node ./src/server/index.js"
   },
   "repository": {
     "type": "git",

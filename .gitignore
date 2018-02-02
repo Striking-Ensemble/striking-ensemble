@@ -6,6 +6,7 @@
 # Logs
 logs
 *.log
+tmp
 npm-debug.log*
 
 # Dependency directories
