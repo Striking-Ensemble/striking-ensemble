@@ -51,12 +51,24 @@ app.use(session({
     path: '/', httpOnly: true, secure: false, maxAge: null // changes needed for production
   }
 }));
-app.set('own_url', process.env.HOST || 'http://localhost:3000');
-app.set('mobile_url', 'https://checkout.twotap.com');
-app.set('twoTap_apiUrl', 'https://api.twotap.com');
-app.set('twoTap_public_token', config.twoTap.publicToken);
-app.set('twoTap_private_token', config.twoTap.privateToken);
-app.set('insta_accessToken', '');
+
+if (app.get('env') === 'development') {
+  app.set('own_url', process.env.HOST || 'http://localhost:3000');
+  app.set('mobile_url', 'https://checkout.twotap.com');
+  app.set('twoTap_apiUrl', 'https://api.twotap.com');
+  app.set('twoTap_public_token', config.twoTap.publicToken);
+  app.set('twoTap_private_token', config.twoTap.privateToken);
+  app.set('insta_accessToken', '');
+}
+
+if (app.get('env') === 'production') {
+  app.set('own_url', process.env.HOST || 'http://localhost:3000');
+  app.set('mobile_url', 'https://checkout.twotap.com');
+  app.set('twoTap_apiUrl', 'https://api.twotap.com');
+  app.set('twoTap_public_token', config.twoTap.publicToken);
+  app.set('twoTap_private_token', config.twoTap.privateToken);
+  app.set('insta_accessToken', '');
+}
 
 // create insta-pass config
 instagramConfig(passport);
