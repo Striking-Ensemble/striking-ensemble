@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from 'store';
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import LoadingSpinner from '../../components/loadingSpinner.react';
 import FourOhFour from '../../components/fourOhFour.react';
 import Navigation from '../../components/navigation.react';
@@ -20,6 +20,7 @@ export default class Billing extends Component {
     this.handlePayoutNow = this.handlePayoutNow.bind(this);
     this.renderDashboard = this.renderDashboard.bind(this);
     this.renderStripeOnboarding = this.renderStripeOnboarding.bind(this);
+    this.handleStripeDeactivate = this.handleStripeDeactivate.bind(this);
   }
 
   componentDidMount() {
@@ -42,10 +43,21 @@ export default class Billing extends Component {
   handlePayoutNow(e) {
     e.preventDefault();
     axios.post('/billing/stripe/payout')
-    .then(response => {
-      console.log('billing payout:', response)
-    })
-    .catch(err => console.log(err))
+      .then(response => {
+        console.log('billing payout:', response)
+      })
+      .catch(err => console.log(err))
+  }
+
+  handleStripeDeactivate(e) {
+    e.preventDefault();
+    axios.post('/billing/stripe/deactivate')
+      .then(response => {
+        console.log('billing deactivate Stripe:', response);
+        store.set('user', response);
+        this.setState({ user: response.data });
+      })
+      .catch(err => console.log(err))
   }
 
   renderDashboard() {
@@ -56,13 +68,18 @@ export default class Billing extends Component {
             <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
               <img src={this.state.user.profile_picture} className="img-responsive img-circle" />
             </div>
-            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+            <div className="col-lg-2 col-md-2 col-sm-2 col-xs-4">
               <h4>{this.state.user.username}</h4>
             </div>
-            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-3">
+            <div className="col-lg-2 col-md-2 col-sm-3 col-xs-5">
               <a href="/billing/stripe/transfers" className="btn btn-default">View Transfers</a>
               <form method="post" onSubmit={this.handlePayoutNow}>
                 <button className="btn btn-success" type="submit">Pay Out Now</button>
+              </form>
+            </div>
+            <div className="col-lg-2 col-md-2 col-sm-3 col-xs-7">
+              <form method="post" onSubmit={this.handleStripeDeactivate}>
+                <button className="btn btn-danger" type="submit">Deactivate Stripe</button>
               </form>
             </div>
           </div>
@@ -78,10 +95,10 @@ export default class Billing extends Component {
             <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
               <img src={this.state.user.profile_picture} className="img-responsive img-circle" />
             </div>
-            <div className="col-lg-1 col-md-2 col-sm-2 col-xs-5">
+            <div className="col-lg-2 col-md-2 col-sm-2 col-xs-5">
               <h4>{this.state.user.username}</h4>
             </div>
-            <a href="/billing/stripe/authorize" className="col-lg-1 col-md-2 col-sm-2 col-xs-5 btn btn-default">Connect Stripe</a>
+            <a href="/billing/stripe/authorize" className="col-lg-2 col-md-2 col-sm-2 col-xs-5 btn btn-default">Connect Stripe</a>
           </div>
         </header>
       )

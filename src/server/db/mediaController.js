@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const Promise = require('bluebird');
 const request = require('request');
 const rp = require('request-promise');
+const normalizeUrl = require('normalize-url');
+
 // media methods to db
 const lookUpSites = [
   {
@@ -114,14 +116,25 @@ exports.updateMedia = async (req, res) => {
 };
 
 exports.updateRetailLinks = (req, res) => {
-  console.log('in UPDATE RETAIL LINK #96:', req.body);
+  console.log('in UPDATE RETAIL LINK #119:', req.body);
   // find individual post through req.params given
   let query = { _id: req.params.id };
   
   let dataTemp = req.body.map(item => {
     let temp = item.url.split('/');
     let result = temp[2].split('www.')[1];
-    let productQuery = temp[temp.length - 1];
+    let finalChanges;
+    // normalize, then replace=> removes all params, then split '.' for evaluation on last index length
+    let normUrl = normalizeUrl(item.url).replace(/\?.*$/, '').split('.');
+    // if last index length is not a suffix, concat the strings
+    if (normUrl[normUrl.length - 1].length > 6) {
+      finalChanges = normUrl.join('.');
+    } else {
+      // slice out suffix (ex: .html) and concat the strings
+      finalChanges = normUrl.slice(0, -1).join('.');
+    }
+    // take the product id from finalChanges to use for query
+    let productQuery = finalChanges.split('/').pop();
     let siteInfo = lookUpSites.filter(item => item.url == result);
     let twoTapPath = `https://api.twotap.com/v1.0/product/search?public_token=${req.app.get('twoTap_public_token')}`;
     let queryObj = {
@@ -136,6 +149,7 @@ exports.updateRetailLinks = (req, res) => {
       uri: twoTapPath,
       form: queryObj
     }
+    console.log('QUERY "/product/search":', queryObj);
     return (
       rp(options)
       .then(body => {

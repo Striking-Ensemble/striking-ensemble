@@ -6,9 +6,9 @@
   "scripts": {
     "test": "jasmine",
     "build": "node_modules/.bin/webpack -w",
-    "start": "nodemon ./src/server/index.js",
-    "db": "sudo mongod",
-    "dev": "npm run db & npm run build & npm run start"
+    "start": "NODE_ENV=development nodemon ./src/server/index.js",
+    "start_db": "NODE_ENV=demo_db nodemon ./src/server/index.js",
+    "start_production": "NODE_ENV=production node ./src/server/index.js"
   },
   "repository": {
     "type": "git",
@@ -42,6 +42,7 @@
     "helmet": "^3.9.0",
     "mongoose": "^4.13.1",
     "morgan": "^1.9.0",
+    "normalize-url": "^2.0.1",
     "passport": "^0.4.0",
     "passport-instagram": "^1.0.0",
     "path": "^0.12.7",
@@ -52,6 +53,7 @@
     "react-router-dom": "^4.2.2",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
+    "serve-favicon": "^2.4.5",
     "store": "^2.0.12",
     "stripe": "^5.4.0",
     "style-loader": "^0.19.0",

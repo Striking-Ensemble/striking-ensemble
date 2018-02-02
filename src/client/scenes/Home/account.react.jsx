@@ -20,7 +20,7 @@ export default class Account extends Component {
   }
 
   componentDidMount() {
-    axios.get(store.get('URL').root_url + '/account/media')
+    axios.post(store.get('URL').root_url + '/account/media', { username: this.props.user.username })
       .then(
       res => {
         console.log('I NEED TO FIND res.data', res.data);
@@ -35,6 +35,9 @@ export default class Account extends Component {
       })
       .catch(err => {
         console.log(err);
+        store.remove('user');
+        store.remove('isAuthenticated');
+        this.props.history.replace({ pathname: '/login' });
       });
   }
 
@@ -101,7 +104,7 @@ export default class Account extends Component {
               <img src={user.profile_picture} className="img-responsive img-circle" />
             </div>
             <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
-              <h4>{user.username}</h4>
+              <h4 className="username-text">{user.username}</h4>
             </div>
           </div>
         </div>

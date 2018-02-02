@@ -15,8 +15,12 @@ const twoTapApiURL = 'https://checkout.twotap.com/prepare_checkout';
 const instaApiURL = 'https://api.instagram.com/v1/users/self/media/recent';
 
 // Controller methods for TwoTap
+/**
+ * POST /purchase_confirm_callback
+ *
+ * Callback to confirm the purchase before Two Tap finalizes it.
+ */
 exports.purchaseConfirmController = (req, res) => {
-  console.log('CHECKING OUT...');
   integrations.purchaseConfirmCallback(req, res);
 };
 
@@ -56,7 +60,7 @@ exports.setupPayment = (req, res) => {
  *
  * Connect the new Stripe account to the platform account.
  */
-exports.getStripeToken = async (req, res) => {
+exports.getStripeToken = (req, res) => {
   // Check the state we got back equals the one we generated before proceeding.
   if (req.session.state != req.query.state) {
     res.redirect(401, '/login');
@@ -138,79 +142,143 @@ exports.payout = async (req, res) => {
   res.redirect('/billing');
 };
 
+/**
+ * POST /billing/stripe/deactivate
+ *
+ * This endpoint is used for revoking access of an app to an account.
+ */
+exports.deactivate = (req, res) => {
+  const influencer = req.user;
+
+  request.post({
+    url: 'https://connect.stripe.com/oauth/deauthorize',
+    headers: {
+      Authorization: `Bearer ${config.stripe.secretKey}`
+    },
+    form: {
+      client_id: config.stripe.clientId,
+      stripe_user_id: influencer.stripeAccountId
+    }
+  }, (err, response, body) => {
+    if (err || body.error) {
+      console.log('The Stripe deauthorize process has not succeeded.', err || body.error);
+    } else {
+      let query = { username: req.user.username };
+      Influencer.update(query, { $unset: { stripeAccountId: 1 } }).exec();
+      req.user.stripeAccountId = '';
+      console.log('Deactivated Acct:', body);
+      res.send(req.user);
+    }
+  })
+};
+
 // ======================================================================== //
 
 // Controller methods for Instagram
 
+/**
+ * POST /account/media => due to the need of updating posts on our own db
+ *
+ * Get media from insta for logged in users & send to client
+**/
 exports.getMedia = (req, res) => {
   if (!req.app.settings.authInfo) {
-    console.log('please log in 1st');
+    console.log('Missing authInfo... please log in 1st');
     res.redirect(401, '/login');
   }
+  // set options to insta api path for request use
   let options = {
     url: instaApiURL + '/?access_token=' + req.app.settings.authInfo.accessToken
   };
+  if (req.params.count) {
+    // set options.url with post count returned to also receive pagination url
+    options.url = options.url + '&count=' + req.params.count;
+  }
+  if (req.params.max_id) {
+    // request for next page
+    options.url = options.url + '&max_id=' + req.params.max_id;
+  }
+
   request.get(options, (err, response, body) => {
     if (err) {
       throw err;
     }
-    let nowBody = JSON.parse(body);
-    console.log('GOT IT COACH! in reqController getMedia');
+    let parsedBody = JSON.parse(body);
     if (req.app.settings.authInfo.newUser) {
       console.log('NEW USER DETECTED IN SAVING MEDIA');
-      let mediaArr = nowBody.data.map(obj => {
-        if (obj.type == 'video') {
-          console.log('HEAVY CHECKING #54', obj.id);
-          return {
-            _id: obj.id,
-            _creator: req.user.id,
-            username: req.user.username,
-            caption: obj.caption,
-            created_time: obj.created_time,
-            images: obj.images,
-            link: obj.link,
-            tags: obj.tags,
-            post_type: obj.type,
-            videos: obj.videos
+      // create an array of posts from insta query results to save in db
+      let mediaArr = parsedBody.data.map(obj => {
+        let tempImages = obj.images;
+        for (let key in obj.images) {
+          // remove the signatures on url images
+          tempImages[key].url = obj.images[key].url.replace(/vp.*\/.{32}\/.{8}\//, '');
+        }
+
+        let tempVideos = obj.type == 'video' ? obj.videos : null;
+        if (tempVideos) {
+          for (let prop in obj.videos) {
+            // remove the signatures on url videos
+            tempVideos[prop].url = obj.videos[prop].url.replace(/vp.*\/.{32}\/.{8}\//, '');
           }
-        } else {
-          return {
-            _id: obj.id,
-            _creator: req.user.id,
-            username: req.user.username,
-            caption: obj.caption,
-            created_time: obj.created_time,
-            images: obj.images,
-            link: obj.link,
-            tags: obj.tags,
-            post_type: obj.type
-          }
+        }
+
+        return {
+          _id: obj.id,
+          _creator: req.user.id,
+          username: req.user.username,
+          caption: obj.caption,
+          created_time: obj.created_time,
+          images: tempImages,
+          link: obj.link,
+          tags: obj.tags,
+          post_type: obj.type,
+          videos: tempVideos
         }
       });
 
-      Media
-        .insertMany(mediaArr)
-        .then((response) => console.log('INSERTED MANY #84'))
-        .catch(err => console.log('ERROR IN INSERTING MEDIA #81!', err));
-
+      Media.insertMany(mediaArr)
+        .then((response) => console.log('INSERTED MANY #228'))
+        .catch(err => console.log('ERROR IN INSERTING MEDIA #229!', err));
       req.app.settings.authInfo.newUser = false;
-      res.send(nowBody.data);
+      res.send(mediaArr);
     } else {
+      // do returning user logic
       console.log('USER EXISTS in getMedia. Now saving in a special way...');
-      let mediaArr = [];
+      let newMediaList = [];
+      let oldMediaList = [];
+      // add post to media list after mediaCount fn resolves the queries
       function mediaCount(arr) {
-        return arr.reduce((promise, item) => 
-          promise.then(() => Media.count({_id: item.id})
+        return arr.reduce((promise, item) =>
+          promise.then(() => Media.count({ _id: item.id })
             .then((count) => {
               console.log('CAN I EVEN SEE??', count);
+              // if item does not exists in Media db
               if (count <= 0) {
-                mediaArr.push(item);
+                let tempItem = item;
+                let tempImages = item.images;
+                for (let key in item.images) {
+                  // remove the signatures on url images
+                  tempImages[key].url = item.images[key].url.replace(/vp.*\/.{32}\/.{8}\//, '');
+                }
+
+                let tempVideos = item.type == 'video' ? item.videos : null;
+                if (tempVideos) {
+                  for (let prop in item.videos) {
+                    // remove the signatures on url videos
+                    tempVideos[prop].url = item.videos[prop].url.replace(/vp.*\/.{32}\/.{8}\//, '');
+                  }
+                }
+                tempItem.images = tempImages;
+                tempItem.videos = tempVideos;
+                newMediaList.push(tempItem);
+              } else {
+                oldMediaList.push(item);
               }
             })), Promise.resolve())
       }
-      mediaCount(nowBody.data).then(() => {
-        if (mediaArr.length == 0) {
-          Media.find({_creator: req.user._id}, (err, response) => {
+      mediaCount(parsedBody.data).then(() => {
+        if (newMediaList.length == 0) {
+          Media.find({ _creator: req.user._id }, (err, response) => {
             if (err) {
               console.log('IN MEDIA COUNT #78', err);
             }
@@ -218,9 +286,9 @@ exports.getMedia = (req, res) => {
             res.send(response);
           })
         } else {
-          let arrToSend = [...mediaArr, ...nowBody.data];
+          let arrToSend = [...newMediaList, ...oldMediaList];
           Media
-            .insertMany(mediaArr)
+            .insertMany(newMediaList)
             .then(response => console.log('GOT THEM UPDATED!'))
             .catch(err => console.log('ERR in reqController #89', err));
           res.send(arrToSend);
@@ -228,7 +296,7 @@ exports.getMedia = (req, res) => {
       })
     }
   });
-}
+};
 
 // submit media to specified influencer in db
 exports.submitMedia = (req, res) => {
@@ -258,6 +326,24 @@ exports.submitLinks = (req, res) => {
 exports.getInfluencerPosts = (req, res) => {
   console.log('GET INFLUENCER POSTS controller');
   mediaController.getInfluencerMedia(req, res);
+};
+
+/**
+ * GET /:username/media-products
+ *
+ * Get media that has retailLinks only
+ */
+exports.getMediaProducts = (req, res) => {
+  let query = { 
+    username: req.params.username,
+    retailLinks: { $exists: true }
+  };
+  Media.find(query, (err, response) => {
+    if (err) {
+      console.log('Error in getMediaProducts controller:', err);
+    }
+    res.send(response);
+  });
 };
 
 exports.getPostCatalog = (req, res) => {

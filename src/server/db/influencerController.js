@@ -15,7 +15,7 @@ exports.createOne = (req, res) => {
     website: req.body.website,
     is_business: req.body.is_business,
     data: mediaData.map((obj) => obj)
-  });
+  }, { bufferCommands: false }); // fails immediately when driver is not connected
 
   newInfluencer.save((err, data) => {
     console.log('ON CREATEONE, ADDING:', data);

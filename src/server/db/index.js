@@ -1,8 +1,29 @@
 const mongoose = require('mongoose');
-const mongoUri = 'mongodb://localhost/influencers'
+let mongoUri;
+if (process.env.NODE_ENV === 'development') {
+  mongoUri = 'mongodb://localhost/influencers';
+}
 
+if (process.env.NODE_ENV === 'demo_db') {
+  mongoUri = `mongodb://${process.env.DBUser}:${process.env.DBPass}@ds249707.mlab.com:49707/striking-ensemble-sandbox-db`;
+}
+
+const dbOptions = {
+  useMongoClient: true,
+  autoReconnect: true,
+  reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
+  reconnectInterval: 500, // Reconnect every 500ms
+  // If not connected, return errors immediately rather than waiting for reconnect
+  // Set this option to 0 and set bufferCommands to *false on your schemas 
+  // If you want your database operations to fail immediately 
+  // When the driver is not connected,
+  bufferMaxEntries: 0,
+  connectTimeoutMS: 300000,
+  socketTimeoutMS: 300000,
+  poolSize: 5
+}
 // Connect Mongoose to our local MongoDB via URI
-mongoose.connect(mongoUri, { useMongoClient: true });
+mongoose.connect(mongoUri, dbOptions);
 
 const db = mongoose.connection;
 // check our db status

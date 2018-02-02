@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import store from 'store';
-import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import store from 'store';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class Navigation extends Component {
   constructor(props) {
     super(props);
 
-    this.handleRedirect = this.handleRedirect.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
     this.handleHome = this.handleHome.bind(this);
   }
 
-  handleRedirect(e) {
+  handleLogout(e) {
     console.log('redirect props', this.props);
-    axios.get(store.get('URL').root_url + '/logout')
+    axios.post(store.get('URL').root_url + '/logout', { username: this.props.user.username })
       .then(
         res => {
           this.props.removeUser();
@@ -50,12 +50,12 @@ export default class Navigation extends Component {
                 <Link to="/billing" data-toggle="collapse" data-target=".navbar-collapse.in">Billing Info</Link>
               </li>
               <li role="button" className={this.props.location.pathname.includes('/stats') ? "active" : ""}>
-                <Link to="/" data-toggle="collapse" data-target=".navbar-collapse.in">Stats</Link>
+                <Link to="/settings" data-toggle="collapse" data-target=".navbar-collapse.in">Settings</Link>
               </li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <button className="btn btn-danger log" onClick={this.handleRedirect}>Logout</button>
+                <button className="btn btn-danger log" onClick={this.handleLogout}>Logout</button>
               </li>
             </ul>
           </div>

@@ -3,11 +3,11 @@
 // ===================== Module Dependencies ========================= //
 const config = require('./config/keys');
 const express = require('express');
+const favicon = require('serve-favicon');
 // extracts the entire body portion of incoming req to be used as req.body
 const bodyParser = require('body-parser');
 const path = require('path');
 const logger = require('morgan');
-// Sets HTTP headers appropriately for protection
 const helmet = require('helmet');
 const router = require('./db/influencerRouter');
 const reqRoutes = require('./routes/routes');
@@ -30,11 +30,16 @@ const app = express();
 // revisit this after thinking it over whether to use jade
 // app.set('views', path.join(__dirname, '../client/views'));
 // app.set('view engine', 'jade');
+
+// Sets HTTP headers appropriately for protection
 app.use(helmet());
 
 // If node.js behind a proxy and are using secure: true for session cookies, 
 // need to set "trust proxy" in express:
 app.set('trust proxy', 1) // trust first proxy
+
+// caches the icon in memory to improve performance by skipping disk access.
+app.use(favicon(path.join(__dirname, '../../public', 'assets', 'images', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(session({
@@ -46,12 +51,24 @@ app.use(session({
     path: '/', httpOnly: true, secure: false, maxAge: null // changes needed for production
   }
 }));
-app.set('own_url', 'http://localhost:3000');
-app.set('mobile_url', 'https://checkout.twotap.com');
-app.set('twoTap_apiUrl', 'https://api.twotap.com');
-app.set('twoTap_public_token', config.twoTap.publicToken);
-app.set('twoTap_private_token', config.twoTap.privateToken);
-app.set('insta_accessToken', '');
+
+if (app.get('env') === 'development') {
+  app.set('own_url', process.env.HOST || 'http://localhost:3000');
+  app.set('mobile_url', 'https://checkout.twotap.com');
+  app.set('twoTap_apiUrl', 'https://api.twotap.com');
+  app.set('twoTap_public_token', config.twoTap.publicToken);
+  app.set('twoTap_private_token', config.twoTap.privateToken);
+  app.set('insta_accessToken', '');
+}
+
+if (app.get('env') === 'production') {
+  app.set('own_url', process.env.HOST || 'http://localhost:3000');
+  app.set('mobile_url', 'https://checkout.twotap.com');
+  app.set('twoTap_apiUrl', 'https://api.twotap.com');
+  app.set('twoTap_public_token', config.twoTap.publicToken);
+  app.set('twoTap_private_token', config.twoTap.privateToken);
+  app.set('insta_accessToken', '');
+}
 
 // create insta-pass config
 instagramConfig(passport);
