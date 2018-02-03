@@ -32,7 +32,7 @@ const app = express();
 // app.set('view engine', 'jade');
 
 // Sets HTTP headers appropriately for protection
-// app.use(helmet());
+app.use(helmet());
 
 // If node.js behind a proxy and are using secure: true for session cookies, 
 // need to set "trust proxy" in express:
@@ -81,7 +81,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parses the text as JSON and set to req.body
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../../public')));
+app.use('/public', express.static(path.join(__dirname, '../../public')));
+app.get('/', (req, res) => { res.sendFile(path.join(__dirname, '../../public/index.html')) })
 
 // serialize and deserialize
 passport.serializeUser((user, done) => {
@@ -97,7 +98,6 @@ passport.deserializeUser((id, done) => {
 });
 
 // set up API routes
-app.use('/login', express.static(path.join(__dirname, '../../public')));
 app.use('/', reqRoutes);
 app.use('/api/*', router);
 app.use('/account/post/:id', express.static(path.join(__dirname, '../../../public')));
