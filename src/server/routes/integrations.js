@@ -6,7 +6,7 @@ const request = require('request');
 exports.integration = (req, res) => {
   console.log('Integration Controller:', process.env.twoTap_public_token);
   const publicToken = process.env.twoTap_public_token;
-  const customCSSURL = req.query.custome_css_url || 'http://localhost:3000/notnicknick/assets/css/integration_twotap.css';
+  const customCSSURL = req.query.custome_css_url || `${req.app.get('own_url')}/:username/public/assets/css/integration_twotap.css`;
   const smsConfirmURL = 'http://localhost:3000/purchase_confirm_callback';
 
   res.send({
