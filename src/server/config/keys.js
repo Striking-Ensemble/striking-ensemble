@@ -1,8 +1,10 @@
 'use strict';
 let hostUri; 
 if (process.env.HOST) {
+  console.log('HOST:', process.env.HOST);
   hostUri = process.env.HOST
 } else {
+  console.log('small host:', process.env.HOST);
   hostUri = process.env.host
 }
 console.log(`${hostUri}/auth/instagram/callback`),

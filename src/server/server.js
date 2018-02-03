@@ -53,6 +53,8 @@ app.use(session({
 }));
 
 if (app.get('env') === 'development') {
+  console.log('SERVER HOST:', process.env.HOST);
+  console.log('SERVER host:', process.env.host);
   app.set('own_url', (process.env.HOST ? process.env.HOST : process.env.host)  || 'http://localhost:3000');
   app.set('mobile_url', 'https://checkout.twotap.com');
   app.set('twoTap_apiUrl', 'https://api.twotap.com');
