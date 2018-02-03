@@ -5,13 +5,14 @@ if (process.env.HOST) {
 } else {
   hostUri = process.env.host
 }
+console.log(`${hostUri}/auth/instagram/callback`),
 
 module.exports = {
   secret: 'sessionSecret',
   // Configuration for Instagram Passport
   clientID: process.env.Instagram_client_id,
   clientSecret: process.env.Instagram_client_secret,
-  callbackURL: `${hostUri}/auth/instagram/callback`,
+  callbackURL: 'https://sleepy-citadel-40559.herokuapp.com/auth/instagram/callback',
   // Configuration for Stripe.
   // API Keys: https://dashboard.stripe.com/account/apikeys
   // Connect Settings: https://dashboard.stripe.com/account/applications/settings
