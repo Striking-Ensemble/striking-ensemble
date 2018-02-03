@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jasmine",
     "start": "NODE_ENV=development HostedDB=false nodemon ./src/server/index.js",
-    "build": "better-npm-run-build",
+    "build": "better-npm-run build",
     "build:dev": "node_modules/.bin/webpack -w --config webpack.dev.js",
     "build:prod": "node_modules/.bin/webpack -p --config webpack.prod.js",
     "start:db": "NODE_ENV=development HostedDB=true nodemon ./src/server/index.js",
