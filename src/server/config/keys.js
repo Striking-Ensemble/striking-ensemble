@@ -5,7 +5,7 @@ module.exports = {
   // Configuration for Instagram Passport
   clientID: process.env.Instagram_client_id,
   clientSecret: process.env.Instagram_client_secret,
-  callbackURL: (process.env.HOST ? `${process.env.HOST}/auth/instagram/callback` : undefined) || 'http://localhost:3000/auth/instagram/callback',
+  callbackURL: ((process.env.HOST ? process.env.HOST : process.env.host) ? `${process.env.HOST}/auth/instagram/callback` : undefined) || 'http://localhost:3000/auth/instagram/callback',
   // Configuration for Stripe.
   // API Keys: https://dashboard.stripe.com/account/apikeys
   // Connect Settings: https://dashboard.stripe.com/account/applications/settings
