@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jasmine",
-    "build": "node_modules/.bin/webpack -w",
+    "build": "node_modules/.bin/webpack -w --config webpack.dev.js",
     "start": "NODE_ENV=development HostedDB=false nodemon ./src/server/index.js",
     "start:db": "NODE_ENV=development HostedDB=true nodemon ./src/server/index.js",
     "start:prod": "NODE_ENV=production node ./src/server/index.js",
@@ -36,20 +36,20 @@
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
-    "css-loader": "^0.28.7",
+    "css-loader": "^0.28.9",
     "dotenv-safe": "^4.0.4",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
-    "helmet": "^3.9.0",
-    "mongoose": "^4.13.1",
+    "helmet": "^3.10.0",
+    "mongoose": "^4.13.10",
     "morgan": "^1.9.0",
     "normalize-url": "^2.0.1",
     "passport": "^0.4.0",
     "passport-instagram": "^1.0.0",
     "path": "^0.12.7",
     "querystring": "^0.2.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-responsive-modal": "^2.0.0",
     "react-router-dom": "^4.2.2",
     "request": "^2.83.0",
@@ -57,13 +57,15 @@
     "serve-favicon": "^2.4.5",
     "store": "^2.0.12",
     "stripe": "^5.4.0",
-    "style-loader": "^0.19.0",
-    "webpack": "^3.8.1"
+    "style-loader": "^0.19.1",
+    "uglifyjs-webpack-plugin": "^1.1.8",
+    "webpack": "^3.10.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "jasmine": "^2.8.0",
-    "nodemon": "^1.12.2"
+    "jasmine": "^2.9.0",
+    "nodemon": "^1.14.12",
+    "webpack-merge": "^4.1.1"
   }
 }
