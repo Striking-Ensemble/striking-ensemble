@@ -32,7 +32,7 @@ const app = express();
 // app.set('view engine', 'jade');
 
 // Sets HTTP headers appropriately for protection
-app.use(helmet());
+// app.use(helmet());
 
 // If node.js behind a proxy and are using secure: true for session cookies, 
 // need to set "trust proxy" in express:
