@@ -15,6 +15,8 @@ node_modules
 # Webpack Output
 public/bundle.js
 public/bundle.js.map
+*.hot-update.js
+*.hot-update.json
 
 # User Settings
 .vscode
