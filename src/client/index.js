@@ -1,12 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { AppContainer } from 'react-hot-loader';
 import Routing from './services/routing';
 import store from 'store';
 
 const protocol = window.location.protocol,
-	host = window.location.host,
-	pathname = window.location.pathname;
+			host = window.location.host,
+			pathname = window.location.pathname;
 
 store.set('URL', {
 	protocol: protocol,
@@ -15,8 +15,20 @@ store.set('URL', {
 	root_url: `${protocol}//${host}`
 });
 
-render((
-	<Router>
-		<Routing />
-	</Router>
-), document.getElementById('App'));
+const renderFn = Component => {
+	render((
+		<AppContainer>
+			<Component />
+		</AppContainer>
+	), document.getElementById('App'));
+};
+
+renderFn(Routing);
+
+// Webpack Hot Module Replacement API
+if (module.hot) {
+	module.hot.accept('./services/routing', () => {
+		const NextApp = require('./services/routing').default;
+		renderFn(NextApp);
+	})
+};
