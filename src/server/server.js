@@ -52,9 +52,26 @@ app.use(session({
   }
 }));
 
+if (process.env.NODE_ENV !== 'production') {
+  const webpack = require('webpack');
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+  const config = require('../../webpack.dev');
+  const compiler = webpack(config);
+
+  app.use(webpackDevMiddleware(compiler, {
+    noInfo: true,
+    publicPath: config.output.publicPath
+  }));
+  app.use(webpackHotMiddleware(compiler, {
+    log: console.log,
+    reload: true,
+    path: '/__webpack_hmr',
+    heartbeat: 10 * 1000
+  }));
+}
+
 if (app.get('env') === 'development') {
-  console.log('SERVER HOST:', process.env.HOST);
-  console.log('SERVER host:', process.env.host);
   app.set('own_url', (process.env.HOST ? process.env.HOST : process.env.host)  || 'http://localhost:3000');
   app.set('mobile_url', 'https://checkout.twotap.com');
   app.set('twoTap_apiUrl', 'https://api.twotap.com');
