@@ -52,7 +52,7 @@ app.use(session({
   }
 }));
 
-if (app.get('env') === 'development') {
+if (app.get('env') !== 'production') {
   const webpack = require('webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -69,22 +69,14 @@ if (app.get('env') === 'development') {
     path: '/__webpack_hmr',
     heartbeat: 10 * 1000
   }));
-  app.set('own_url', (process.env.HOST ? process.env.HOST : process.env.host)  || 'http://localhost:3000');
-  app.set('mobile_url', 'https://checkout.twotap.com');
-  app.set('twoTap_apiUrl', 'https://api.twotap.com');
-  app.set('twoTap_public_token', config.twoTap.publicToken);
-  app.set('twoTap_private_token', config.twoTap.privateToken);
-  app.set('insta_accessToken', '');
 }
 
-if (app.get('env') === 'production') {
-  app.set('own_url', (process.env.HOST ? process.env.HOST : process.env.host) || 'http://localhost:3000');
-  app.set('mobile_url', 'https://checkout.twotap.com');
-  app.set('twoTap_apiUrl', 'https://api.twotap.com');
-  app.set('twoTap_public_token', config.twoTap.publicToken);
-  app.set('twoTap_private_token', config.twoTap.privateToken);
-  app.set('insta_accessToken', '');
-}
+app.set('own_url', (process.env.HOST ? process.env.HOST : process.env.host) || 'http://localhost:3000');
+app.set('mobile_url', 'https://checkout.twotap.com');
+app.set('twoTap_apiUrl', 'https://api.twotap.com');
+app.set('twoTap_public_token', config.twoTap.publicToken);
+app.set('twoTap_private_token', config.twoTap.privateToken);
+app.set('insta_accessToken', '');
 
 // create insta-pass config
 instagramConfig(passport);
