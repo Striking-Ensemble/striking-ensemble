@@ -18,6 +18,9 @@
       "command": "npm run build:prod && npm run start:prod"
     }
   },
+  "nodemonConfig": {
+    "ignore": ["src/client/*"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Striking-Ensemble/striking-ensemble.git"
