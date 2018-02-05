@@ -1,6 +1,5 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
 import Routing from './services/routing';
 import store from 'store';
 
@@ -15,8 +14,27 @@ store.set('URL', {
 	root_url: `${protocol}//${host}`
 });
 
-render((
-	<Router>
+if (process.env.NODE_ENV === 'production') {
+	render((
 		<Routing />
-	</Router>
-), document.getElementById('App'));
+	), document.getElementById('App'))
+} else {
+	const { AppContainer } = require('react-hot-loader');
+	const renderFn = Component => {
+		render((
+			<AppContainer>
+				<Component />
+			</AppContainer>
+		), document.getElementById('App'));
+	};
+
+	renderFn(Routing);
+
+	// Webpack Hot Module Replacement API
+	if (module.hot) {
+		module.hot.accept('./services/routing', () => {
+			const NextApp = require('./services/routing').default;
+			renderFn(NextApp);
+		})
+	};
+}

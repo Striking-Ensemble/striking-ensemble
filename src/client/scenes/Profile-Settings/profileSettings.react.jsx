@@ -153,12 +153,12 @@ export default class ProfileSettings extends Component {
               </div>
             </div>
           </div>
-          <div class="checkbox">
+          <div className="checkbox">
             <label>
               <input type="checkbox" /><span> I have read and accept the terms of the Influencer Membership Agreement</span>
             </label>
           </div>
-          <div class="checkbox">
+          <div className="checkbox">
             <label>
               <input type="checkbox" /><span> I am 18 years of age or older</span>
             </label>

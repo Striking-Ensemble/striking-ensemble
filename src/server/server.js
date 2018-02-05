@@ -52,23 +52,31 @@ app.use(session({
   }
 }));
 
-if (app.get('env') === 'development') {
-  app.set('own_url', process.env.HOST || 'http://localhost:3000');
-  app.set('mobile_url', 'https://checkout.twotap.com');
-  app.set('twoTap_apiUrl', 'https://api.twotap.com');
-  app.set('twoTap_public_token', config.twoTap.publicToken);
-  app.set('twoTap_private_token', config.twoTap.privateToken);
-  app.set('insta_accessToken', '');
+if (app.get('env') !== 'production') {
+  const webpack = require('webpack');
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+  const webpackConfig = require('../../webpack.dev');
+  const compiler = webpack(webpackConfig);
+
+  app.use(webpackDevMiddleware(compiler, {
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath
+  }));
+  app.use(webpackHotMiddleware(compiler, {
+    log: console.log,
+    reload: true,
+    path: '/__webpack_hmr',
+    heartbeat: 10 * 1000
+  }));
 }
 
-if (app.get('env') === 'production') {
-  app.set('own_url', process.env.HOST || 'http://localhost:3000');
-  app.set('mobile_url', 'https://checkout.twotap.com');
-  app.set('twoTap_apiUrl', 'https://api.twotap.com');
-  app.set('twoTap_public_token', config.twoTap.publicToken);
-  app.set('twoTap_private_token', config.twoTap.privateToken);
-  app.set('insta_accessToken', '');
-}
+app.set('own_url', (process.env.HOST ? process.env.HOST : process.env.host) || 'http://localhost:3000');
+app.set('mobile_url', 'https://checkout.twotap.com');
+app.set('twoTap_apiUrl', 'https://api.twotap.com');
+app.set('twoTap_public_token', config.twoTap.publicToken);
+app.set('twoTap_private_token', config.twoTap.privateToken);
+app.set('insta_accessToken', '');
 
 // create insta-pass config
 instagramConfig(passport);
@@ -81,7 +89,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parses the text as JSON and set to req.body
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../../public')));
+app.use('/public', express.static(path.join(__dirname, '../../public')));
+app.get('/', (req, res) => { res.sendFile(path.join(__dirname, '../../public/index.html')) })
 
 // serialize and deserialize
 passport.serializeUser((user, done) => {
@@ -97,7 +106,6 @@ passport.deserializeUser((id, done) => {
 });
 
 // set up API routes
-app.use('/login', express.static(path.join(__dirname, '../../public')));
 app.use('/', reqRoutes);
 app.use('/api/*', router);
 app.use('/account/post/:id', express.static(path.join(__dirname, '../../../public')));

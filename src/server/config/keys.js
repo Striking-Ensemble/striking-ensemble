@@ -1,11 +1,17 @@
 'use strict';
+let hostUri; 
+if (process.env.NODE_ENV !== 'production') {
+  hostUri = 'http://localhost:3000/auth/instagram/callback';
+} else {
+  hostUri = 'https://sleepy-citadel-40559.herokuapp.com/auth/instagram/callback';
+}
 
 module.exports = {
   secret: 'sessionSecret',
   // Configuration for Instagram Passport
   clientID: process.env.Instagram_client_id,
   clientSecret: process.env.Instagram_client_secret,
-  callbackURL: (process.env.HOST ? `${process.env.HOST}/auth/instagram/callback` : undefined) || 'http://localhost:3000/auth/instagram/callback',
+  callbackURL: hostUri,
   // Configuration for Stripe.
   // API Keys: https://dashboard.stripe.com/account/apikeys
   // Connect Settings: https://dashboard.stripe.com/account/applications/settings
