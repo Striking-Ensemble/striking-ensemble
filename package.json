@@ -10,12 +10,12 @@
     "build:dev": "node_modules/.bin/webpack -w --config webpack.dev.js",
     "build:prod": "node_modules/.bin/webpack -p --config webpack.prod.js",
     "start:db": "NODE_ENV=development HostedDB=true nodemon ./src/server/index.js",
-    "start:prod": "NODE_ENV=production node ./src/server/index.js",
+    "start:prod": "NODE_ENV=production HostedDB=true node ./src/server/index.js",
     "start:heroku": "NODE_ENV=development HostedDB=true node ./src/server/index.js"
   },
   "betterScripts": {
     "build": {
-      "command": "npm run build:prod && npm run start:heroku"
+      "command": "npm run build:prod && npm run start:prod"
     }
   },
   "repository": {
