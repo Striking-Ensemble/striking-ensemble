@@ -104,8 +104,10 @@ export default class RetailForm extends Component {
         <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
           <legend>Add your retail links</legend>
           <div className="row">
-            <div className="col-md-2 col-sm-3 col-xs-3">
-              <button className="btn btn-success btn-sm" type="submit">Save</button>
+            <div className="col-md-3 col-sm-4 col-xs-4">
+              <button className="btn btn-success btn-sm" type="submit">
+                {this.state.changesDetected ? "Save" : (<span className="glyphicon glyphicon-ok" aria-hidden="true"> Saved</span>)}
+              </button>
             </div>
             <div className="col-md-2 col-sm-3 col-xs-3">
               <Link to='/' className="btn btn-default btn-sm" >Cancel</Link>
