@@ -18,6 +18,41 @@ exports.integration = (req, res) => {
 
 exports.purchaseConfirmCallback = (req, res) => {
   console.log('THIS GOT USED, purchase confirm', req.body);
+  /*
+  THIS GOT USED, purchase confirm {
+    purchase_id: '5a792b00eeba220316d9a275',
+    cart_id: '5a792abc30ca6b3e49dda567',
+    user_id: '5a42ea62f9d9a878c694da30',
+    created_at: '2018-02-06T04:11:44.856Z',
+    total_prices:
+      {
+        sales_tax: '$13.77',
+        shipping_price: '$5.00',
+        final_price: '$158.77'
+      },
+    destination: 'domestic',
+    test_mode: 'fake_confirm',
+    notes: null,
+    used_profiles: { shipping: '926b3tsc', payment: '4ys77wry' },
+    unique_token: '5643578',
+    pending_confirm: true,
+    sites:
+      {
+        '539ec15bce04fa4c5100002d':
+          {
+            info: {keys:"url, name, logo(url pics)"},
+            prices: [Object],
+            details: [Object],
+            failed_to_add_to_cart: null,
+            order_id: null, *"String. After 'confirm' finished this could contain the site's order id."
+            products: {keys: "product_id": {info}, "url", "required_fields", "status"},
+            status: 'done'
+          }
+      },
+    session_finishes_at: 1517890704916,
+    message: 'done'
+  }
+  */
   let apiURL = req.app.settings.twoTap_apiUrl;
   let testMode = req.body.test_mode || 'fake_confirm';
   let purchaseId = req.body.purchase_id;
@@ -51,6 +86,18 @@ exports.purchaseConfirmCallback = (req, res) => {
 
 exports.purchaseUpdatedCallback = (req, res) => {
   console.log('Requesting UPDATES from 2Tap:', req.body);
+  /*
+    Same as incoming /purchase/confirm but with final_message field
+    and order_id under sites field may be provided...
+    order_id: 'fake_confirm_order_id'
+    {
+      final_message: 'Hi! We\'ve confirmed your order:
+        \n\nPerry Ellis total $158.77 vs our initial estimate of $153.30 (shipping $5.00 vs estimated $0.00).
+        \n* products: Solid Texture Lapel Jacket.\n* delivery estimate: Standard Shipping (4-8 business days).
+        \n* store order number: fake_confirm_order_id.
+        \n\nTotal $158.77.' 
+    }
+  */
   let purchaseId = req.body.purchase_id;
   res.send(req.body);
 };
