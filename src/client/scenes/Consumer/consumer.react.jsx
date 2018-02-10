@@ -98,7 +98,7 @@ export default class Consumer extends Component {
   tTHandleEvents(event) {
     let { data } = event;
     if (event.origin != 'https://checkout.twotap.com') return;
-    console.log('SEARCHING.....', event);
+    console.log('SEARCHING.....', event.data);
     ga('create', 'UA-113143362-1', 'auto', {
       clientId: event.data
     })
