@@ -197,7 +197,6 @@ export default class Consumer extends Component {
     if (this.state.checkout_request_id) {
       return (
         <div id="purchaseModal" className="modal-content" ref={el => this.el = el}>
-          {/* <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;  </span></button> */}
           <iframe src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={customStyles} frameBorder="0" ></iframe>
         </div>
       )
