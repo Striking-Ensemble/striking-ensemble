@@ -144,6 +144,7 @@ export default class Consumer extends Component {
           revenue: revenueSoFar
         });
         ga('send', 'pageview');
+        console.log('revenue so far...', revenueSoFar);
         this.setState({ localCart: [] });
       }
     }
