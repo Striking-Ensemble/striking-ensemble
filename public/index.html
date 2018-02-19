@@ -38,23 +38,6 @@
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <div id="App"></div>
-    <script>
-      var handlePurchaseTracker = function() {
-        ga('create', 'UA-113143362-1', 'auto');
-        ga(function (tracker) {
-          // Gets the client ID of the default tracker.
-          var clientId = tracker.get('clientId');
-          console.log('do i get fired***************', clientId);
-  
-          // Gets a reference to the window object of the destionation iframe.
-          var frameWindow = document.getElementById('purchase-frame').contentWindow;
-  
-          // Sends the client ID to the window inside the destination frame.
-          frameWindow.postMessage(clientId, 'https://checkout.twotap.com');
-        });
-      };
-      window.addEventListener('message', handlePurchaseTracker);
-    </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
     crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"

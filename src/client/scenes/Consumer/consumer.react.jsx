@@ -98,10 +98,6 @@ export default class Consumer extends Component {
   tTHandleEvents(event) {
     let { data } = event;
     if (event.origin != 'https://checkout.twotap.com') return;
-    console.log('SEARCHING.....', event.data);
-    ga('create', 'UA-113143362-1', 'auto', {
-      clientId: event.data
-    })
     if (data['action'] == 'cart_contents_changed') {
       console.log('things changed...', data);
       let productLinksToUpdate = [];
@@ -128,6 +124,7 @@ export default class Consumer extends Component {
     // does not show cart contents
     if (data['action'] == 'cart_finalized') {
       console.log('things finalized...', data);
+      
     }
     if (data['action'] == 'place_order_button_pressed') {
       console.log('things ordered...', data);
@@ -200,6 +197,7 @@ export default class Consumer extends Component {
       maxHeight: '700px'
     };
     if (this.state.checkout_request_id) {
+      ga('require', 'ecommerce');
       return (
         <div id="purchaseModal" className="modal-content" ref={el => this.el = el}>
           <iframe id="purchase-frame" src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}&utm_source=striking-ensemble&utm_medium=influencer&utm_campaign=notnicknick&utm_term=clothing%2Bjacket&utm_content=pdId1234`} style={customStyles} frameBorder="0" ></iframe>
