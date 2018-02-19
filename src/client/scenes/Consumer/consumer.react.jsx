@@ -115,9 +115,35 @@ export default class Consumer extends Component {
       }
       // order is completed, update Influencer's db to track purchases
       if (data.cart_event == 'cart_finalized') {
+        let revenueSoFar = 0;
         productLinksToUpdate.push({ ...data.cart_contents, cart_id: data.cart_id, purchase_id: data.purchase_id })
         // axios.post('/update-influencer-purchase-tracker', productLinksToUpdate);
         console.log('stuff to update for influencer\'s db:', productLinksToUpdate);
+        ga('create', 'UA-113143362-1');
+        ga('require', 'ec');
+
+        for (let storeId in data.cart_contents) {
+          let storeList = data.cart_contents[storeId]
+          for (let itemId in storeList) {
+            let productFields = storeList[itemId];
+            let dollarLess = productFields.price.slice(1);
+            revenueSoFar += parseInt(dollarLess, 10);
+            ga('ec:addProduct', {
+              id: itemId,
+              name: productFields.title,
+              brand: productFields.brand,
+              price: productFields.price,
+              quantity: productFields.fields_input.quantity,
+              coupon: productFields.affiliate_link
+            });
+          }
+        }
+        ga('ec:setAction', 'purchase', {
+          id: data.purchase_id,
+          affiliation: 'TwoTap Cart API',
+          revenue: revenueSoFar
+        });
+        ga('send', 'pageview');
         this.setState({ localCart: [] });
       }
     }
@@ -197,7 +223,6 @@ export default class Consumer extends Component {
       maxHeight: '700px'
     };
     if (this.state.checkout_request_id) {
-      ga('require', 'ecommerce');
       return (
         <div id="purchaseModal" className="modal-content" ref={el => this.el = el}>
           <iframe id="purchase-frame" src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}&utm_source=striking-ensemble&utm_medium=influencer&utm_campaign=notnicknick&utm_term=clothing%2Bjacket&utm_content=pdId1234`} style={customStyles} frameBorder="0" ></iframe>
