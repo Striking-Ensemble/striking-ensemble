@@ -127,12 +127,12 @@ export default class Consumer extends Component {
           for (let itemId in storeList) {
             let productFields = storeList[itemId];
             let dollarLess = productFields.price.slice(1);
-            revenueSoFar += parseInt(dollarLess, 10);
+            revenueSoFar += parseFloat(dollarLess);
             ga('ec:addProduct', {
               id: itemId,
               name: productFields.title,
               brand: productFields.brand,
-              price: productFields.price,
+              price: dollarLess,
               quantity: productFields.fields_input.quantity,
               coupon: productFields.affiliate_link
             });
