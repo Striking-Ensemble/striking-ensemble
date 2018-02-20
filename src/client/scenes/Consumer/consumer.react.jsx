@@ -1,6 +1,7 @@
 import axios from 'axios';
 import store from 'store';
 import React, { Component } from 'react';
+import ReactGA from 'react-ga';
 import FourOhFour from '../../components/fourOhFour.react';
 import Footer from '../../components/footer.react';
 import LoadingSpinner from '../../components/loadingSpinner.react';
@@ -126,7 +127,7 @@ export default class Consumer extends Component {
             let productFields = storeList[itemId];
             let dollarLess = productFields.price.slice(1);
             revenueSoFar += parseFloat(dollarLess) * parseFloat(productFields.fields_input.quantity);
-            ga('ec:addProduct', {
+            ReactGA.plugin.execute('ec', 'addProduct', {
               id: itemId,
               name: productFields.title,
               brand: productFields.brand,
@@ -136,12 +137,12 @@ export default class Consumer extends Component {
             });
           }
         }
-        ga('ec:setAction', 'purchase', {
+        ReactGA.plugin.execute('ec', 'setAction', 'purchase', {
           id: data.purchase_id,
           affiliation: 'TwoTap Cart API',
           revenue: revenueSoFar
         });
-        ga('send', 'transaction');
+        ReactGA.send('transaction');
         console.log('revenue so far...', revenueSoFar);
         this.setState({ localCart: [] });
       }
@@ -213,8 +214,10 @@ export default class Consumer extends Component {
         this.setState({ checkout_request_id: res.data.checkout_request_id });
       })
       .catch(err => console.log('OOOPPPSS:', err));
-    // load ecommerce plugin & located here to ensure firing nearly once
-    ga('require', 'ec');
+
+    // load ga ecommerce plugin & located here to ensure firing only
+    // when user clicks the cart button
+    ReactGA.plugin.require('ec');
   }
 
   renderPurchase() {
