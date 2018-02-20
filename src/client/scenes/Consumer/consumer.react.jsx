@@ -214,7 +214,6 @@ export default class Consumer extends Component {
       })
       .catch(err => console.log('OOOPPPSS:', err));
     // load ecommerce plugin & located here to ensure firing nearly once
-    ga('create', 'UA-113143362-1'); // global ga variable
     ga('require', 'ec');
   }
 
@@ -227,7 +226,7 @@ export default class Consumer extends Component {
     if (this.state.checkout_request_id) {
       return (
         <div id="purchaseModal" className="modal-content" ref={el => this.el = el}>
-          <iframe id="purchase-frame" src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}&utm_source=striking-ensemble&utm_medium=influencer&utm_campaign=notnicknick&utm_term=clothing%2Bjacket&utm_content=pdId1234`} style={customStyles} frameBorder="0" ></iframe>
+          <iframe id="purchase-frame" src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={customStyles} frameBorder="0" ></iframe>
         </div>
       )
     }
