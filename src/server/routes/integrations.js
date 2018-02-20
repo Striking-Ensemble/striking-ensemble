@@ -56,36 +56,35 @@ exports.purchaseConfirmCallback = (req, res) => {
     message: 'done'
   }
   */
-  // let apiURL = req.app.settings.twoTap_apiUrl;
-  // let testMode = req.body.test_mode || 'fake_confirm';
-  // let purchaseId = req.body.purchase_id;
-  // let uniqueToken = req.body.unique_token;
-  // let sites = req.body.sites;
-  // const privateToken = req.app.settings.twoTap_private_token;
+  let apiURL = req.app.settings.twoTap_apiUrl;
+  let testMode = req.body.test_mode || 'fake_confirm';
+  let purchaseId = req.body.purchase_id;
+  let uniqueToken = req.body.unique_token;
+  let sites = req.body.sites;
+  const privateToken = req.app.settings.twoTap_private_token;
 
-  // let callPath = '/v1.0/purchase/confirm?private_token=' + privateToken;
-  // request.post(apiURL + callPath, {
-  //   form: {
-  //     purchase_id: purchaseId,
-  //     test_mode: testMode
-  //   },
-  //   json: true
-  // }, (err, response, body) => {
-  //   if (err) {
-  //     console.log('ERROR Detected on purchaseConfirm', err);
-  //   }
-  //   /*
-  //    * Users should have received a confirmed SMS message
-  //    * and expected body format from this call is...
-  //    * {
-  //    *   "purchase_id": "50f414b9e6a4869bf6000010",
-  //    *   "message": "still_processing",
-  //    *   "description": "Still processing."
-  //    * }
-  //   */
-  //   res.send(body);
-  // });
-  res.send('FE only testing!');
+  let callPath = '/v1.0/purchase/confirm?private_token=' + privateToken;
+  request.post(apiURL + callPath, {
+    form: {
+      purchase_id: purchaseId,
+      test_mode: testMode
+    },
+    json: true
+  }, (err, response, body) => {
+    if (err) {
+      console.log('ERROR Detected on purchaseConfirm', err);
+    }
+    /*
+     * Users should have received a confirmed SMS message
+     * and expected body format from this call is...
+     * {
+     *   "purchase_id": "50f414b9e6a4869bf6000010",
+     *   "message": "still_processing",
+     *   "description": "Still processing."
+     * }
+    */
+    res.send(body);
+  });
 };
 
 exports.purchaseUpdatedCallback = (req, res) => {
