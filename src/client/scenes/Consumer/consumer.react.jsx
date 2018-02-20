@@ -120,14 +120,22 @@ export default class Consumer extends Component {
         productLinksToUpdate.push({ ...data.cart_contents, cart_id: data.cart_id, purchase_id: data.purchase_id })
         // axios.post('/update-influencer-purchase-tracker', productLinksToUpdate);
         console.log('stuff to update for influencer\'s db:', productLinksToUpdate);
-
+        const GA = ReactGA.ga();
         for (let storeId in data.cart_contents) {
           let storeList = data.cart_contents[storeId]
           for (let itemId in storeList) {
             let productFields = storeList[itemId];
             let dollarLess = productFields.price.slice(1);
             revenueSoFar += parseFloat(dollarLess) * parseFloat(productFields.fields_input.quantity);
-            ReactGA.plugin.execute('ec', 'addProduct', {
+            // ReactGA.plugin.execute('ec', 'addProduct', {
+            //   id: itemId,
+            //   name: productFields.title,
+            //   brand: productFields.brand,
+            //   price: dollarLess,
+            //   quantity: productFields.fields_input.quantity,
+            //   coupon: productFields.affiliate_link
+            // });
+            GA('ec:addProduct', {
               id: itemId,
               name: productFields.title,
               brand: productFields.brand,
@@ -135,14 +143,21 @@ export default class Consumer extends Component {
               quantity: productFields.fields_input.quantity,
               coupon: productFields.affiliate_link
             });
+
           }
         }
-        ReactGA.plugin.execute('ec', 'setAction', 'purchase', {
+        // ReactGA.plugin.execute('ec', 'setAction', 'purchase', {
+        //   id: data.purchase_id,
+        //   affiliation: 'TwoTap Cart API',
+        //   revenue: revenueSoFar
+        // });
+        GA('ec:setAction', 'purchase', {
           id: data.purchase_id,
           affiliation: 'TwoTap Cart API',
           revenue: revenueSoFar
         });
-        ReactGA.send('transaction');
+        // ReactGA.send('transaction');
+        GA('send', 'transaction');
         console.log('revenue so far...', revenueSoFar);
         this.setState({ localCart: [] });
       }
