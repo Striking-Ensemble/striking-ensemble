@@ -135,7 +135,6 @@ export default class Consumer extends Component {
               quantity: productFields.fields_input.quantity,
               coupon: productFields.affiliate_link
             });
-
           }
         }
         ReactGA.plugin.execute('ec', 'setAction', 'purchase', {

@@ -10,9 +10,7 @@ import Consumer from '../scenes/Consumer/consumer.react';
 import InfluencerList from '../scenes/Consumer/influencerList.react';
 import Billing from '../scenes/Billing/billing.react';
 
-ReactGA.initialize('UA-113143362-1', {
-  debug: true
-});
+ReactGA.initialize('UA-113143362-1');
 
 const Routing = () => {
   return (
