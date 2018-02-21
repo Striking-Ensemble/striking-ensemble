@@ -143,7 +143,7 @@ export default class Consumer extends Component {
           revenue: revenueSoFar
         });
 
-        ReactGA.send('transaction');
+        ReactGA.pageview(this.props.location.pathname + '/success');
 
         console.log('revenue so far...', revenueSoFar);
         this.setState({ localCart: [] });
