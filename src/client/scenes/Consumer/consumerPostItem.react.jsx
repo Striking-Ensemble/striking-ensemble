@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import LoadingSpinner from '../../components/loadingSpinner.react';
+import noImg from '../../../../public/assets/images/no-preview';
+import noImgThumb from '../../../../public/assets/images/no-image-thumbnail';
 
 export default class ConsumerPostItem extends Component {
   constructor(props) {
@@ -53,9 +55,9 @@ export default class ConsumerPostItem extends Component {
         <ul>
           {this.props.currentPost.retailLinks.map((item, index) => {
             return (
-              <div key={`boxAt${item.id}`} className="row">
+              <div key={`boxAt${item.id}`} className="row list">
                 <li key={item.id} className="col-lg-3 col-md-4 col-sm-6 col-xs-4">
-                  <img style={imgStyle} src={item.image} onClick={this.handleImageModal.bind(this, item)} alt={item.title} data-toggle="modal" data-target=".product-image-modal-sm" />
+                  <img style={imgStyle} src={item.image ? item.image : noImgThumb} onClick={this.handleImageModal.bind(this, item)} alt={item.title} data-toggle="modal" data-target=".product-image-modal-sm" />
                 </li>
                 <button key={`buttonKeyAt${item.id}`} className="col-md-1 col-sm-1 col-xs-1 btn btn-default btn-xs" onClick={this.handleAddButton.bind(this, item.url, item.affiliateCode)}>
                   <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -69,12 +71,13 @@ export default class ConsumerPostItem extends Component {
   }
 
   renderProductImage() {
+    let { currentProduct } = this.state;
     return (
       <div className="modal-content">
         <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 className="text-center">{this.state.currentProduct.title}</h4>
-        <h5 className="text-center"><strong>{this.state.currentProduct.price}</strong></h5>
-        <img src={this.state.currentProduct.image} className="img-responsive" alt="image modal" />
+        <h4 className="text-center">{currentProduct.title}</h4>
+        <h5 className="text-center"><strong>{currentProduct.price ? currentProduct.price : '*Check cart for item price'}</strong></h5>
+        <img src={currentProduct.image ? currentProduct.image : noImg} className="img-responsive" alt="image modal" />
       </div>
     )
   }
