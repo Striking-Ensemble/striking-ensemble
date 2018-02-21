@@ -134,6 +134,7 @@ exports.updateRetailLinks = (req, res) => {
       finalChanges = normUrl.slice(0, -1).join('.');
     }
     // take the product id from finalChanges to use for query
+    let productInfo = finalChanges.split('/').slice(-2, -1).pop();
     let productQuery = finalChanges.split('/').pop();
     let siteInfo = lookUpSites.filter(item => item.url == result);
     let twoTapPath = `https://api.twotap.com/v1.0/product/search?public_token=${req.app.get('twoTap_public_token')}`;
@@ -154,10 +155,15 @@ exports.updateRetailLinks = (req, res) => {
       rp(options)
       .then(body => {
         let tempObj = { ...item };
-        let productsList = JSON.parse(body);
-        tempObj.title = productsList.products[0].title;
-        tempObj.image = productsList.products[0].image;
-        tempObj.price = productsList.products[0].price;
+        let { products } = JSON.parse(body);
+        console.log('FETCHED PROPERLY?', products);
+        if (products.length > 0) {
+          tempObj.title = products[0].title;
+          tempObj.image = products[0].image;
+          tempObj.price = products[0].price;
+        } else {
+          tempObj.title = productInfo;
+        }
         return tempObj;
       })
       .catch(err => console.log('Err in /product/search:', err))
