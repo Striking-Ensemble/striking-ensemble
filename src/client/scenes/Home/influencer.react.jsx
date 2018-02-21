@@ -31,7 +31,6 @@ export default class Influencer extends Component {
   }
 
   componentWillMount() {
-    console.log('Initial Props!!', this.props);
     this.checkAuthentication(this.props);
   }
 
@@ -125,7 +124,6 @@ export default class Influencer extends Component {
   }
 
   renderPathname(location) {
-    console.log('OOOOOOHHHHHH TASTY....', location);
     let { pathname } = location;
     if (pathname.includes('/billing')) {
       return <Billing />

@@ -52,14 +52,8 @@ export default class RetailForm extends Component {
       let item = elements[i];
       if (item.name.includes('link')) {
         if (item.value !== '') {
-          body.push({id: `link_${body.length}`, url: item.value});
+          body.push({id: `link_${body.length}`, url: item.value, affiliateCode: this.props.user.affiliateCode});
         }
-      }
-      if (item.name.includes('affiliate')) {
-        if (item.value !== '') {
-          body[lastUrl].affiliateLink = item.value;
-        }
-        lastUrl++;
       }
     }
 

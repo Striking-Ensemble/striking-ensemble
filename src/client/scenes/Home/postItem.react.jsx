@@ -55,6 +55,7 @@ export default class PostItem extends Component {
           </div>
           <div className="col-md-4 col-sm-4 col-xs-12">
             <RetailForm
+              user={this.props.user}
               instaId={this.props.currentPost.instaId}
               retailLinks={this.state.retailLinks}
               editRetailLink={this.editRetailLink}
@@ -73,6 +74,7 @@ export default class PostItem extends Component {
           </div>
           <div className="col-md-4 col-sm-4 col-xs-12">
             <RetailForm
+              user={this.props.user}
               instaId={this.props.currentPost.instaId}
               retailLinks={this.state.retailLinks}
               editRetailLink={this.editRetailLink}
