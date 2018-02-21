@@ -18,9 +18,6 @@ exports.integration = (req, res) => {
 
 exports.purchaseConfirmCallback = (req, res) => {
   console.log('THIS GOT USED, purchase confirm', req.body);
-  req.body.sites.forEach((storeId) => {
-    storeId
-  })
   /*
   THIS GOT USED, purchase confirm {
     purchase_id: '5a792b00eeba220316d9a275',
