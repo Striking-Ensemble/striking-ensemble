@@ -24,8 +24,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              context: '/',
-              name: '/assets/images/[name].[ext]',
+              name: '[name].[ext]',
               useRelativePath: process.env.NODE_ENV === "production"
             }
           }
