@@ -84,9 +84,14 @@ li {
   margin: auto;
 }
 
+.row.list {
+  margin-bottom: 7px;
+}
+
 #retail-form > .row {
   margin-bottom: 10px;
 }
+
 
 /* /////////////////////////////////////////////////////////// */
 .container {

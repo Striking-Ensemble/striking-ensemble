@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
 
+/*
+ * Removed affiliate input, this code will be automatically
+ * saved on every url submission
+ * <div className="row">
+ *   <div className="col-sm-10 col-xs-10">
+ *     <input className="form-control input-sm" type="url" name={`affiliate_${this.props.retailIndex}`} placeholder="Your affiliate link..." defaultValue={this.props.affiliateLink} onChange={this.props.handleChange} />
+ *   </div>
+ * </div>
+*/
+
 export default class InputBox extends Component {
   constructor(props) {
     super(props)
@@ -21,11 +31,6 @@ export default class InputBox extends Component {
           </div>
           <div className="col-sm-2 col-xs-1">
             <button className="btn btn-warning btn-sm" onClick={this.removeItem} value="retail-form" type="button">-</button>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm-10 col-xs-10">
-            <input className="form-control input-sm" type="url" name={`affiliate_${this.props.retailIndex}`} placeholder="Your affiliate link..." defaultValue={this.props.affiliateLink} onChange={this.props.handleChange} />
           </div>
         </div>
         <hr />

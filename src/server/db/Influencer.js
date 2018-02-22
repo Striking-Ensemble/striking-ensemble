@@ -23,6 +23,10 @@ const influencerSchema = Schema({
   },
   is_business: Boolean,
   media: [{type: String}],
+  affiliateLink: {
+    type: String,
+    unique: true
+  },
   stripeAccountId: String
 });
 

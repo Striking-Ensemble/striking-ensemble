@@ -1,6 +1,7 @@
 import axios from 'axios';
 import store from 'store';
 import React, { Component } from 'react';
+import ReactGA from 'react-ga';
 import FourOhFour from '../../components/fourOhFour.react';
 import Footer from '../../components/footer.react';
 import LoadingSpinner from '../../components/loadingSpinner.react';
@@ -97,6 +98,7 @@ export default class Consumer extends Component {
 
   tTHandleEvents(event) {
     let { data } = event;
+    if (event.origin != 'https://checkout.twotap.com') return;
     if (data['action'] == 'cart_contents_changed') {
       console.log('things changed...', data);
       let productLinksToUpdate = [];
@@ -114,15 +116,43 @@ export default class Consumer extends Component {
       }
       // order is completed, update Influencer's db to track purchases
       if (data.cart_event == 'cart_finalized') {
+        let revenueSoFar = 0;
         productLinksToUpdate.push({ ...data.cart_contents, cart_id: data.cart_id, purchase_id: data.purchase_id })
         // axios.post('/update-influencer-purchase-tracker', productLinksToUpdate);
         console.log('stuff to update for influencer\'s db:', productLinksToUpdate);
+
+        for (let storeId in data.cart_contents) {
+          let storeList = data.cart_contents[storeId]
+          for (let itemId in storeList) {
+            let productFields = storeList[itemId];
+            let dollarLess = productFields.price.slice(1);
+            revenueSoFar += parseFloat(dollarLess) * parseFloat(productFields.fields_input.quantity);
+            ReactGA.plugin.execute('ec', 'addProduct', {
+              id: itemId,
+              name: productFields.title,
+              brand: productFields.brand,
+              price: dollarLess,
+              quantity: productFields.fields_input.quantity,
+              coupon: productFields.affiliate_link
+            });
+          }
+        }
+        ReactGA.plugin.execute('ec', 'setAction', 'purchase', {
+          id: data.purchase_id,
+          affiliation: 'TwoTap Cart API',
+          revenue: revenueSoFar
+        });
+
+        ReactGA.pageview(this.props.location.pathname + '/checkout/success');
+
+        console.log('revenue so far...', revenueSoFar);
         this.setState({ localCart: [] });
       }
     }
     // does not show cart contents
     if (data['action'] == 'cart_finalized') {
       console.log('things finalized...', data);
+      
     }
     if (data['action'] == 'place_order_button_pressed') {
       console.log('things ordered...', data);
@@ -185,7 +215,11 @@ export default class Consumer extends Component {
       .then(res => {
         this.setState({ checkout_request_id: res.data.checkout_request_id });
       })
-      .catch(err => console.log('OOOPPPSS:', err))
+      .catch(err => console.log('OOOPPPSS:', err));
+
+    // load ga enhanced ecommerce plugin here to ensure firing only
+    // when user clicks the cart button
+    ReactGA.plugin.require('ec');
   }
 
   renderPurchase() {
@@ -197,8 +231,7 @@ export default class Consumer extends Component {
     if (this.state.checkout_request_id) {
       return (
         <div id="purchaseModal" className="modal-content" ref={el => this.el = el}>
-          {/* <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;  </span></button> */}
-          <iframe src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={customStyles} frameBorder="0" ></iframe>
+          <iframe id="purchase-frame" src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={customStyles} frameBorder="0" ></iframe>
         </div>
       )
     }
