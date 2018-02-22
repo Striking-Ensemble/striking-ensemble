@@ -16,8 +16,9 @@ reqRoutes.use(function timeLog(req, res, next) {
 });
 
 // Account route handlers
-reqRoutes.post('/account/submit_media', reqController.submitMedia);
-reqRoutes.post('/account/post/:id/submit_links', reqController.submitLinks);
+reqRoutes.get('/account/post/:id', influencerRequired, reqController.getInstaPost);
+reqRoutes.post('/account/submit_media', influencerRequired, reqController.submitMedia);
+reqRoutes.post('/account/post/:id/submit_links', influencerRequired, reqController.submitLinks);
 
 // ================= Passport Instagram Endpoints ================= //
 
