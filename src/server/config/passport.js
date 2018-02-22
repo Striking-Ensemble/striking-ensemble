@@ -27,7 +27,7 @@ module.exports = (passport) => {
             bio: data.bio,
             website: data.website,
             is_business: data.is_business,
-            affiliateCode: `SEI-${data.username}-${data.id.slice(-4)}`
+            affiliateLink: `https://strikingensemble.com/${data.username}`
           }, { bufferCommands: false });
           info.newUser = true;
           user.save((err) => {

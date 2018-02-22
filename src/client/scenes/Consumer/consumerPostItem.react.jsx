@@ -59,7 +59,7 @@ export default class ConsumerPostItem extends Component {
                 <li key={item.id} className="col-lg-3 col-md-4 col-sm-6 col-xs-4">
                   <img style={imgStyle} src={item.image ? item.image : noImgThumb} onClick={this.handleImageModal.bind(this, item)} alt={item.title} data-toggle="modal" data-target=".product-image-modal-sm" />
                 </li>
-                <button key={`buttonKeyAt${item.id}`} className="col-md-1 col-sm-1 col-xs-1 btn btn-default btn-xs" onClick={this.handleAddButton.bind(this, item.url, item.affiliateCode)}>
+                <button key={`buttonKeyAt${item.id}`} className="col-md-1 col-sm-1 col-xs-1 btn btn-default btn-xs" onClick={this.handleAddButton.bind(this, item.url, item.affiliateLink)}>
                   <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
               </div>

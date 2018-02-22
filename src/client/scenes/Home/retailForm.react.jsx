@@ -52,7 +52,7 @@ export default class RetailForm extends Component {
       let item = elements[i];
       if (item.name.includes('link')) {
         if (item.value !== '') {
-          body.push({id: `link_${body.length}`, url: item.value, affiliateCode: this.props.user.affiliateCode});
+          body.push({id: `link_${body.length}`, url: item.value, affiliateLink: this.props.user.affiliateLink});
         }
       }
     }

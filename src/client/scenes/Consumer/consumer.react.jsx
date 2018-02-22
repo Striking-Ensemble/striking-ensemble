@@ -143,7 +143,7 @@ export default class Consumer extends Component {
           revenue: revenueSoFar
         });
 
-        ReactGA.pageview(this.props.location.pathname + '/success');
+        ReactGA.pageview(this.props.location.pathname + '/checkout/success');
 
         console.log('revenue so far...', revenueSoFar);
         this.setState({ localCart: [] });
@@ -186,10 +186,10 @@ export default class Consumer extends Component {
     return Object.keys(this.state.currentPost).length === 0 && this.state.currentPost.constructor === Object;
   }
   
-  addToLocalCart(productLink, affiliateCode) {
+  addToLocalCart(productLink, affiliateLink) {
     // might need to use store instead so that users can switch to different influencers
     // as well as reopening the web app to come back to the cart
-    let itemsToAdd = [...this.state.localCart, { url: productLink, affiliate_link: affiliateCode }];
+    let itemsToAdd = [...this.state.localCart, { url: productLink, affiliate_link: affiliateLink }];
     this.setState({ localCart: itemsToAdd });
   }
 

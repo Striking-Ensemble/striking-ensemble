@@ -23,7 +23,7 @@ const influencerSchema = Schema({
   },
   is_business: Boolean,
   media: [{type: String}],
-  affiliateCode: {
+  affiliateLink: {
     type: String,
     unique: true
   },
