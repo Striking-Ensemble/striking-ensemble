@@ -22,7 +22,10 @@ module.exports = {
         test: /\.(png|jpg|gif)$/,
         use: [
           {
-            loader: 'file-loader'
+            loader: 'file-loader',
+            options: {
+              useRelativePath: process.env.NODE_ENV === "production"
+            }
           }
         ]
       }
