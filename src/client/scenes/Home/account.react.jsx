@@ -13,26 +13,43 @@ export default class Account extends Component {
     this.state = {
       isLoaded: false,
       data: [],
+      currentPost: {}
     }
 
+    this.fetchInstaPosts = this.fetchInstaPosts.bind(this);
     this.renderPosts = this.renderPosts.bind(this);
     this.renderPostItem = this.renderPostItem.bind(this);
   }
 
   componentDidMount() {
+    const { match } = this.props;
+    if (match.path == '/account' || match.path == '/') {
+      this.fetchInstaPosts();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { match, history } = nextProps;
+    const toFetchData = (match.path == '/account' || match.path == '/') && this.props.location.pathname !== '/' && this.state.data.length == 0;
+    if (toFetchData) {
+      this.fetchInstaPosts();
+    }
+  }
+
+  fetchInstaPosts() {
     axios.post(store.get('URL').root_url + '/account/media', { username: this.props.user.username })
       .then(
-      res => {
-        console.log('I NEED TO FIND res.data', res.data);
-        if (res.data) {
-          const newArr = res.data.map(post => post);
-          // update state, then send recent media to DB
-          this.setState({
-            isLoaded: true, 
-            data: [...this.state.data, ...newArr] 
-          });
-        }
-      })
+        res => {
+          console.log('I NEED TO FIND res.data', res.data);
+          if (res.data) {
+            const newArr = res.data.map(post => post);
+            // update state, then send recent media to DB
+            this.setState({
+              isLoaded: true,
+              data: [...this.state.data, ...newArr]
+            });
+          }
+        })
       .catch(err => {
         console.log(err);
         store.remove('user');
@@ -55,7 +72,7 @@ export default class Account extends Component {
             <PostListItem 
               key={post._id || post.id}
               instaId={post._id || post.id}
-              caption={post.caption.text}
+              caption={post.caption}
               image_thumb={post.images.thumbnail}
               video_low={post.videos.low_bandwidth}
               video_norm={post.videos.standard_resolution}
@@ -69,7 +86,7 @@ export default class Account extends Component {
             <PostListItem
               key={post._id || post.id}
               instaId={post._id || post.id}
-              caption={post.caption.text}
+              caption={post.caption}
               image_low={post.images.low_resolution}
               image_norm={post.images.standard_resolution}
               image_thumb={post.images.thumbnail}

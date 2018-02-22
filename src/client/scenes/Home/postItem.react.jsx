@@ -51,7 +51,7 @@ export default class PostItem extends Component {
           <div id="post-item" className="col-md-8 col-sm-8 col-xs-12">
             <iframe src={this.props.currentPost.video_low.url} className="embed-responsive-item" style={{ height: '536px' }} seamless>
             </iframe>
-            <p>{this.props.currentPost.caption}</p>
+            <p>{this.props.currentPost.caption.text}</p>
           </div>
           <div className="col-md-4 col-sm-4 col-xs-12">
             <RetailForm
@@ -70,7 +70,7 @@ export default class PostItem extends Component {
         <div className="container">
           <div id="post-item" className="col-md-8 col-sm-8 col-xs-12">
             <img src={this.props.currentPost.image_norm.url} className="img-responsive" />
-            <p>{this.props.currentPost.caption}</p>
+            <p>{this.props.currentPost.caption.text}</p>
           </div>
           <div className="col-md-4 col-sm-4 col-xs-12">
             <RetailForm

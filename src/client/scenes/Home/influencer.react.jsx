@@ -35,12 +35,22 @@ export default class Influencer extends Component {
   }
 
   componentDidMount() {
+    const { location, match } = this.props;
+    const rootUrl = store.get('URL').root_url;
     !isAuthenticated() ? 
       <Redirect to={{
         pathname: '/login',
-        state: { from: this.props.location }
+        state: { from: location }
       }}/> 
       : this.setState({ isLoaded: true });
+    
+    if (match.path == '/account/p/:id') {
+      return axios.get(`${rootUrl}/account/post/${match.params.id}`)
+        .then(
+          res => {
+            this.addCurrentPost(res.data[0])
+          })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -54,7 +64,7 @@ export default class Influencer extends Component {
           state: { from: this.props.location }
         }} />
         // next pathname relates to postLog id?
-      } else if (nextProps.location.pathname === `/account/post/${this.state.postLog.instaId}`) {
+      } else if (nextProps.location.pathname === `/account/p/${this.state.postLog.instaId}`) {
         // set it as the new currentPost
         this.setState({ currentPost: this.state.postLog });
       }
@@ -63,7 +73,9 @@ export default class Influencer extends Component {
 
   checkAuthentication(params) {
     const { history } = params;
-    axios.get(store.get('URL').root_url + '/account')
+    const rootUrl = store.get('URL').root_url;
+
+    axios.get(`${rootUrl}/account/`)
       .then(
       res => {
         if (res.data.username) {
@@ -71,7 +83,6 @@ export default class Influencer extends Component {
           store.set('user', { data: res.data });
           store.set('isAuthenticated', true);
           this.setState({ isLoaded: true }); // is this still necessary? check setState on DidMount
-          console.log('ARE WE CLEAR in checkAuth?', store.get('user'));
         } else {
           store.remove('user');
           store.remove('isAuthenticated');
@@ -105,14 +116,20 @@ export default class Influencer extends Component {
   addCurrentPost(post) {
     console.log('WE ARE ADDING CURRENT POST FROM ROOT', post);
     let currentPost = {...this.state.currentPost};
-    currentPost.instaId = post.instaId;
-    currentPost.caption = post.caption;
-    currentPost.image_thumb = post.image_thumb;
-    currentPost.image_low = post.image_low ? post.image_low : null;
-    currentPost.image_norm = post.image_norm ? post.image_norm : null;
-    currentPost.video_low = post.video_low ? post.video_low : null;
-    currentPost.video_norm = post.video_norm ? post.video_norm : null;
-    currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
+    let image_low = post.image_low || (post.images ? post.images.low_resolution : null),
+        image_norm = post.image_norm || (post.images ? post.images.standard_resolution : null),
+        video_low = post.video_low || (post.videos ? post.videos.low_bandwidth : null),
+        video_norm = post.video_norm || (post.videos ? post.videos.standard_resolution : null);
+    Object.assign(currentPost, {
+      instaId: post.instaId || post._id,
+      caption: post.caption,
+      image_thumb: post.image_thumb || post.images.thumbnail,
+      image_low: image_low ? image_low : null,
+      image_norm: image_norm ? image_norm : null,
+      video_low: video_low ? video_low : null,
+      video_norm: video_norm ? video_norm : null,
+      retailLinks: post.retailLinks ? post.retailLinks : null
+    });
 
     this.setState({currentPost}, () => console.log('updated state value', this.state.currentPost));
   }
