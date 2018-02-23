@@ -48,9 +48,7 @@ export default class Influencer extends Component {
       return axios.get(`${rootUrl}/account/post/${match.params.id}`)
         .then(
           res => {
-            if (!res.data[0]) {
-              this.setState({ error: true });
-            } else {
+            if (res.data[0] && typeof res.data !== 'string') {
               this.addCurrentPost(res.data[0]);
             }
           })

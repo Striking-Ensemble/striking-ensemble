@@ -45,8 +45,7 @@ export default class Account extends Component {
     axios.post(store.get('URL').root_url + '/account/media', { username: this.props.user.username })
       .then(
         res => {
-          console.log('I NEED TO FIND res.data', res.data);
-          if (res.data) {
+          if (res.data[0] && typeof res.data !== 'string') {
             const newArr = res.data.map(post => post);
             // update state, then send recent media to DB
             this.setState({

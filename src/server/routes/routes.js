@@ -9,7 +9,7 @@ const integrations = require('./integrations');
 const Influencer = require('../db/Influencer');
 const influencerRequired = require('../middleware/influencerRequired');
 
-// middleware that is logs time to this router
+// middleware logs time to this router
 reqRoutes.use(function timeLog(req, res, next) {
   console.log('Time in Routes file: ', Date.now());
   next();
@@ -23,7 +23,7 @@ reqRoutes.post('/logout', (req, res) => {
 });
 
 reqRoutes.get('/auth/instagram', passport.authenticate('instagram'), 
-(req, res) => {}
+  (req, res) => {}
 );
 
 reqRoutes.get('/auth/instagram/callback', 
@@ -73,15 +73,6 @@ reqRoutes.get('/billing/stripe/token', influencerRequired, reqController.getStri
 reqRoutes.get('/billing/stripe/transfers', influencerRequired, reqController.getStripeTransfers);
 reqRoutes.post('/billing/stripe/payout', influencerRequired, reqController.payout);
 reqRoutes.post('/billing/stripe/deactivate', influencerRequired, reqController.deactivate);
-
-// reqRoutes.get('/', (req, res) => {
-  //   console.log('TRIGGERED');
-  //   if (!req.user || req.user.status !== 'ENABLED') {
-    //     return res.redirect('/login');
-    //   }
-    //   console.log('FOUND USER:', req.user);
-    //   res.sendFile(path.resolve(__dirname, '../../../public', 'index.html'));
-    // });
     
 // Public route handlers here due to paths can be loosely associated with other paths
 reqRoutes.get('/user/:username', influencerController.retrieveOne);
