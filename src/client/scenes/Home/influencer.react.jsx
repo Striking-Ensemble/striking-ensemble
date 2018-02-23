@@ -48,7 +48,11 @@ export default class Influencer extends Component {
       return axios.get(`${rootUrl}/account/post/${match.params.id}`)
         .then(
           res => {
-            this.addCurrentPost(res.data[0])
+            if (!res.data[0]) {
+              this.setState({ error: true });
+            } else {
+              this.addCurrentPost(res.data[0]);
+            }
           })
         .catch(err => {
           console.log('err in fetching post', err);

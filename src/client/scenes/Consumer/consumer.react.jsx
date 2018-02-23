@@ -50,14 +50,15 @@ export default class Consumer extends Component {
           if (res.data) {
             if(!res.data[0]) {
               this.setState({error: true});
+            } else {
+              const newObj = res.data[0];
+              // update user state
+              this.setState({
+                userIsLoaded: true,
+                user: newObj
+              });
+              // this.props.history.push(`/${this.state.user.username}`);
             }
-            const newObj = res.data[0];
-            // update user state
-            this.setState({
-              userIsLoaded: true,
-              user: newObj
-            });
-            // this.props.history.push(`/${this.state.user.username}`);
           }
         }
       )
@@ -67,7 +68,11 @@ export default class Consumer extends Component {
     if (match.path == '/:username/p/:id') {
       return axios.get(`${rootUrl}/u/${match.params.username}/post/${match.params.id}`)
         .then(res => {
-          this.addCurrentPost(res.data[0]);
+          if (!res.data[0]) {
+            this.setState({ error: true });
+          } else {
+            this.addCurrentPost(res.data[0]);
+          }
         })
         .catch(err => {
           console.log('err in fetching post', err);
