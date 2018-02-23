@@ -7,28 +7,11 @@ export default class Navigation extends Component {
   constructor(props) {
     super(props);
 
-    this.handleLogout = this.handleLogout.bind(this);
-    this.handleHome = this.handleHome.bind(this);
-  }
-
-  handleLogout(e) {
-    console.log('redirect props', this.props);
-    axios.post(store.get('URL').root_url + '/logout', { username: this.props.user.username })
-      .then(
-        res => {
-          this.props.removeUser();
-        }
-      )
-      .catch( err => {
-        console.log(err);
-      });
-  }
-
-  handleHome(e) {
-    this.props.removeCurrentPost();
   }
 
   render() {
+    // <li> classnames here helps to identify which tab should be highlighted
+    // depending on the current location => this.props.location
     return (
       <nav className="navbar navbar-inverse navbar-fixed-top">
         <div className="container-fluid">
@@ -39,12 +22,12 @@ export default class Navigation extends Component {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <Link className="navbar-brand" to='/' onClick={this.handleHome}>Striking Ensemble</Link>
+            <Link className="navbar-brand" to='/'>Striking Ensemble</Link>
           </div>
           <div className="collapse navbar-collapse" id="navbar-header-content">
             <ul className="nav navbar-nav">
               <li role="button" className={this.props.location.pathname == '/' || this.props.location.pathname.includes('account') ? "active" : ""}>
-                <Link to='/' onClick={this.handleHome} data-toggle="collapse" data-target=".navbar-collapse.in">Home <span className="sr-only">(current)</span></Link>
+                <Link to='/' data-toggle="collapse" data-target=".navbar-collapse.in">Home <span className="sr-only">(current)</span></Link>
               </li>
               <li role="button" className={this.props.location.pathname.includes('/billing') ? "active" : ""}>
                 <Link to="/billing" data-toggle="collapse" data-target=".navbar-collapse.in">Billing Info</Link>
@@ -55,7 +38,7 @@ export default class Navigation extends Component {
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <button className="btn btn-danger log" onClick={this.handleLogout}>Logout</button>
+                <Link to="/logout" id="logout-button" className="btn btn-danger log" data-toggle="collapse" data-target=".navbar-collapse.in">Logout</Link>
               </li>
             </ul>
           </div>
@@ -63,4 +46,4 @@ export default class Navigation extends Component {
       </nav>
     )
   }
-}
+};

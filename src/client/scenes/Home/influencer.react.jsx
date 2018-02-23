@@ -22,7 +22,6 @@ export default class Influencer extends Component {
       postLog: {}
     }
 
-    this.removeUser = this.removeUser.bind(this);
     this.addCurrentPost = this.addCurrentPost.bind(this);
     this.removeCurrentPost = this.removeCurrentPost.bind(this);
     this.currentUserIsEmpty = this.currentUserIsEmpty.bind(this);
@@ -62,6 +61,19 @@ export default class Influencer extends Component {
   componentWillReceiveProps(nextProps) {
     // location changed
     if (nextProps.location !== this.props.location) {
+      if (nextProps.location.pathname === '/logout') {
+        axios.post(store.get('URL').root_url + '/logout')
+        .then(
+          res => {
+            store.remove('user');
+            store.remove('isAuthenticated');
+            this.props.history.push('/login');
+          }
+        )
+        .catch(err => {
+          console.log(err);
+        });
+      }
       // check user is authenticated
       // this.checkAuthentication(nextProps);
       if (!isAuthenticated()) {
@@ -107,13 +119,6 @@ export default class Influencer extends Component {
       });
   }
 
-  // for logout nav use
-  removeUser() {
-    store.remove('user');
-    store.remove('isAuthenticated');
-    this.props.history.push('/login');
-  }
-
   currentUserIsEmpty() {
     let user = store.get('user') ? store.get('user').data : {};
     return Object.keys(user).length === 0 && user.constructor === Object;
@@ -141,9 +146,12 @@ export default class Influencer extends Component {
   }
 
   // for browser & navigation use
-  removeCurrentPost() {
+  // what if user says OK on modal confirm?
+  removeCurrentPost(changesDetected) {
     console.log('REMOVING CURRENT POST FROM ROOT');
-    this.setState({ postLog: this.state.currentPost, currentPost: {} }, () => console.log('UPDATE ON CURRENTPOST & POSTLOG:', this.state));
+    // if (!changesDetected) {
+      this.setState({ postLog: this.state.currentPost, currentPost: {} }, () => console.log('UPDATE ON CURRENTPOST & POSTLOG:', this.state));
+    // }
   }
 
   renderPathname(location) {
@@ -176,7 +184,6 @@ export default class Influencer extends Component {
         <div id="wrap">
           <Navigation 
             user={store.get('user').data}
-            removeUser={this.removeUser} 
             removeCurrentPost={this.removeCurrentPost}
             currentPost={this.state.currentPost}
             {...this.props} 

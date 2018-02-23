@@ -24,6 +24,7 @@ const Routing = () => {
           <Route path="/billing" component={Influencer} />
           <Route path="/settings" component={Influencer} />
           <Route exact path="/influencer-list" component={InfluencerList} />
+          <Route exact path="/logout" component={Influencer} />
           <Route exact path="/:username" component={Consumer} />
           <Route exact path="/:username/p/:id" component={Consumer} />
           <Route exact path="/" component={Influencer} />
