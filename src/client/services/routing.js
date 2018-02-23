@@ -25,7 +25,7 @@ const Routing = () => {
           <Route path="/settings" component={Influencer} />
           <Route exact path="/influencer-list" component={InfluencerList} />
           <Route exact path="/:username" component={Consumer} />
-          <Route exact path="/:username/post/:id" component={Consumer} />
+          <Route exact path="/:username/p/:id" component={Consumer} />
           <Route exact path="/" component={Influencer} />
           <Route component={FourOhFour} />
         </Switch>

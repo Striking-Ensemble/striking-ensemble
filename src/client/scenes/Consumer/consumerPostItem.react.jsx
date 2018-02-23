@@ -95,7 +95,7 @@ export default class ConsumerPostItem extends Component {
             <div id="post-item" className="col-lg-4 col-lg-offset-2 col-md-6 col-md-offset-1 col-sm-8 col-xs=12">
               <iframe src={this.props.currentPost.video_low.url} className="embed-responsive-item" style={{ height: '536px' }} seamless>
               </iframe>
-              <p>{this.props.currentPost.caption}</p>
+              <p>{this.props.currentPost.caption.text}</p>
             </div>
             <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12">
               {this.renderRetailList()}
@@ -118,7 +118,7 @@ export default class ConsumerPostItem extends Component {
           <div className="row">
             <div id="post-item" className="col-lg-4 col-lg-offset-2 col-md-6 col-md-offset-1 col-sm-8 col-xs=12">
               <img src={this.props.currentPost.image_norm.url} className="img-responsive" />
-              <p>{this.props.currentPost.caption}</p>
+              <p>{this.props.currentPost.caption.text}</p>
             </div>
             <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12">
               {this.renderRetailList()}

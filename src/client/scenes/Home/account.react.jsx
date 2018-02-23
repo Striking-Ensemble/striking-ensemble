@@ -29,8 +29,13 @@ export default class Account extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { match, history } = nextProps;
-    const toFetchData = (match.path == '/account' || match.path == '/') && this.props.location.pathname !== '/' && this.state.data.length == 0;
+    const { match } = nextProps;
+    // fetch insta posts when on '/account' or '/' and 
+    // not coming from '/' and 
+    // no media on state yet to avoid duplication
+    const toFetchData = (match.path == '/account' || match.path == '/') && 
+                        this.props.location.pathname !== '/' && 
+                        this.state.data.length == 0;
     if (toFetchData) {
       this.fetchInstaPosts();
     }
