@@ -15,13 +15,7 @@ reqRoutes.use(function timeLog(req, res, next) {
   next();
 });
 
-// Account route handlers
-reqRoutes.get('/account/post/:id', influencerRequired, reqController.getInstaPost);
-reqRoutes.post('/account/submit_media', influencerRequired, reqController.submitMedia);
-reqRoutes.post('/account/post/:id/submit_links', influencerRequired, reqController.submitLinks);
-
 // ================= Passport Instagram Endpoints ================= //
-
 reqRoutes.post('/logout', (req, res) => {
   console.log('LOGGING OUT USER:', req.body.username);
   req.logOut();
@@ -33,11 +27,11 @@ reqRoutes.get('/auth/instagram', passport.authenticate('instagram'),
 );
 
 reqRoutes.get('/auth/instagram/callback', 
-passport.authenticate('instagram', { failureRedirect: '/login' }), 
-(req, res) => {
-  req.app.settings.authInfo = req.authInfo;
-  res.redirect('/');
-}
+  passport.authenticate('instagram', { failureRedirect: '/login' }), 
+  (req, res) => {
+    req.app.settings.authInfo = req.authInfo;
+    res.redirect('/');
+  }
 );
 
 reqRoutes.get('/account', influencerRequired, (req, res) => {
@@ -57,10 +51,13 @@ reqRoutes.get('/account', influencerRequired, (req, res) => {
     }
   });
 });
-
 // =================================================================== //
 
 // ======================= Instagram Endpoints ======================== //
+// Account route handlers
+reqRoutes.get('/account/post/:id', influencerRequired, reqController.getInstaPost);
+reqRoutes.post('/account/submit_media', influencerRequired, reqController.submitMedia);
+reqRoutes.post('/account/post/:id/submit_links', influencerRequired, reqController.submitLinks);
 reqRoutes.post('/account/media', influencerRequired, reqController.getMedia);
 
 // ======================== TwoTap API Routes ======================== //
@@ -92,5 +89,6 @@ reqRoutes.get('/users', influencerController.retrieve);
 reqRoutes.get('/:username/media', reqController.getInfluencerPosts);
 reqRoutes.get('/:username/media-products', reqController.getMediaProducts);
 reqRoutes.get('/:username/post/:instaId', reqController.getPostCatalog);
+reqRoutes.get('/u/:username/post/:id', reqController.getInstaPost);
 
 module.exports = reqRoutes;
