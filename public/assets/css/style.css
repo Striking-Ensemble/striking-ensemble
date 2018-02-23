@@ -164,6 +164,11 @@ li {
   margin: 7px 15px;
 }
 
+#logout-button {
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
 /* ///////////////////////// */
 
 /* Spinner */
