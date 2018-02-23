@@ -50,6 +50,10 @@ export default class Influencer extends Component {
           res => {
             this.addCurrentPost(res.data[0])
           })
+        .catch(err => {
+          console.log('err in fetching post', err);
+          this.setState({ error: true })
+        })
     }
   }
 

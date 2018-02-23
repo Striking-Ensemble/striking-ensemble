@@ -43,12 +43,10 @@ export default class Consumer extends Component {
   componentDidMount() {
     const rootUrl = store.get('URL').root_url;
     const { match } = this.props;
-    console.log('GIMMMMMMEERRRRR PROPS', this.props);
     // fetch influencer profile
     axios.get(`${rootUrl}/user/${match.params.username}`)
       .then(
         res => {
-          console.log('CONSUMER RES DATA DID MOUNT', res.data);
           if (res.data) {
             if(!res.data[0]) {
               this.setState({error: true});
@@ -70,6 +68,10 @@ export default class Consumer extends Component {
       return axios.get(`${rootUrl}/u/${match.params.username}/post/${match.params.id}`)
         .then(res => {
           this.addCurrentPost(res.data[0]);
+        })
+        .catch(err => {
+          console.log('err in fetching post', err);
+          this.setState({ error: true });
         })
     }
     if (match.path == '/:username') {
@@ -116,7 +118,8 @@ export default class Consumer extends Component {
           }
         })
       .catch(err => {
-        console.log(err);
+        console.log('err in fetching post', err);
+        this.setState({ error: true })
       });
   }
 
