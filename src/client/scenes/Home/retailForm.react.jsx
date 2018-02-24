@@ -46,26 +46,27 @@ export default class RetailForm extends Component {
     let elements = e.target.elements;
     let body = [];
     let lastUrl = 0;
+    const { user, match, instaId, editRetailLink } = this.props;
     // iterate through the entire form element content
     for (let i = 0; i < elements.length - 1; i++) {
       console.log('NEW AFFILIATE FIELD FORM:', elements[i]);
       let item = elements[i];
       if (item.name.includes('link')) {
         if (item.value !== '') {
-          body.push({id: `link_${body.length}`, url: item.value, affiliateLink: this.props.user.affiliateLink});
+          body.push({id: `link_${body.length}`, url: item.value, affiliateLink: `${user.affiliateLink}/p/${match.params.id}`});
         }
       }
     }
 
     console.log('json would be body:', body);
-    axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
+    axios.post(`/account/post/${instaId}/submit_links`, body)
     .then(response => {
       console.log(response);
       this.setState({ changesDetected: false });
     })
     .catch(err => console.log(err));
 
-    this.props.editRetailLink(body);
+    editRetailLink(body);
   }
   // part of modal prompt
   renderModal(redirectPath) {
@@ -94,17 +95,14 @@ export default class RetailForm extends Component {
     console.log('CONTENTS OF LOCAL RETAIL LINKS', this.props.retailLinks);
     return (
       <div>
-
         <form id="retail-form" method="post" onSubmit={this.handleSubmit}>
-          <legend>Add your retail links</legend>
+          <legend>Product Links</legend>
           <div className="row">
-            <div className="col-md-3 col-sm-4 col-xs-4">
-              <button className="btn btn-success btn-sm" type="submit">
-                {this.state.changesDetected ? "Save" : (<span className="glyphicon glyphicon-ok" aria-hidden="true"> Saved</span>)}
-              </button>
+            <div className="col-lg-2 col-md-3 col-sm-3 col-xs-2">
+              <button className="btn btn-success btn-sm" type="submit">Save</button>
             </div>
-            <div className="col-md-2 col-sm-3 col-xs-3">
-              <Link to='/' className="btn btn-default btn-sm" >Cancel</Link>
+            <div className="col-lg-2 col-md-3 col-sm-3 col-xs-3">
+              <Link to='/' className="btn btn-default btn-sm">Cancel</Link>
             </div>
           </div>
           <div className="form-group">

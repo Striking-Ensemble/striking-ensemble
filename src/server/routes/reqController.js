@@ -63,7 +63,7 @@ exports.setupPayment = (req, res) => {
 exports.getStripeToken = (req, res) => {
   // Check the state we got back equals the one we generated before proceeding.
   if (req.session.state != req.query.state) {
-    res.redirect(401, '/login');
+    res.redirect(303, '/login');
   }
   // Post the authorization code to Stripe to complete the authorization flow.
   request.post(config.stripe.tokenUri, {
@@ -100,7 +100,7 @@ exports.getStripeTransfers = async (req, res) => {
   // Make sure the logged-in influencer had completed the Stripe onboarding.
   if (!influencer.stripeAccountId) {
     console.log('stripe on-boarding?', influencer.stripeAccountId);
-    return res.redirect(401, '/login');
+    return res.redirect(303, '/login');
   }
   try {
     // Generate a unique login link for the associated Stripe account.
@@ -184,7 +184,7 @@ exports.deactivate = (req, res) => {
 exports.getMedia = (req, res) => {
   if (!req.app.settings.authInfo) {
     console.log('Missing authInfo... please log in 1st');
-    res.redirect(401, '/login');
+    res.redirect(303, '/login');
   }
   // set options to insta api path for request use
   let options = {
@@ -298,6 +298,16 @@ exports.getMedia = (req, res) => {
   });
 };
 
+exports.getInstaPost = (req, res) => {
+  console.log('GRAB 1 INSTA', req.params);
+  Media.find({_id: req.params.id}, (err, response) => {
+    if (err) {
+      console.log('Error in getInstaPost', err)
+    }
+    res.send(response)
+  })
+};
+
 // submit media to specified influencer in db
 exports.submitMedia = (req, res) => {
   console.log('USER CONTENTS IN reqController by submitMedia', req.user);
@@ -310,13 +320,6 @@ exports.submitMedia = (req, res) => {
   }
 };
 
-// Let the front-end handle the rendering
-exports.getFrontEnd = (req, res) => {
-  console.log('get Front End route');
-  req.app.use(express.static(path.join(__dirname, '../../../public')));
-  res.end();
-};
-
 exports.submitLinks = (req, res) => {
   console.log('can i hazz user?', req.user);
   // find db user
@@ -326,6 +329,13 @@ exports.submitLinks = (req, res) => {
 exports.getInfluencerPosts = (req, res) => {
   console.log('GET INFLUENCER POSTS controller');
   mediaController.getInfluencerMedia(req, res);
+};
+
+// Let the front-end handle the rendering
+exports.getFrontEnd = (req, res) => {
+  console.log('get Front End route');
+  req.app.use(express.static(path.join(__dirname, '../../../public')));
+  res.end();
 };
 
 /**

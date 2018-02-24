@@ -37,47 +37,51 @@ export default class Consumer extends Component {
     this.renderPurchase = this.renderPurchase.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.tTHandleEvents = this.tTHandleEvents.bind(this);
+    this.fetchMediaProducts = this.fetchMediaProducts.bind(this);
   }
 
   componentDidMount() {
-    axios.get(store.get('URL').root_url + `/user${this.props.location.pathname}`)
+    const rootUrl = store.get('URL').root_url;
+    const { match } = this.props;
+    // fetch influencer profile
+    axios.get(`${rootUrl}/user/${match.params.username}`)
       .then(
         res => {
-          // console.log('I NEED TO FIND res.data for user', res.data);
           if (res.data) {
             if(!res.data[0]) {
               this.setState({error: true});
+            } else {
+              const newObj = res.data[0];
+              // update user state
+              this.setState({
+                userIsLoaded: true,
+                user: newObj
+              });
+              // this.props.history.push(`/${this.state.user.username}`);
             }
-            const newObj = res.data[0];
-            // update user state
-            this.setState({
-              userIsLoaded: true,
-              user: newObj
-            });
-            // this.props.history.push(`/${this.state.user.username}`);
           }
         }
       )
       .catch(err => {
         console.log(err);
       });
-
-    axios.get(store.get('URL').root_url + `/${this.props.match.params.username}/media-products`)
-      .then(
-      res => {
-        // console.log('I NEED TO FIND res.data for user MEDIA', res);
-        if (res.data) {
-          const newArr = res.data.map(post => post);
-          // update media state
-          this.setState({
-            mediaIsLoaded: true,
-            data: [...newArr]
-          });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (match.path == '/:username/p/:id') {
+      return axios.get(`${rootUrl}/u/${match.params.username}/post/${match.params.id}`)
+        .then(res => {
+          if (!res.data[0]) {
+            this.setState({ error: true });
+          } else {
+            this.addCurrentPost(res.data[0]);
+          }
+        })
+        .catch(err => {
+          console.log('err in fetching post', err);
+          this.setState({ error: true });
+        })
+    }
+    if (match.path == '/:username') {
+      this.fetchMediaProducts();
+    }
     // events for TwoTap cart API
     window.addEventListener('message', this.tTHandleEvents);
   }
@@ -86,14 +90,42 @@ export default class Consumer extends Component {
     // this serves as the basis for browser forward
     // which will assign currentPost again based on postLog's pathname
     // and next pathname match
-    if (nextProps.location.pathname === this.state.postLog.pathname) {
+    const { location, match } = nextProps;
+    const { username, instaId } = this.state.postLog;
+    if (location.pathname === `/${username}/p/${instaId}`) {
       this.setState({ currentPost: this.state.postLog });
     }
-    console.log('NEW STUFF:', nextProps);
+    // fetch posts when on '/:username and no media data on state yet to avoid duplicates
+    const toFetchData = match.path == '/:username' && this.state.data.length == 0;
+    if (toFetchData) {
+      this.fetchMediaProducts();
+    }
   }
 
   componentWillUnmount() {
     window.removeEventListener('message', this.tTHandleEvents);
+  }
+
+  fetchMediaProducts() {
+    console.log('FETCHING THUH MEDIA PRODUCTS');
+    const rootUrl = store.get('URL').root_url;
+    axios.get(`${rootUrl}/${this.props.match.params.username}/media-products`)
+      .then(
+        res => {
+          // console.log('I NEED TO FIND res.data for user MEDIA', res);
+          if (res.data) {
+            const newArr = res.data.map(post => post);
+            // update media state
+            this.setState({
+              mediaIsLoaded: true,
+              data: [...newArr]
+            });
+          }
+        })
+      .catch(err => {
+        console.log('err in fetching post', err);
+        this.setState({ error: true })
+      });
   }
 
   tTHandleEvents(event) {
@@ -166,16 +198,23 @@ export default class Consumer extends Component {
   addCurrentPost(post) {
     console.log('WE ARE ADDING CURRENT POST FROM ROOT', post);
     let currentPost = { ...this.state.currentPost };
-    currentPost.instaId = post.instaId;
-    currentPost.caption = post.caption;
-    currentPost.image_thumb = post.image_thumb;
-    currentPost.image_low = post.image_low ? post.image_low : null;
-    currentPost.image_norm = post.image_norm ? post.image_norm : null;
-    currentPost.video_low = post.video_low ? post.video_low : null;
-    currentPost.video_norm = post.video_norm ? post.video_norm : null;
-    currentPost.retailLinks = post.retailLinks ? post.retailLinks : null;
+    let image_low = post.image_low || (post.images ? post.images.low_resolution : null),
+      image_norm = post.image_norm || (post.images ? post.images.standard_resolution : null),
+      video_low = post.video_low || (post.videos ? post.videos.low_bandwidth : null),
+      video_norm = post.video_norm || (post.videos ? post.videos.standard_resolution : null);
+    Object.assign(currentPost, {
+      instaId: post.instaId || post._id,
+      username: post.username,
+      caption: post.caption,
+      image_thumb: post.image_thumb || post.images.thumbnail,
+      image_low: image_low ? image_low : null,
+      image_norm: image_norm ? image_norm : null,
+      video_low: video_low ? video_low : null,
+      video_norm: video_norm ? video_norm : null,
+      retailLinks: post.retailLinks ? post.retailLinks : null
+    });
 
-    this.setState({ currentPost });
+    this.setState({ mediaIsLoaded: true, currentPost });
   }
 
   removeCurrentPost(post) {
