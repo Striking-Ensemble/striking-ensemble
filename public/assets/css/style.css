@@ -167,8 +167,12 @@ li {
 #logout-button {
   padding-top: 7px;
   padding-bottom: 7px;
+  color: #FFF0DC; 
 }
 
+#logout-button:hover {
+  background-color: #c9302c;
+}
 /* ///////////////////////// */
 
 /* Spinner */
