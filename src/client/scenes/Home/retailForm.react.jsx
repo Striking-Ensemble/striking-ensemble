@@ -46,26 +46,27 @@ export default class RetailForm extends Component {
     let elements = e.target.elements;
     let body = [];
     let lastUrl = 0;
+    const { user, match, instaId, editRetailLink } = this.props;
     // iterate through the entire form element content
     for (let i = 0; i < elements.length - 1; i++) {
       console.log('NEW AFFILIATE FIELD FORM:', elements[i]);
       let item = elements[i];
       if (item.name.includes('link')) {
         if (item.value !== '') {
-          body.push({id: `link_${body.length}`, url: item.value, affiliateLink: this.props.user.affiliateLink});
+          body.push({id: `link_${body.length}`, url: item.value, affiliateLink: `${user.affiliateLink}/p/${match.params.id}`});
         }
       }
     }
 
     console.log('json would be body:', body);
-    axios.post(`/account/post/${this.props.instaId}/submit_links`, body)
+    axios.post(`/account/post/${instaId}/submit_links`, body)
     .then(response => {
       console.log(response);
       this.setState({ changesDetected: false });
     })
     .catch(err => console.log(err));
 
-    this.props.editRetailLink(body);
+    editRetailLink(body);
   }
   // part of modal prompt
   renderModal(redirectPath) {

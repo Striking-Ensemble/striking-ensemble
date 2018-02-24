@@ -61,6 +61,7 @@ export default class PostItem extends Component {
               editRetailLink={this.editRetailLink}
               removeRetailLink={this.removeRetailLink}
               addInputBox={this.addInputBox}
+              {...this.props}
             />
           </div>
         </div>
@@ -80,6 +81,7 @@ export default class PostItem extends Component {
               editRetailLink={this.editRetailLink}
               removeRetailLink={this.removeRetailLink}
               addInputBox={this.addInputBox}
+              {...this.props}
             />
           </div>
         </div>
