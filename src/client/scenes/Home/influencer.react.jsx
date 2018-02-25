@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import Navigation from '../../components/navigation.react';
 import Account from '../Home/account.react';
-import Billing from '../Billing/billing.react'
+import Billing from '../Billing/billing.react';
+import Reports from '../Reports/reports.react';
 import Footer from '../../components/footer.react';
 import ProfileSettings from '../Profile-Settings/profileSettings.react';
 import LoadingSpinner from '../../components/loadingSpinner.react';
@@ -160,6 +161,8 @@ export default class Influencer extends Component {
       return <Billing />
     } else if (pathname.includes('/settings')) {
       return <ProfileSettings />
+    } else if (pathname.includes('/reports')) {
+      return <Reports />
     } else {
       return (<Account
         user={store.get('user').data}

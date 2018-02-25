@@ -29,6 +29,9 @@ export default class Navigation extends Component {
               <li role="button" className={this.props.location.pathname == '/' || this.props.location.pathname.includes('account') ? "active" : ""}>
                 <Link to='/' data-toggle="collapse" data-target=".navbar-collapse.in">Home <span className="sr-only">(current)</span></Link>
               </li>
+              <li role="button" className={this.props.location.pathname.includes('/reports') ? "active" : ""}>
+                <Link to='/reports' data-toggle="collapse" data-target=".navbar-collapse.in">Reports</Link>
+              </li>
               <li role="button" className={this.props.location.pathname.includes('/billing') ? "active" : ""}>
                 <Link to="/billing" data-toggle="collapse" data-target=".navbar-collapse.in">Billing Info</Link>
               </li>

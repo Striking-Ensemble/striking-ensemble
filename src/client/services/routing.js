@@ -5,10 +5,9 @@ import Analytics from './analytics';
 import Navigation from '../components/navigation.react';
 import Influencer from '../scenes/Home/influencer.react';
 import Landing from '../scenes/Sign/landing.react';
-import FourOhFour from '../components/fourOhFour.react';
 import Consumer from '../scenes/Consumer/consumer.react';
 import InfluencerList from '../scenes/Consumer/influencerList.react';
-import Billing from '../scenes/Billing/billing.react';
+import FourOhFour from '../components/fourOhFour.react';
 
 ReactGA.initialize('UA-113143362-1');
 
@@ -23,6 +22,7 @@ const Routing = () => {
           <Route exact path="/account/p/:id" component={Influencer} />
           <Route path="/billing" component={Influencer} />
           <Route path="/settings" component={Influencer} />
+          <Route path="/reports" component={Influencer} />
           <Route exact path="/influencer-list" component={InfluencerList} />
           <Route exact path="/logout" component={Influencer} />
           <Route exact path="/:username" component={Consumer} />
