@@ -98,7 +98,7 @@ export default class Influencer extends Component {
       .then(
       res => {
         if (res.data.username) {
-          console.log('LOG IN SUCCESS, Retrieving user info...');
+          // console.log('LOG IN SUCCESS, Retrieving user info...');
           store.set('user', { data: res.data });
           store.set('isAuthenticated', true);
           this.setState({ isLoaded: true }); // is this still necessary? check setState on DidMount
@@ -175,8 +175,8 @@ export default class Influencer extends Component {
   }
 
   render() {
-    console.log('STACK #:', window.history.length);
-    console.log('Router Count:', this.props);
+    // console.log('STACK #:', window.history.length);
+    // console.log('Router Count:', this.props);
     if (this.state.error) {
       return (<FourOhFour />)
     }
