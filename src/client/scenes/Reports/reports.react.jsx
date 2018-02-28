@@ -22,7 +22,7 @@ export default class Reports extends Component {
       reportType: "ga",
       query: {
         dimensions: "ga:productBrand,ga:productName",
-        metrics: "ga:itemRevenue,ga:itemQuantity",
+        metrics: "ga:itemQuantity,ga:itemRevenue,ga:calcMetric_Commisions",
         filters: `ga:productCouponCode=@${this.props.user.affiliateLink}`,
         "start-date": "30daysAgo",
         "end-date": "yesterday"
