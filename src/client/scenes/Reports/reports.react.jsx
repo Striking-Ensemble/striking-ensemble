@@ -76,7 +76,7 @@ export default class Reports extends Component {
   render() {
     return (
       <div>
-        <h1>Product Summary</h1>
+        <h1>Product Summary</h1><p className="small text-info" data-toggle="tooltip" data-placement="bottom" title="Out-of-stock and/or cancelled items may be included within the data presented">* Raw values are displayed</p>
           {this.renderGoogleData()}
       </div>
     )
