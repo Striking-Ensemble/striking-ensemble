@@ -14,6 +14,7 @@ module.exports = merge(common, {
     publicPath: 'https://sleepy-citadel-40559.herokuapp.com/',
   },
   plugins: [
+    // create global constants that is accessed on the F.E.
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),

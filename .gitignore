@@ -3,6 +3,9 @@
 # Variables
 .env
 
+# Local JSON files
+.json
+
 # Logs
 logs
 *.log
