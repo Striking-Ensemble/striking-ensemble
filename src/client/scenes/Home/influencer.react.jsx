@@ -162,7 +162,7 @@ export default class Influencer extends Component {
     } else if (pathname.includes('/settings')) {
       return <ProfileSettings />
     } else if (pathname.includes('/reports')) {
-      return <Reports />
+      return <Reports user={store.get('user').data} />
     } else {
       return (<Account
         user={store.get('user').data}

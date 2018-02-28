@@ -6,38 +6,6 @@ loadEmbedAnalytics();
 
 const CLIENT_ID = '418887696773-5eg12mral6v45b8v9dpumopo2440reaf.apps.googleusercontent.com';
 
-const last30days = {
-  reportType: "ga",
-  query: {
-    dimensions: "ga:date",
-    metrics: "ga:pageviews",
-    "start-date": "30daysAgo",
-    "end-date": "yesterday"
-  },
-  chart: {
-    type: "LINE",
-    options: {
-      // options for google charts 
-      // https://google-developers.appspot.com/chart/interactive/docs/gallery 
-      title: "Last 30 days pageviews"
-    }
-  }
-}
-
-// graph 2 config 
-const last7days = {
-  reportType: "ga",
-  query: {
-    dimensions: "ga:date",
-    metrics: "ga:pageviews",
-    "start-date": "7daysAgo",
-    "end-date": "yesterday"
-  },
-  chart: {
-    type: "LINE"
-  }
-}
-
 export default class Reports extends Component {
   constructor(props) {
     super(props);
@@ -50,15 +18,56 @@ export default class Reports extends Component {
   }
 
   renderGoogleData() {
+    const last30days = {
+      reportType: "ga",
+      query: {
+        dimensions: "ga:productBrand,ga:productName",
+        metrics: "ga:itemRevenue,ga:itemQuantity",
+        filters: `ga:productCouponCode=@${this.props.user.affiliateLink}`,
+        "start-date": "30daysAgo",
+        "end-date": "yesterday"
+      },
+      chart: {
+        type: "TABLE",
+        options: {
+          // options for google charts 
+          // https://google-developers.appspot.com/chart/interactive/docs/gallery 
+        }
+      }
+    };
+
+    // graph 2 config 
+    const last7days = {
+      reportType: "ga",
+      query: {
+        dimensions: "ga:productName",
+        metrics: "ga:itemQuantity",
+        filters: `ga:productCouponCode=@${this.props.user.affiliateLink}`,
+        "start-date": "7daysAgo",
+        "end-date": "yesterday"
+      },
+      chart: {
+        type: "PIE",
+        options: {
+          pieHole: "0.4",
+          title: "Last 7 Days"
+        }
+      }
+    };
+
     // analytics views ID 
     const views = {
       query: {
         ids: this.state.ids
       }
-    }
+    };
+
     return (
       <GoogleProvider clientId={CLIENT_ID}>
+        <h3>Last 30 Days</h3>
         <GoogleDataChart views={views} config={last30days} />
+        <br />
+        <h3>Unique Purchases per Product</h3>
         <GoogleDataChart views={views} config={last7days} />
       </GoogleProvider>
     )
@@ -67,7 +76,7 @@ export default class Reports extends Component {
   render() {
     return (
       <div>
-        <h1>Reports Overview</h1>
+        <h1>Product Summary</h1>
           {this.renderGoogleData()}
       </div>
     )
