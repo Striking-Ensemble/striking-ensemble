@@ -13,6 +13,8 @@ const Influencer = require('../db/Influencer');
 const integrations = require('./integrations');
 const twoTapApiURL = 'https://checkout.twotap.com/prepare_checkout';
 const instaApiURL = 'https://api.instagram.com/v1/users/self/media/recent';
+const jwtClient = require('../config/googleAuth').jwtClient;
+const google = require('googleapis').google;
 
 // Controller methods for TwoTap
 /**
@@ -358,4 +360,37 @@ exports.getMediaProducts = (req, res) => {
 
 exports.getPostCatalog = (req, res) => {
   // TwoTap logic here for saving product catalogs to catalogs Schema
+};
+
+/**
+ * GET /reports/analytics
+ *
+ * Get Google Analytics Reports
+ */
+
+exports.getReports = (req, res) => {
+  console.log('getting REPORTS with BODY:', req.body);
+  const VIEW_ID = 'ga:168623324';
+  jwtClient.authorize((err, tokens) => {
+    if (err) {
+      console.log('ERROR IN jwtClient auth', err);
+      return;
+    }
+    let analytics = google.analytics('v3');
+    analytics.data.ga.get({
+      'auth': jwtClient,
+      'ids': VIEW_ID,
+      'dimensions': "ga:productBrand,ga:productName",
+      'metrics': "ga:itemQuantity,ga:itemRevenue,ga:calcMetric_Commisions",
+      'filters': `ga:productCouponCode=@${req.body.affiliateLink}`,
+      "start-date": "30daysAgo",
+      "end-date": "yesterday"
+    }, (err, response) => {
+      if (err) {
+        console.log('ERROR in get analytics', err);
+        return;
+      }
+      res.send(response.data);
+    })
+  });
 };
