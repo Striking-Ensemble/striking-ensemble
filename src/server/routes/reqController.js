@@ -370,6 +370,7 @@ exports.getPostCatalog = (req, res) => {
 
 exports.getReports = (req, res) => {
   console.log('getting REPORTS with BODY:', req.body);
+  const { affiliateLink, dimensions, metrics } = req.body;
   const VIEW_ID = 'ga:168623324';
   jwtClient.authorize((err, tokens) => {
     if (err) {
@@ -380,11 +381,11 @@ exports.getReports = (req, res) => {
     analytics.data.ga.get({
       'auth': jwtClient,
       'ids': VIEW_ID,
-      'dimensions': "ga:productBrand,ga:productName",
-      'metrics': "ga:itemQuantity,ga:itemRevenue,ga:calcMetric_Commisions",
-      'filters': `ga:productCouponCode=@${req.body.affiliateLink}`,
-      "start-date": "30daysAgo",
-      "end-date": "yesterday"
+      'dimensions': dimensions,
+      'metrics': metrics,
+      'filters': `ga:productCouponCode=@${affiliateLink}`,
+      "start-date": req.body['start-date'],
+      "end-date": req.body['end-date']
     }, (err, response) => {
       if (err) {
         console.log('ERROR in get analytics', err);

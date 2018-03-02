@@ -2,25 +2,18 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import store from 'store';
 import LoadingSpinner from '../../components/loadingSpinner.react';
-import { GoogleProvider, GoogleDataChart } from 'react-analytics-widget';
-import loadEmbedAnalytics from '../../services/loadEmbedAnalytics';
 import { Table, TableRow } from '../../components/tables.react';
-
-loadEmbedAnalytics();
-
-const CLIENT_ID = '418887696773-5eg12mral6v45b8v9dpumopo2440reaf.apps.googleusercontent.com';
 
 export default class Reports extends Component {
   constructor(props) {
     super(props);
     
     this.state = {
-      ids: 'ga:168623324',
       ready: false,
-      data: {}
+      productData: {}
     };
 
-    this.renderGoogleData = this.renderGoogleData.bind(this);
+    this.queryReportBuilder = this.queryReportBuilder.bind(this);
     this.renderTable = this.renderTable.bind(this);
     this.renderTHeaders = this.renderTHeaders.bind(this);
     this.renderTCell = this.renderTCell.bind(this);
@@ -28,51 +21,54 @@ export default class Reports extends Component {
 
   componentDidMount() {
     const rootUrl = store.get('URL').root_url;
-    axios.post(`${rootUrl}/reports/affiliate`, { affiliateLink: this.props.user.affiliateLink })
+    /** 
+     * Pie query sample
+     *  query: {
+          dimensions: "ga:productName",
+          metrics: "ga:itemQuantity",
+          filters: `ga:productCouponCode=@${this.props.user.affiliateLink}`,
+          "start-date": "30daysAgo",
+          "end-date": "yesterday"
+        },
+    */
+
+    let queryTable = this.queryReportBuilder(
+      this.props.user.affiliateLink,
+      "ga:productBrand,ga:productName",
+      "ga:itemQuantity,ga:itemRevenue,ga:calcMetric_Commisions",
+      "30daysAgo",
+      "yesterday"
+    );
+
+    axios.post(`${rootUrl}/reports/affiliate`, queryTable)
       .then(res => {
         const { columnHeaders, rows, totalsForAllResults } = res.data;
-        this.setState({ ready: true, data: {columnHeaders, rows, totalsForAllResults} });
+        this.setState({ ready: true, productData: {columnHeaders, rows, totalsForAllResults} });
       })
       .catch(err => {
       console.log('ERROR in REPORTS POST', err);
       });
   }
 
-  renderGoogleData() {
-    // graph 2 config 
-    const last7days = {
-      reportType: "ga",
-      query: {
-        dimensions: "ga:productName",
-        metrics: "ga:itemQuantity",
-        filters: `ga:productCouponCode=@${this.props.user.affiliateLink}`,
-        "start-date": "7daysAgo",
-        "end-date": "yesterday"
-      },
-      chart: {
-        type: "PIE",
-        options: {
-          // options for google charts 
-          // https://google-developers.appspot.com/chart/interactive/docs/gallery
-          pieHole: "0.4",
-          title: "Last 7 Days"
-        }
-      }
-    };
-
-    // analytics views ID 
-    const views = {
-      query: {
-        ids: this.state.ids
-      }
-    };
-
-    return (
-      <GoogleProvider clientId={CLIENT_ID}>
-        <h3>Unique Purchases per Product</h3>
-        <GoogleDataChart views={views} config={last7days} />
-      </GoogleProvider>
-    )
+  /**
+   * @method queryReportBuilder
+   * 
+   * @param {String} affiliateLink 
+   * @param {String} dimensions 
+   * @param {String} metrics 
+   * @param {String} startDate 
+   * @param {String} endDate
+   *  
+   * @returns {Object}
+   */
+  queryReportBuilder(affiliateLink, dimensions, metrics, startDate, endDate) {
+    return {
+      'affiliateLink': affiliateLink,
+      'dimensions': dimensions,
+      'metrics': metrics,
+      'start-date': startDate,
+      'end-date': endDate
+    } 
   }
 
   renderTable() {
@@ -118,7 +114,7 @@ export default class Reports extends Component {
       }
     }
 
-    return this.state.data.columnHeaders.map(item => {
+    return this.state.productData.columnHeaders.map(item => {
       return (
         <th key={`index_${item.name}`}>
           {titleBuilder(item.name)}
@@ -128,7 +124,7 @@ export default class Reports extends Component {
   }
 
   renderTCell() {
-    return this.state.data.rows.map((item, index) => {
+    return this.state.productData.rows.map((item, index) => {
       return (
         <TableRow key={`row_${index}`}>
           {item.map((value, index) => (<td key={`index_${value}_${index}`}>{value}</td>))}
@@ -142,7 +138,6 @@ export default class Reports extends Component {
       <div>
         <h1>Product Summary</h1><p className="small text-info" data-toggle="tooltip" data-placement="bottom" title="Out-of-stock and/or cancelled items may be included within the data presented">* Raw values are displayed</p>
         {this.state.ready ? this.renderTable() : <LoadingSpinner /> }
-        {this.renderGoogleData()}
       </div>
     )
   }
