@@ -26,30 +26,29 @@ export default class Influencer extends Component {
     this.addCurrentPost = this.addCurrentPost.bind(this);
     this.removeCurrentPost = this.removeCurrentPost.bind(this);
     this.currentUserIsEmpty = this.currentUserIsEmpty.bind(this);
-    this.checkAuthentication = this.checkAuthentication.bind(this);
     this.renderPathname = this.renderPathname.bind(this);
-  }
-
-  componentWillMount() {
-    this.checkAuthentication(this.props);
   }
 
   componentDidMount() {
     const { location, match } = this.props;
     const rootUrl = store.get('URL').root_url;
-    !isAuthenticated() ? 
-      <Redirect to={{
-        pathname: '/login',
-        state: { from: location }
-      }}/> 
-      : this.setState({ isLoaded: true });
-    
+
     if (match.path == '/account/p/:id') {
       return axios.get(`${rootUrl}/account/post/${match.params.id}`)
         .then(
           res => {
+            console.log('res INFLUENCER DATA', res.data);
             if (res.data[0] && typeof res.data !== 'string') {
               this.addCurrentPost(res.data[0]);
+            } else {
+              // necessary for when server restarts
+              // and client still has login session
+              store.remove('user');
+              store.remove('isAuthenticated');
+              <Redirect to={{
+                pathname: '/login',
+                state: { from: this.props.location }
+              }} />
             }
           })
         .catch(err => {
@@ -75,49 +74,14 @@ export default class Influencer extends Component {
           console.log(err);
         });
       }
-      // check user is authenticated
-      // this.checkAuthentication(nextProps);
-      if (!isAuthenticated()) {
-        <Redirect to={{
-          pathname: '/login',
-          state: { from: this.props.location }
-        }} />
-        // next pathname relates to postLog id?
-      } else if (nextProps.location.pathname === `/account/p/${this.state.postLog.instaId}`) {
+      if (nextProps.location.pathname === `/account/p/${this.state.postLog.instaId}`) {
         // set it as the new currentPost
         this.setState({ currentPost: this.state.postLog });
       }
+      if (nextProps.location.pathname === '/account') {
+        this.removeCurrentPost();
+      }
     }
-  }
-
-  checkAuthentication(params) {
-    const { history } = params;
-    const rootUrl = store.get('URL').root_url;
-
-    axios.get(`${rootUrl}/account/`)
-      .then(
-      res => {
-        if (res.data.username) {
-          // console.log('LOG IN SUCCESS, Retrieving user info...');
-          store.set('user', { data: res.data });
-          store.set('isAuthenticated', true);
-          this.setState({ isLoaded: true }); // is this still necessary? check setState on DidMount
-        } else {
-          store.remove('user');
-          store.remove('isAuthenticated');
-          console.log('PLEASE LOG IN 1st');
-          history.replace({ pathname: '/login' });
-        }
-      })
-      .catch(err => {
-        console.log('ERROR IN CHECK checkAuth', err);
-        store.remove('user');
-        store.remove('isAuthenticated');
-        store.each((value, key) => {
-          console.log('WHATs IN STORE:', key, '==', value);
-        });
-        history.replace({ pathname: '/login' });
-      });
   }
 
   currentUserIsEmpty() {
@@ -150,9 +114,7 @@ export default class Influencer extends Component {
   // what if user says OK on modal confirm?
   removeCurrentPost(changesDetected) {
     console.log('REMOVING CURRENT POST FROM ROOT');
-    // if (!changesDetected) {
-      this.setState({ postLog: this.state.currentPost, currentPost: {} }, () => console.log('UPDATE ON CURRENTPOST & POSTLOG:', this.state));
-    // }
+    this.setState({ postLog: this.state.currentPost, currentPost: {} }, () => console.log('UPDATE ON CURRENTPOST & POSTLOG:', this.state));
   }
 
   renderPathname(location) {
@@ -179,9 +141,6 @@ export default class Influencer extends Component {
     // console.log('Router Count:', this.props);
     if (this.state.error) {
       return (<FourOhFour />)
-    }
-    if (!this.state.isLoaded) {
-      return <LoadingSpinner />
     } else {
       return (
         <div id="wrap">
