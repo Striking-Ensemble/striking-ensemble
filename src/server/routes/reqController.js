@@ -127,7 +127,13 @@ exports.payout = async (req, res) => {
     const balance = await stripe.balance.retrieve({ stripe_account: influencer.stripeAccountId });
     // This instance only uses USD so we'll just use the first available balance.
     // Note: There are as many balances as currencies used in your application.
+    console.log('CURRENT USER BALANCE:', balance.available[0]);
     const { amount, currency } = balance.available[0];
+
+    if (amount == 0) {
+      res.send('Insufficient Funds for Payout');
+    }
+
     // Create the instant payout.
     const payout = await stripe.payouts.create({
       method: 'instant',
@@ -139,6 +145,7 @@ exports.payout = async (req, res) => {
       });
   } catch (err) {
     console.log(err);
+    res.status(400).end();
   }
   // Redirect to the pilot dashboard.
   res.redirect('/billing');
