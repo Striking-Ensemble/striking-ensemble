@@ -262,15 +262,10 @@ export default class Consumer extends Component {
   }
 
   renderPurchase() {
-    let customStyles = { 
-      width: '100%',
-      minHeight: '600px', 
-      maxHeight: '700px'
-    };
     if (this.state.checkout_request_id) {
       return (
         <div id="purchaseModal" className="modal-content" ref={el => this.el = el}>
-          <iframe id="purchase-frame" src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={customStyles} frameBorder="0" ></iframe>
+          <iframe id="purchase-iframe" src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} frameBorder="0" ></iframe>
         </div>
       )
     }
