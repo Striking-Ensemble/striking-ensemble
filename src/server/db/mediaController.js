@@ -124,14 +124,15 @@ exports.updateRetailLinks = (req, res) => {
     // take the domain name
     let temp = item.url.split('/')[2];
     let finalChanges;
+    // ==== to remove all params => .replace(/\?.*$/, '') ==== //
     // normalize, then replace=> removes all params, then split '.' for evaluation on last index length
-    let normUrl = normalizeUrl(item.url).replace(/\?.*$/, '').split('.');
+    let urlArr = normalizeUrl(item.url).replace(/\?.*$/, '').split('.');
     // if last index length is not a suffix, concat the strings
-    if (normUrl[normUrl.length - 1].length > 6) {
-      finalChanges = normUrl.join('.');
+    if (urlArr[urlArr.length - 1].length > 6) {
+      finalChanges = urlArr.join('.');
     } else {
       // slice out suffix (ex: .html) and concat the strings
-      finalChanges = normUrl.slice(0, -1).join('.');
+      finalChanges = urlArr.slice(0, -1).join('.');
     }
     // take the product id from finalChanges to use for query
     let productInfo = finalChanges.split('/').slice(-2, -1).pop();
@@ -142,7 +143,7 @@ exports.updateRetailLinks = (req, res) => {
       'filter': {
         "keywords": productQuery,
         "keywords_fields": ['url'],
-        "site_ids": [siteInfo[0].id]
+        "site_ids": [siteInfo[0] ? siteInfo[0].id : '']
       }
     };
     let options = {
@@ -154,6 +155,7 @@ exports.updateRetailLinks = (req, res) => {
     return (
       rp(options)
       .then(body => {
+        // item in this block is from req.body.map param
         let tempObj = { ...item };
         let { products } = JSON.parse(body);
         console.log('FETCHED PROPERLY?', products);

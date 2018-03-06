@@ -47,6 +47,7 @@ export default class RetailForm extends Component {
     let elements = e.target.elements;
     let body = [];
     let lastUrl = 0;
+    let affiliateLinkBuilder;
     const { user, match, instaId, editRetailLink } = this.props;
     // iterate through the entire form element content
     for (let i = 0; i < elements.length - 1; i++) {
@@ -54,10 +55,17 @@ export default class RetailForm extends Component {
       let item = elements[i];
       if (item.name.includes('link')) {
         if (item.value !== '') {
-          console.log('UGGHH SANITY CHECK', item);
-          let normUrl = normalizeUrl(item.value);
-          const coreCampaign = '&utm_source=affiliate&utm_medium=strikingensemble.com';
-          let affiliateLinkBuilder = `${normUrl}?${coreCampaign}`;
+          // normalize & remove known affiliate fields
+          let normUrl = normalizeUrl(item.value, {
+            removeQueryParameters: ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'siteId', 'cm_mmc']
+          });
+          // insert our own signature campaign
+          const campaignBuilder = '&utm_source=strikingensemble.com&utm_medium=affiliate';
+          if (item.value.includes('?')) {
+            affiliateLinkBuilder = `${normUrl + campaignBuilder}`;
+          } else {
+            affiliateLinkBuilder = `${normUrl}?${campaignBuilder}`;
+          }
           body.push({
             id: `link_${body.length}`, 
             url: normUrl, 
