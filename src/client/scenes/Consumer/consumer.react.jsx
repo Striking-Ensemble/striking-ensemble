@@ -240,7 +240,7 @@ export default class Consumer extends Component {
     let checkoutRequest = {};
     checkoutRequest['products'] = this.state.localCart;
     checkoutRequest['public_token'] = '52434d36952f32a3bb43f67ea85c64';
-    // checkoutRequest['custom_css_url'] = `${store.get('URL').root_url}/public/assets/css/integration_twotap.css`
+    checkoutRequest['custom_css_url'] = `${store.get('URL').root_url}/public/assets/css/integration_twotap.css`;
     checkoutRequest['confirm'] = { 
       method: 'sms', 
       sms_confirm_url: `${store.get('URL').root_url}/purchase_confirm_callback`,
