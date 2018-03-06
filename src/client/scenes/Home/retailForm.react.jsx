@@ -61,6 +61,7 @@ export default class RetailForm extends Component {
           });
           // insert our own signature campaign
           const campaignBuilder = '&utm_source=strikingensemble.com&utm_medium=affiliate';
+          // check if list of params already exists in url
           if (item.value.includes('?')) {
             affiliateLinkBuilder = `${normUrl + campaignBuilder}`;
           } else {
