@@ -121,8 +121,8 @@ exports.updateRetailLinks = (req, res) => {
   let query = { _id: req.params.id };
   
   let dataTemp = req.body.map(item => {
-    let temp = item.url.split('/');
-    let result = temp[2].split('www.')[1];
+    // take the domain name
+    let temp = item.url.split('/')[2];
     let finalChanges;
     // normalize, then replace=> removes all params, then split '.' for evaluation on last index length
     let normUrl = normalizeUrl(item.url).replace(/\?.*$/, '').split('.');
@@ -136,7 +136,7 @@ exports.updateRetailLinks = (req, res) => {
     // take the product id from finalChanges to use for query
     let productInfo = finalChanges.split('/').slice(-2, -1).pop();
     let productQuery = finalChanges.split('/').pop();
-    let siteInfo = lookUpSites.filter(item => item.url == result);
+    let siteInfo = lookUpSites.filter(item => item.url == temp);
     let twoTapPath = `https://api.twotap.com/v1.0/product/search?public_token=${req.app.get('twoTap_public_token')}`;
     let queryObj = {
       'filter': {

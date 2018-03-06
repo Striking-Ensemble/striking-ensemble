@@ -52,11 +52,12 @@ export default class RetailForm extends Component {
     for (let i = 0; i < elements.length - 1; i++) {
       console.log('NEW AFFILIATE FIELD FORM:', elements[i]);
       let item = elements[i];
-      let normUrl = normalizeUrl(item.value);
-      const coreCampaign = '&utm_source=affiliate&utm_medium=strikingensemble.com';
-      let affiliateLinkBuilder = `${normUrl}?${coreCampaign}`;
       if (item.name.includes('link')) {
         if (item.value !== '') {
+          console.log('UGGHH SANITY CHECK', item);
+          let normUrl = normalizeUrl(item.value);
+          const coreCampaign = '&utm_source=affiliate&utm_medium=strikingensemble.com';
+          let affiliateLinkBuilder = `${normUrl}?${coreCampaign}`;
           body.push({
             id: `link_${body.length}`, 
             url: normUrl, 
