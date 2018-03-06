@@ -10,7 +10,7 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/, //exclude any and all files in the node_modules folder
         loader: 'babel-loader',
-        query: {
+        options: {
           presets: ['react', 'env']
         }
       },
