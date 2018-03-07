@@ -47,7 +47,7 @@ export default class PostItem extends Component {
     console.log('HERE WE ARE NOW FOR PROPS*************', this.props);
     if (this.props.currentPost.video_low) {
       return (
-        <div className="container">
+        <div>
           <div id="post-item" className="col-md-8 col-sm-8 col-xs-12">
             <iframe src={this.props.currentPost.video_low.url} className="embed-responsive-item" style={{ height: '536px' }} seamless>
             </iframe>
@@ -68,7 +68,7 @@ export default class PostItem extends Component {
       )
     } else {
       return (
-        <div className="container">
+        <div>
           <div id="post-item" className="col-md-8 col-sm-8 col-xs-12">
             <img src={this.props.currentPost.image_norm.url} className="img-responsive" />
             <p>{this.props.currentPost.caption.text}</p>
