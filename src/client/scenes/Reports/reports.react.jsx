@@ -124,13 +124,21 @@ export default class Reports extends Component {
   }
 
   renderTCell() {
-    return this.state.productData.rows.map((item, index) => {
+    if (this.state.productData.rows) {
+      return this.state.productData.rows.map((item, index) => {
+          return (
+            <TableRow key={`row_${index}`}>
+              {item.map((value, index) => (<td key={`index_${value}_${index}`}>{value}</td>))}
+            </TableRow>
+          )
+        })
+    } else {
       return (
-        <TableRow key={`row_${index}`}>
-          {item.map((value, index) => (<td key={`index_${value}_${index}`}>{value}</td>))}
+        <TableRow>
+          <td>*No activity history available for the past 30 days</td>
         </TableRow>
       )
-    })
+    }
   }
   
   render() {
