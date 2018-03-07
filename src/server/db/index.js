@@ -11,6 +11,8 @@ if (process.env.HostedDB === 'true') {
 const dbOptions = {
   useMongoClient: true,
   autoReconnect: true,
+  // For PRODUCTION, uncomment autoIndex field!
+  // autoIndex: false,
   reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
   reconnectInterval: 500, // Reconnect every 500ms
   // If not connected, return errors immediately rather than waiting for reconnect
@@ -18,8 +20,11 @@ const dbOptions = {
   // If you want your database operations to fail immediately 
   // When the driver is not connected,
   bufferMaxEntries: 0,
+  keepAlive: 300000, // for long running applications
   connectTimeoutMS: 300000,
   socketTimeoutMS: 300000,
+  // sockets may need to be increased if we have few slow queries
+  // blocking faster queries. Default: 5
   poolSize: 5
 }
 // Connect Mongoose to our local MongoDB via URI

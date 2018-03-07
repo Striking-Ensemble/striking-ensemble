@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default () =>
-  <svg width="100px" height="15px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" className="lds-bars" style={{"background": "none"}}>
+  <svg width="100px" height="15px" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" className="lds-bars" style={{"background": "none"}}>
     <rect ng-attr-x="{{config.x1}}" y="5" ng-attr-width="{{config.width}}" height="90" fill="#aaa8a1" x="-35" width="20">
       <animate attributeName="opacity" calcMode="spline" values="1;0.2;1" keyTimes="0;0.5;1" dur="0.7" keySplines="0.5 0 0.5 1;0.5 0 0.5 1" begin="-0.42s" repeatCount="indefinite">
       </animate>

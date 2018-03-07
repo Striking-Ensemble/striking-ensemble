@@ -52,6 +52,15 @@ export default class Account extends Component {
               isLoaded: true,
               data: [...this.state.data, ...newArr]
             });
+          } else {
+            // necessary for when server restarts
+            // and client still has login session
+            store.remove('user');
+            store.remove('isAuthenticated');
+            <Redirect to={{
+              pathname: '/login',
+              state: { from: this.props.location }
+            }} />
           }
         })
       .catch(err => {

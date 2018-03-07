@@ -240,7 +240,7 @@ export default class Consumer extends Component {
     let checkoutRequest = {};
     checkoutRequest['products'] = this.state.localCart;
     checkoutRequest['public_token'] = '52434d36952f32a3bb43f67ea85c64';
-    // checkoutRequest['custom_css_url'] = `${store.get('URL').root_url}/public/assets/css/integration_twotap.css`
+    checkoutRequest['custom_css_url'] = `${store.get('URL').root_url}/assets/css/integration_twotap.css`;
     checkoutRequest['confirm'] = { 
       method: 'sms', 
       sms_confirm_url: `${store.get('URL').root_url}/purchase_confirm_callback`,
@@ -262,15 +262,10 @@ export default class Consumer extends Component {
   }
 
   renderPurchase() {
-    let customStyles = { 
-      width: '100%',
-      minHeight: '600px', 
-      maxHeight: '700px'
-    };
     if (this.state.checkout_request_id) {
       return (
         <div id="purchaseModal" className="modal-content" ref={el => this.el = el}>
-          <iframe id="purchase-frame" src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} style={customStyles} frameBorder="0" ></iframe>
+          <iframe id="purchase-iframe" src={`https://checkout.twotap.com/?checkout_request_id=${this.state.checkout_request_id}`} frameBorder="0" ></iframe>
         </div>
       )
     }
@@ -341,8 +336,8 @@ export default class Consumer extends Component {
       <div id="page-outer" className="container-fluid">
         <br />
         <div className="row">
-          <button type="button" className="col-lg-1 col-lg-offset-9 col-md-2 col-md-offset-9 col-sm-2 col-sm-offset-9 col-xs-2 col-xs-offset-9 btn btn-primary btn-xs" onClick={this.buyProducts} data-toggle="modal" data-target=".bs-example-modal-sm">
-            <span className={`${this.state.localCart.length == 0 ? 'hidden' : 'badge'}`}>{this.state.localCart.length} </span> <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> <span className="hidden-xs">Check Cart </span>
+          <button type="button" className="col-lg-1 col-lg-offset-9 col-md-2 col-md-offset-9 col-sm-2 col-sm-offset-9 col-xs-2 col-xs-offset-9 btn btn-primary" onClick={this.buyProducts} data-toggle="modal" data-target=".bs-example-modal-sm">
+            <span className={`${this.state.localCart.length == 0 ? 'hidden' : 'badge'}`}>{this.state.localCart.length} </span> <span className="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> <span className="hidden-xs">Cart </span>
           </button>
           <div className="modal fade bs-example-modal-sm" tabIndex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
             <div className="modal-dialog modal-sm" role="document">

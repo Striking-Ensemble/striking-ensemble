@@ -6,12 +6,19 @@ if (process.env.NODE_ENV !== 'production') {
   hostUri = 'https://sleepy-citadel-40559.herokuapp.com/auth/instagram/callback';
 }
 
+let googleService_privateKey;
+if (process.env.GoogleService_privateKey) {
+  googleService_privateKey = process.env.GoogleService_privateKey.split('\n').join('\n');
+}
+
 module.exports = {
   secret: 'sessionSecret',
   // Configuration for Instagram Passport
-  clientID: process.env.Instagram_client_id,
-  clientSecret: process.env.Instagram_client_secret,
-  callbackURL: hostUri,
+  instagram: {
+    clientID: process.env.Instagram_client_id,
+    clientSecret: process.env.Instagram_client_secret,
+    callbackURL: hostUri
+  },
   // Configuration for Stripe.
   // API Keys: https://dashboard.stripe.com/account/apikeys
   // Connect Settings: https://dashboard.stripe.com/account/applications/settings
@@ -25,5 +32,9 @@ module.exports = {
   twoTap: {
     publicToken: process.env.TwoTap_public_token,
     privateToken: process.env.TwoTap_private_token
+  },
+  googleService: {
+    client_email: process.env.GoogleService_clientEmail,
+    private_key: googleService_privateKey
   }
 };

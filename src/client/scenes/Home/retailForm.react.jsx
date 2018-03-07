@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Link, Prompt } from 'react-router-dom';
 import InputBox from './inputBox.react';
+import normalizeUrl from 'normalize-url';
 
 export default class RetailForm extends Component {
   constructor(props) {
@@ -46,6 +47,7 @@ export default class RetailForm extends Component {
     let elements = e.target.elements;
     let body = [];
     let lastUrl = 0;
+    let affiliateLinkBuilder;
     const { user, match, instaId, editRetailLink } = this.props;
     // iterate through the entire form element content
     for (let i = 0; i < elements.length - 1; i++) {
@@ -53,7 +55,24 @@ export default class RetailForm extends Component {
       let item = elements[i];
       if (item.name.includes('link')) {
         if (item.value !== '') {
-          body.push({id: `link_${body.length}`, url: item.value, affiliateLink: `${user.affiliateLink}/p/${match.params.id}`});
+          // normalize & remove known affiliate fields
+          let normUrl = normalizeUrl(item.value, {
+            removeQueryParameters: ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'siteId', 'cm_mmc']
+          });
+          // insert our own signature campaign
+          const campaignBuilder = '&utm_source=strikingensemble.com&utm_medium=affiliate';
+          // check if list of params already exists in url
+          if (item.value.includes('?')) {
+            affiliateLinkBuilder = `${normUrl + campaignBuilder}`;
+          } else {
+            affiliateLinkBuilder = `${normUrl}?${campaignBuilder}`;
+          }
+          body.push({
+            id: `link_${body.length}`, 
+            url: normUrl, 
+            affiliateLink: affiliateLinkBuilder,
+            postPath: `/${user.username}/p/${match.params.id}`
+          });
         }
       }
     }

@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 
@@ -11,8 +12,8 @@ module.exports = merge(common, {
   ],
   output: {
     filename: 'bundle.js',
-    path: __dirname + '/public',
-    publicPath: '/public',
+    path: path.resolve(__dirname, 'public'),
+    publicPath: '/',
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

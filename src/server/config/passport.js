@@ -1,5 +1,5 @@
 const InstagramStrategy = require('passport-instagram').Strategy;
-const instagramAuth = require('./keys');
+const instagramAuth = require('./keys').instagram;
 const Influencer = require('../db/Influencer');
 
 module.exports = (passport) => {

@@ -60,6 +60,9 @@ reqRoutes.post('/account/submit_media', influencerRequired, reqController.submit
 reqRoutes.post('/account/post/:id/submit_links', influencerRequired, reqController.submitLinks);
 reqRoutes.post('/account/media', influencerRequired, reqController.getMedia);
 
+// ======================== Google Reporting ========================= //
+reqRoutes.post('/reports/affiliate', influencerRequired, reqController.getReports);
+
 // ======================== TwoTap API Routes ======================== //
 reqRoutes.get('/:username/cart', integrations.integration);
 reqRoutes.get('/purchase_status/id/:purchase_id', reqController.purchaseStatusController);

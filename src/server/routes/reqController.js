@@ -13,6 +13,8 @@ const Influencer = require('../db/Influencer');
 const integrations = require('./integrations');
 const twoTapApiURL = 'https://checkout.twotap.com/prepare_checkout';
 const instaApiURL = 'https://api.instagram.com/v1/users/self/media/recent';
+const jwtClient = require('../config/googleAuth').jwtClient;
+const google = require('googleapis').google;
 
 // Controller methods for TwoTap
 /**
@@ -125,7 +127,13 @@ exports.payout = async (req, res) => {
     const balance = await stripe.balance.retrieve({ stripe_account: influencer.stripeAccountId });
     // This instance only uses USD so we'll just use the first available balance.
     // Note: There are as many balances as currencies used in your application.
+    console.log('CURRENT USER BALANCE:', balance.available[0]);
     const { amount, currency } = balance.available[0];
+
+    if (amount == 0) {
+      res.send('Insufficient Funds for Payout');
+    }
+
     // Create the instant payout.
     const payout = await stripe.payouts.create({
       method: 'instant',
@@ -137,6 +145,7 @@ exports.payout = async (req, res) => {
       });
   } catch (err) {
     console.log(err);
+    res.status(400).end();
   }
   // Redirect to the pilot dashboard.
   res.redirect('/billing');
@@ -358,4 +367,38 @@ exports.getMediaProducts = (req, res) => {
 
 exports.getPostCatalog = (req, res) => {
   // TwoTap logic here for saving product catalogs to catalogs Schema
+};
+
+/**
+ * GET /reports/analytics
+ *
+ * Get Google Analytics Reports
+ */
+
+exports.getReports = (req, res) => {
+  console.log('getting REPORTS with BODY:', req.body);
+  const { affiliateLink, dimensions, metrics } = req.body;
+  const VIEW_ID = 'ga:168623324';
+  jwtClient.authorize((err, tokens) => {
+    if (err) {
+      console.log('ERROR IN jwtClient auth', err);
+      return;
+    }
+    let analytics = google.analytics('v3');
+    analytics.data.ga.get({
+      'auth': jwtClient,
+      'ids': VIEW_ID,
+      'dimensions': dimensions,
+      'metrics': metrics,
+      'filters': `ga:productCouponCode=@${affiliateLink}`,
+      "start-date": req.body['start-date'],
+      "end-date": req.body['end-date']
+    }, (err, response) => {
+      if (err) {
+        console.log('ERROR in get analytics', err);
+        return;
+      }
+      res.send(response.data);
+    })
+  });
 };

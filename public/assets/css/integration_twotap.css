@@ -1,0 +1,99 @@
+body, html {
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.header-container {
+  border-top-left-radius: 2px !important;
+  border-top-right-radius: 2px !important;
+  overflow: hidden;
+  background: #1f2935;
+}
+
+.btn-blue {
+  background: #1f2935
+}
+.btn-blue:hover {
+  background: #090c10;
+}
+
+a {
+  color: #ed485c;
+}
+a:hover {
+  color: #cf4051;
+}
+
+.price-list tr.coupon td {
+  color: #1f2935;
+}
+
+.product-fields .product-fields-meta .product-details .product-quantity-and-price .product-price .product-price-discounted-value {
+  color: #1f2935;
+}
+
+.have-a-coupon a {
+  color: #1f2935;
+  border: 1px solid #fff;
+}
+
+.shipping-options .shipping-options-tabs .shipping-option {
+  color: #1f2935;
+}
+
+.shipping-options .shipping-options-tabs .shipping-option.active {
+  background: #1f2935;
+  border-color: #1f2935;
+}
+
+.checkout-info {
+  background: none;
+  box-shadow: none;
+  padding: 0
+}
+
+.checkout-info .your-wallet, .checkout-info .your-wallet-lock {
+  display: none;
+}
+
+.checkout-info .generic-info.with-bottom-border {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.checkout-info .generic-info .new-link .img-holder {
+  color: #ed485c;
+}
+
+.form-progress ul li.progress-entry.active .index {
+  background: #1f2935;
+}
+.form-progress ul li.progress-entry.active .name {
+  color: #1f2935;
+}
+
+.modal-backdrop {
+  border-radius: 2px !important;
+  overflow: hidden;
+}
+
+.modal, .modal-dialog, .modal-content, .modal-header {
+  border-top-left-radius: 2px !important;
+  border-top-right-radius: 2px !important;
+  overflow: hidden;
+}
+
+.product-details-modal .btn-group button {
+  color: #807e7f;
+  border: 1px solid #d6d7d9;
+}
+.product-details-modal .btn-group button.btn-active {
+  background: #ee485c;
+  border: 1px solid #ee485c;
+}
+
+.modal .btn-blue {
+  background: #ee485c
+}
+.modal .btn-blue:hover {
+  background: #ee485c;
+}

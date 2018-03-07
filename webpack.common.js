@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.png', '.jpg', '.gif'] // auto resolve file extensions when importing
@@ -9,10 +7,14 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/, //exclude any and all files in the node_modules folder
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'env']
-        }
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['react', 'env']
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,
@@ -24,7 +26,7 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: '[name].[ext]',
+              name: '[path][name].[ext]',
               useRelativePath: process.env.NODE_ENV === "production"
             }
           }
