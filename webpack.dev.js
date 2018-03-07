@@ -12,7 +12,7 @@ module.exports = merge(common, {
   output: {
     filename: 'bundle.js',
     path: __dirname + '/public',
-    publicPath: '/public',
+    publicPath: '/',
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
