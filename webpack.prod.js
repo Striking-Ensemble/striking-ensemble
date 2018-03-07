@@ -13,7 +13,7 @@ module.exports = merge(common, {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public'),
-    publicPath: 'https://sleepy-citadel-40559.herokuapp.com/public',
+    publicPath: 'https://sleepy-citadel-40559.herokuapp.com/',
   },
   plugins: [
     // create global constants that is accessed on the F.E.
