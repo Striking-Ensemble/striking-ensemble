@@ -90,7 +90,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parses the text as JSON and set to req.body
 app.use(bodyParser.json());
 app.use('/', express.static(path.join(__dirname, '../../public')));
-// app.get('/', (req, res) => { res.sendFile(path.join(__dirname, '../../public/index.html')) })
 
 // serialize and deserialize
 passport.serializeUser((user, done) => {
