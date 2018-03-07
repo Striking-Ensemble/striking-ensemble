@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const BabelEnginePlugin = require('babel-engine-plugin');
 
 module.exports = merge(common, {
   devtool: 'source-map',
@@ -18,11 +19,11 @@ module.exports = merge(common, {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
+    new BabelEnginePlugin({
+      presets: ['env']
+    }),
     new UglifyJsPlugin({
-      sourceMap: true,
-      uglifyOptions: {
-        ecma: 7
-      }
+      sourceMap: true
     })
   ]
 });
