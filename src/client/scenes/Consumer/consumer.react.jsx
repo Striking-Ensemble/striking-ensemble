@@ -163,6 +163,7 @@ export default class Consumer extends Component {
               let productDetails = productFields.required_field_values;
               let NUM = 'replace this with a script that detects numbers on a string';
               if (productDetails['size type'] > 1) {
+                // might need to traverse the arr to check for ['extra_info'] field
                 let productMultiDetails = productDetails['size type'][1];
                 if (productMultiDetails.extra_info) {
                   productMultiDetails.extra_info.includes(NUM) ? 
@@ -181,7 +182,7 @@ export default class Consumer extends Component {
                 }
               }
             }
-            revenueSoFar += parseFloat(dollarLess) * parseFloat(productFields.fields_input.quantity);
+            revenueSoFar += parseFloat(adjustedPrice) * parseFloat(productFields.fields_input.quantity);
             ReactGA.plugin.execute('ec', 'addProduct', {
               id: itemId,
               name: productFields.title,
