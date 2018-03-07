@@ -42,6 +42,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "babel-core": "^6.26.0",
+    "babel-engine-plugin": "^0.2.1",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
