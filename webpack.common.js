@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.png', '.jpg', '.gif'] // auto resolve file extensions when importing

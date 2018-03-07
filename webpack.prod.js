@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
@@ -11,7 +12,7 @@ module.exports = merge(common, {
   ],
   output: {
     filename: 'bundle.js',
-    path: __dirname + '/public',
+    path: path.resolve(__dirname, 'public'),
     publicPath: 'https://sleepy-citadel-40559.herokuapp.com/',
   },
   plugins: [
