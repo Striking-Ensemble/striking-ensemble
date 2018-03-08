@@ -18,15 +18,13 @@ exports.integration = (req, res) => {
 
 exports.purchaseConfirmCallback = (req, res) => {
   console.log('THIS GOT USED, purchase confirm', req.body);
-  for (let list in req.body.sites) {
-    let storeId = req.body.sites[list];
-    for (let key in storeId) {
-      let prodInfo = storeId[key];
-      console.log('Purchase Products Info:', prodInfo);
-      for (let objField in prodInfo['products']) {
-        let prodItem = prodInfo['products'][objField];
-        console.log('product_md5 info:', prodItem);
-      }
+  for (let storeId in req.body.sites) {
+    let productDetails = req.body.sites[storeId];
+    let prodInfo = productDetails['products'];
+    console.log('Purchase Products Info:', prodInfo);
+    for (let objField in prodInfo) {
+      let prodItem = prodInfo[objField];
+      console.log('product_md5 info:', prodItem);
     }
   };
   /*
