@@ -163,7 +163,7 @@ export default class Consumer extends Component {
             let numCheck;
             for (let objField in productDetails) {
               let infoArr = productDetails[objField];
-              if (infoArr > 1) {
+              if (infoArr.length > 1) {
                 console.log('INSIDE BIG ARR');
                 // might need to traverse the arr to check for ['extra_info'] field
                 let productMultiDetails = infoArr[1];
@@ -188,7 +188,8 @@ export default class Consumer extends Component {
                 }
               }
             }
-            console.log('DISCOUNT % WAS:', numCheck);
+            console.log(`DISCOUNT % for ${productFields.brand} WAS:`, numCheck);
+            console.log('adjustedPrice is:', adjustedPrice);
 
             revenueSoFar += parseFloat(adjustedPrice) * parseFloat(productFields.fields_input.quantity);
             ReactGA.plugin.execute('ec', 'addProduct', {
