@@ -28,7 +28,7 @@ exports.purchaseConfirmCallback = (req, res) => {
         console.log('product_md5 info:', prodItem);
       }
     }
-  });
+  };
   /*
   THIS GOT USED, purchase confirm {
     purchase_id: '5a792b00eeba220316d9a275',
