@@ -18,6 +18,11 @@ exports.integration = (req, res) => {
 
 exports.purchaseConfirmCallback = (req, res) => {
   console.log('THIS GOT USED, purchase confirm', req.body);
+  req.body.sites.forEach(storeId => {
+    storeId.forEach(productId => {
+      console.log('Purchase Product Info:', productId);
+    })
+  });
   /*
   THIS GOT USED, purchase confirm {
     purchase_id: '5a792b00eeba220316d9a275',
@@ -80,6 +85,7 @@ exports.purchaseConfirmCallback = (req, res) => {
      *   "description": "Still processing."
      * }
     */
+   console.log('/purchase/callback result:', body);
     res.send(body);
   });
 };
