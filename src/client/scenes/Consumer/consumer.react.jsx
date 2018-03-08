@@ -162,28 +162,34 @@ export default class Consumer extends Component {
             if (productFields.required_field_values.length > 1) {
               let productDetails = productFields.required_field_values;
               let numCheck;
-              if (productDetails['size type'] > 1) {
-                // might need to traverse the arr to check for ['extra_info'] field
-                let productMultiDetails = productDetails['size type'][1];
-                if (productMultiDetails.extra_info) {
-                  numCheck = productMultiDetails.extra_info.match(/\d/g);
-                  numCheck ? 
-                    adjustedPrice = dollarLess * ((100 - numCheck) / 100) 
-                    : 
-                    adjustedPrice = dollarLess
+              for (let objField in productDetails) {
+                let infoArr = productDetails[objField];
+                if (infoArr > 1) {
+                  console.log('INSIDE BIG ARR');
+                  // might need to traverse the arr to check for ['extra_info'] field
+                  let productMultiDetails = infoArr[1];
+                  if (productMultiDetails.extra_info) {
+                    numCheck = productMultiDetails.extra_info.match(/\d/g);
+                    numCheck ? 
+                      adjustedPrice = dollarLess * ((100 - numCheck) / 100) 
+                      : 
+                      adjustedPrice = dollarLess
+                  } else {
+                    adjustedPrice = dollarLess;
+                  }
                 } else {
-                  adjustedPrice = dollarLess;
-                }
-              } else {
-                if (productDetails['color'][0].extra_info) {
-                  numCheck = productDetails['color'][0].extra_info.match(/\d/g);
-                  numCheck ? 
-                    adjustedPrice = dollarLess * ((100 - numCheck) / 100) : 
-                    adjustedPrice = dollarLess
-                } else {
-                  adjustedPrice = dollarLess;
+                  console.log('INSIDE NEARLY 0 LENGTH ARR');
+                  if (infoArr[0].extra_info) {
+                    numCheck = infoArr[0].extra_info.match(/\d/g);
+                    numCheck ? 
+                      adjustedPrice = dollarLess * ((100 - numCheck) / 100) : 
+                      adjustedPrice = dollarLess
+                  } else {
+                    adjustedPrice = dollarLess;
+                  }
                 }
               }
+              console.log('DISCOUNT % WAS:', numCheck);
             }
             revenueSoFar += parseFloat(adjustedPrice) * parseFloat(productFields.fields_input.quantity);
             ReactGA.plugin.execute('ec', 'addProduct', {
