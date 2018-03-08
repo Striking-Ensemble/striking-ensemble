@@ -161,21 +161,24 @@ export default class Consumer extends Component {
             let adjustedPrice;
             if (productFields.required_field_values.length > 1) {
               let productDetails = productFields.required_field_values;
-              let NUM = 'replace this with a script that detects numbers on a string';
+              let numCheck;
               if (productDetails['size type'] > 1) {
                 // might need to traverse the arr to check for ['extra_info'] field
                 let productMultiDetails = productDetails['size type'][1];
                 if (productMultiDetails.extra_info) {
-                  productMultiDetails.extra_info.includes(NUM) ? 
-                  adjustedPrice = dollarLess * ((100 - NUM) / 100) : 
-                  adjustedPrice = dollarLess
+                  numCheck = productMultiDetails.extra_info.match(/\d/g);
+                  numCheck ? 
+                    adjustedPrice = dollarLess * ((100 - numCheck) / 100) 
+                    : 
+                    adjustedPrice = dollarLess
                 } else {
                   adjustedPrice = dollarLess;
                 }
               } else {
                 if (productDetails['color'][0].extra_info) {
-                  productDetails['color'][0].extra_info.includes(NUM) ? 
-                    adjustedPrice = dollarLess * ((100 - NUM) / 100) : 
+                  numCheck = productDetails['color'][0].extra_info.match(/\d/g);
+                  numCheck ? 
+                    adjustedPrice = dollarLess * ((100 - numCheck) / 100) : 
                     adjustedPrice = dollarLess
                 } else {
                   adjustedPrice = dollarLess;
