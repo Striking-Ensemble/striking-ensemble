@@ -170,18 +170,18 @@ export default class Consumer extends Component {
                 if (productMultiDetails.extra_info) {
                   numCheck = productMultiDetails.extra_info.match(/\d/g);
                   numCheck ? 
-                    adjustedPrice = dollarLess * ((100 - numCheck) / 100) 
+                    adjustedPrice = dollarLess * ((100 - numCheck.join('')) / 100) 
                     : 
                     adjustedPrice = dollarLess
                 } else {
                   adjustedPrice = dollarLess;
                 }
               } else {
-                console.log('INSIDE NEARLY 0 LENGTH ARR');
+                console.log('INSIDE 1 LENGTH or non-existing ARR');
                 if (infoArr[0].extra_info) {
                   numCheck = infoArr[0].extra_info.match(/\d/g);
                   numCheck ? 
-                    adjustedPrice = dollarLess * ((100 - numCheck) / 100) : 
+                    adjustedPrice = dollarLess * ((100 - numCheck.join('')) / 100) : 
                     adjustedPrice = dollarLess
                 } else {
                   adjustedPrice = dollarLess;
