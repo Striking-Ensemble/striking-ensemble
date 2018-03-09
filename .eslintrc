@@ -1,0 +1,12 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": "airbnb",
+    "rules": {
+    	"import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    	"react/jsx-filename-extension": 0
+    }
+}
