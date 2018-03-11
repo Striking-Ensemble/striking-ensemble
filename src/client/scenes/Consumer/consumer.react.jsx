@@ -251,7 +251,7 @@ export default class Consumer extends Component {
       image_norm: image_norm ? image_norm : null,
       video_low: video_low ? video_low : null,
       video_norm: video_norm ? video_norm : null,
-      retailLinks: post.retailLinks ? post.retailLinks : null
+      retailLinks: post.retailLinks ? post.retailLinks : null,
     });
 
     this.setState({ mediaIsLoaded: true, currentPost });
