@@ -153,53 +153,60 @@ export default class Consumer extends Component {
         // axios.post('/update-influencer-purchase-tracker', productLinksToUpdate);
         console.log('stuff to update for influencer\'s db:', productLinksToUpdate);
 
+        // iterate through the cart_contents field
         for (let storeId in data.cart_contents) {
+          // set storeList to a store
           let storeList = data.cart_contents[storeId]
+          // iterate the fields of a store
           for (let itemId in storeList) {
+            // set productFields to a product from a store we are in
             let productFields = storeList[itemId];
             let dollarLess = productFields.price.slice(1);
             let adjustedPrice;
-            let productDetails = productFields.required_field_values;
-            let numCheck;
-            for (let objField in productDetails) {
-              let infoArr = productDetails[objField];
-              if (infoArr.length > 1) {
-                console.log('INSIDE BIG ARR');
-                // might need to traverse the arr to check for ['extra_info'] field
-                let productMultiDetails = infoArr[1];
-                if (productMultiDetails.extra_info) {
-                  numCheck = productMultiDetails.extra_info.match(/\d/g);
-                  numCheck ? 
-                    adjustedPrice = dollarLess * ((100 - numCheck.join('')) / 100) 
-                    : 
-                    adjustedPrice = dollarLess
-                } else {
-                  adjustedPrice = dollarLess;
-                }
-              } else {
-                console.log('INSIDE 1 LENGTH or non-existing ARR');
-                if (infoArr[0].extra_info) {
-                  numCheck = infoArr[0].extra_info.match(/\d/g);
-                  numCheck ? 
-                    adjustedPrice = dollarLess * ((100 - numCheck.join('')) / 100) : 
-                    adjustedPrice = dollarLess
+            // check ******** FIX THIS. this assumes that we are checking an array
+            // but we are not!! we are checking an obj that has 1 field which has
+            // a value of an array
+            // this array is what we want to check for length
+            let productContainerKey = Object.keys(productFields.required_field_values)[0];
+            let productDetails = productFields.required_field_values[productContainerKey];
+            let discount;
+            // check if the arr has more than 1 product details
+            if (productDetails.length > 1) {
+              // fit arr : []
+              let productDetailsKeyArr = Object.keys(productDetails);
+              for (let i = 0; i < productDetailsKeyArr.length - 1; i++) {
+                let currentProductInfo = productDetails[productDetailsKeyArr[i]];
+                if (currentProductInfo.extra_info) {
+                  discount = currentProductInfo.extra_info.match(/\d/g);
+                  discount.length > 0 ?
+                  adjustedPrice = dollarLess * ((100 - discount.join('')) / 100) : 
+                  adjustedPrice = dollarLess
                 } else {
                   adjustedPrice = dollarLess;
                 }
               }
+            } else {
+              if (productDetails[0].extra_info) {
+                discount = productDetails[0].extra_info.match(/\d/g);
+                  discount.length > 0 ? 
+                  adjustedPrice = dollarLess * ((100 - discount.join('')) / 100) : 
+                  adjustedPrice = dollarLess
+              } else {
+                adjustedPrice = dollarLess;
+              }
             }
-            console.log(`DISCOUNT % for ${productFields.brand} WAS:`, numCheck);
-            console.log('adjustedPrice is:', adjustedPrice);
 
             revenueSoFar += parseFloat(adjustedPrice) * parseFloat(productFields.fields_input.quantity);
-            ReactGA.plugin.execute('ec', 'addProduct', {
+            let gaQuery = {
               id: itemId,
               name: productFields.title,
               brand: productFields.brand,
               price: adjustedPrice,
               quantity: productFields.fields_input.quantity,
               coupon: productFields.affiliate_link
-            });
+            };
+            console.log('HELP ME OUT:', gaQuery)
+            ReactGA.plugin.execute('ec', 'addProduct', gaQuery);
           }
         }
         ReactGA.plugin.execute('ec', 'setAction', 'purchase', {
