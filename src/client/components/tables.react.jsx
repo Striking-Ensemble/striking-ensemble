@@ -21,8 +21,8 @@ export function TableRow(props) {
   const { className, style, children } = props; // eslint-disable-line
   return (
     <tr
-      className={this.props.className}
-      style={this.props.style}
+      className={className}
+      style={style}
       ref={(node) => {
           this.tableRowNode = node;
           return this.tableRowNode;
