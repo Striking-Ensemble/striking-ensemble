@@ -172,11 +172,11 @@ export default class Consumer extends Component {
             let discount;
             // check if the arr has more than 1 product details
             if (productDetails.length > 1) {
-              // fit arr : []
               let productDetailsKeyArr = Object.keys(productDetails);
               for (let i = 0; i < productDetailsKeyArr.length - 1; i++) {
                 let currentProductInfo = productDetails[productDetailsKeyArr[i]];
                 if (currentProductInfo.extra_info) {
+                  // extract numbers from the string with discount info into an arr
                   discount = currentProductInfo.extra_info.match(/\d/g);
                   discount.length > 0 ?
                   adjustedPrice = dollarLess * ((100 - discount.join('')) / 100) : 
@@ -187,6 +187,7 @@ export default class Consumer extends Component {
               }
             } else {
               if (productDetails[0].extra_info) {
+                // extract numbers from the string with discount info into an arr
                 discount = productDetails[0].extra_info.match(/\d/g);
                   discount.length > 0 ? 
                   adjustedPrice = dollarLess * ((100 - discount.join('')) / 100) : 
@@ -195,7 +196,8 @@ export default class Consumer extends Component {
                 adjustedPrice = dollarLess;
               }
             }
-
+            let couponIndex = productFields.affiliate_link.indexOf('utm_campaign');
+            let couponId = productFields.affiliate_link.slice(couponIndex + 13);
             revenueSoFar += parseFloat(adjustedPrice) * parseFloat(productFields.fields_input.quantity);
             let gaQuery = {
               id: itemId,
@@ -203,7 +205,7 @@ export default class Consumer extends Component {
               brand: productFields.brand,
               price: adjustedPrice,
               quantity: productFields.fields_input.quantity,
-              coupon: productFields.affiliate_link
+              coupon: couponId
             };
             console.log('HELP ME OUT:', gaQuery)
             ReactGA.plugin.execute('ec', 'addProduct', gaQuery);
