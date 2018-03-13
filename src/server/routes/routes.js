@@ -19,6 +19,10 @@ reqRoutes.use(function timeLog(req, res, next) {
 reqRoutes.post('/logout', (req, res) => {
   console.log('LOGGING OUT USER:', req.body.username);
   req.logOut();
+  // attaches a new expiration date on the header
+  // so that cookie in browser will be delete since
+  // it is set to expire at this time
+  req.session.cookie.expires = new Date(Date.now());
   res.redirect(200, '/');
 });
 
