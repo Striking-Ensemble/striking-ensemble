@@ -45,8 +45,8 @@ app.use(cookieParser());
 app.use(session({
   secret: config.secret,
   name: 'cookie-cookie',
-  resave: false,
-  saveUninitialized: true,
+  resave: false, // should session be updated even no changes made to data in BE every page reload?
+  saveUninitialized: false, // should create cookie session even if user is not logged in? 
   cookie: {
     path: '/', httpOnly: true, secure: false, maxAge: null // changes needed for production
   }
