@@ -153,44 +153,62 @@ export default class Consumer extends Component {
         // axios.post('/update-influencer-purchase-tracker', productLinksToUpdate);
         console.log('stuff to update for influencer\'s db:', productLinksToUpdate);
 
+        // iterate through the cart_contents field
         for (let storeId in data.cart_contents) {
+          // set storeList to a store
           let storeList = data.cart_contents[storeId]
+          // iterate the fields of a store
           for (let itemId in storeList) {
+            // set productFields to a product from a store we are in
             let productFields = storeList[itemId];
             let dollarLess = productFields.price.slice(1);
             let adjustedPrice;
-            if (productFields.required_field_values.length > 1) {
-              let productDetails = productFields.required_field_values;
-              let NUM = 'replace this with a script that detects numbers on a string';
-              if (productDetails['size type'] > 1) {
-                // might need to traverse the arr to check for ['extra_info'] field
-                let productMultiDetails = productDetails['size type'][1];
-                if (productMultiDetails.extra_info) {
-                  productMultiDetails.extra_info.includes(NUM) ? 
-                  adjustedPrice = dollarLess * ((100 - NUM) / 100) : 
+            // check ******** FIX THIS. this assumes that we are checking an array
+            // but we are not!! we are checking an obj that has 1 field which has
+            // a value of an array
+            // this array is what we want to check for length
+            let productContainerKey = Object.keys(productFields.required_field_values)[0];
+            let productDetails = productFields.required_field_values[productContainerKey];
+            let discount;
+            // check if the arr has more than 1 product details
+            if (productDetails.length > 1) {
+              let productDetailsKeyArr = Object.keys(productDetails);
+              for (let i = 0; i < productDetailsKeyArr.length - 1; i++) {
+                let currentProductInfo = productDetails[productDetailsKeyArr[i]];
+                if (currentProductInfo.extra_info) {
+                  // extract numbers from the string with discount info into an arr
+                  discount = currentProductInfo.extra_info.match(/\d/g);
+                  discount.length > 0 ?
+                  adjustedPrice = dollarLess * ((100 - discount.join('')) / 100) : 
                   adjustedPrice = dollarLess
                 } else {
                   adjustedPrice = dollarLess;
                 }
+              }
+            } else {
+              if (productDetails[0].extra_info) {
+                // extract numbers from the string with discount info into an arr
+                discount = productDetails[0].extra_info.match(/\d/g);
+                  discount.length > 0 ? 
+                  adjustedPrice = dollarLess * ((100 - discount.join('')) / 100) : 
+                  adjustedPrice = dollarLess
               } else {
-                if (productDetails['color'][0].extra_info) {
-                  productDetails['color'][0].extra_info.includes(NUM) ? 
-                    adjustedPrice = dollarLess * ((100 - NUM) / 100) : 
-                    adjustedPrice = dollarLess
-                } else {
-                  adjustedPrice = dollarLess;
-                }
+                adjustedPrice = dollarLess;
               }
             }
+            let couponIndex = productFields.affiliate_link.indexOf('utm_campaign');
+            let couponId = productFields.affiliate_link.slice(couponIndex + 13);
             revenueSoFar += parseFloat(adjustedPrice) * parseFloat(productFields.fields_input.quantity);
-            ReactGA.plugin.execute('ec', 'addProduct', {
+            let gaQuery = {
               id: itemId,
               name: productFields.title,
               brand: productFields.brand,
               price: adjustedPrice,
               quantity: productFields.fields_input.quantity,
-              coupon: productFields.affiliate_link
-            });
+              coupon: couponId
+            };
+            console.log('HELP ME OUT:', gaQuery)
+            ReactGA.plugin.execute('ec', 'addProduct', gaQuery);
           }
         }
         ReactGA.plugin.execute('ec', 'setAction', 'purchase', {
@@ -235,7 +253,7 @@ export default class Consumer extends Component {
       image_norm: image_norm ? image_norm : null,
       video_low: video_low ? video_low : null,
       video_norm: video_norm ? video_norm : null,
-      retailLinks: post.retailLinks ? post.retailLinks : null
+      retailLinks: post.retailLinks ? post.retailLinks : null,
     });
 
     this.setState({ mediaIsLoaded: true, currentPost });

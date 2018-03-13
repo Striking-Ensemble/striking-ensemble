@@ -60,7 +60,7 @@ export default class RetailForm extends Component {
             removeQueryParameters: ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'siteId', 'cm_mmc']
           });
           // insert our own signature campaign
-          const campaignBuilder = '&utm_source=strikingensemble.com&utm_medium=affiliate';
+          const campaignBuilder = `&utm_source=strikingensemble.com&utm_medium=affiliate&utm_campaign=${user._id}`;
           // check if list of params already exists in url
           if (item.value.includes('?')) {
             affiliateLinkBuilder = `${normUrl + campaignBuilder}`;

@@ -377,7 +377,7 @@ exports.getPostCatalog = (req, res) => {
 
 exports.getReports = (req, res) => {
   console.log('getting REPORTS with BODY:', req.body);
-  const { affiliateLink, dimensions, metrics } = req.body;
+  const { influencerId, dimensions, metrics } = req.body;
   const VIEW_ID = 'ga:168623324';
   jwtClient.authorize((err, tokens) => {
     if (err) {
@@ -390,7 +390,7 @@ exports.getReports = (req, res) => {
       'ids': VIEW_ID,
       'dimensions': dimensions,
       'metrics': metrics,
-      'filters': `ga:productCouponCode=@${affiliateLink}`,
+      'filters': `ga:productCouponCode=@${influencerId}`,
       "start-date": req.body['start-date'],
       "end-date": req.body['end-date']
     }, (err, response) => {

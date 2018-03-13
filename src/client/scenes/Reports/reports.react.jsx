@@ -33,7 +33,7 @@ export default class Reports extends Component {
     */
 
     let queryTable = this.queryReportBuilder(
-      this.props.user.affiliateLink,
+      this.props.user._id,
       "ga:productBrand,ga:productName",
       "ga:itemQuantity,ga:itemRevenue,ga:calcMetric_Commisions",
       "30daysAgo",
@@ -53,7 +53,7 @@ export default class Reports extends Component {
   /**
    * @method queryReportBuilder
    * 
-   * @param {String} affiliateLink 
+   * @param {String} influencerId 
    * @param {String} dimensions 
    * @param {String} metrics 
    * @param {String} startDate 
@@ -61,9 +61,9 @@ export default class Reports extends Component {
    *  
    * @returns {Object}
    */
-  queryReportBuilder(affiliateLink, dimensions, metrics, startDate, endDate) {
+  queryReportBuilder(influencerId, dimensions, metrics, startDate, endDate) {
     return {
-      'affiliateLink': affiliateLink,
+      'influencerId': influencerId,
       'dimensions': dimensions,
       'metrics': metrics,
       'start-date': startDate,
