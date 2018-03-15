@@ -45,8 +45,11 @@ app.use(cookieParser());
 app.use(session({
   secret: config.secret,
   name: 'cookie-cookie',
+  // Forces the session to be saved back to the session store,
+  // even if the session was never modified during the request
   resave: false,
-  saveUninitialized: true,
+  // should we create cookie session even if user is not logged in?
+  saveUninitialized: false, 
   cookie: {
     path: '/', httpOnly: true, secure: false, maxAge: null // changes needed for production
   }

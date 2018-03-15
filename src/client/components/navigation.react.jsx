@@ -1,3 +1,4 @@
+import store from 'store';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -5,6 +6,11 @@ const Navigation = (props) => {
   const { location } = props; // eslint-disable-line
   // <li> classnames here helps to identify which tab should be highlighted
   // depending on the current location => props.location
+  
+  const logoutHandle = (e) => {
+    store.remove('user');
+  };
+
   return (
     <nav className="navbar navbar-inverse navbar-fixed-top">
       <div className="container-fluid">
@@ -34,7 +40,7 @@ const Navigation = (props) => {
           </ul>
           <ul className="nav navbar-nav navbar-right">
             <li>
-              <Link to="/logout" id="logout-button" className="btn btn-danger log" data-toggle="collapse" data-target=".navbar-collapse.in">Logout</Link>
+              <Link to="/logout" onClick={logoutHandle} id="logout-button" className="btn btn-danger log" data-toggle="collapse" data-target=".navbar-collapse.in">Logout</Link>
             </li>
           </ul>
         </div>
