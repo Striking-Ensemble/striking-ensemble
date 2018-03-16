@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 let mongoUri;
 if (process.env.HostedDB === 'false') {
   mongoUri = 'mongodb://localhost/influencers';
@@ -16,8 +17,8 @@ const dbOptions = {
   reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
   reconnectInterval: 500, // Reconnect every 500ms
   // If not connected, return errors immediately rather than waiting for reconnect
-  // Set this option to 0 and set bufferCommands to *false on your schemas 
-  // If you want your database operations to fail immediately 
+  // Set this option to 0 and set bufferCommands to *false on your schemas
+  // If you want your database operations to fail immediately
   // When the driver is not connected,
   bufferMaxEntries: 0,
   keepAlive: 300000, // for long running applications
@@ -25,8 +26,8 @@ const dbOptions = {
   socketTimeoutMS: 300000,
   // sockets may need to be increased if we have few slow queries
   // blocking faster queries. Default: 5
-  poolSize: 5
-}
+  poolSize: 5,
+};
 // Connect Mongoose to our local MongoDB via URI
 mongoose.connect(mongoUri, dbOptions);
 
