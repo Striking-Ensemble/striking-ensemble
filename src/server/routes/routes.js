@@ -26,9 +26,7 @@ reqRoutes.post('/logout', (req, res) => {
   res.redirect(200, '/');
 });
 
-reqRoutes.get('/auth/instagram', passport.authenticate('instagram'), 
-  (req, res) => {}
-);
+reqRoutes.get('/auth/instagram', passport.authenticate('instagram'));
 
 reqRoutes.get('/auth/instagram/callback', 
   passport.authenticate('instagram', { failureRedirect: '/login' }), 
