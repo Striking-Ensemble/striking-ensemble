@@ -123,7 +123,7 @@ exports.getStripeTransfers = async (req, res) => {
 exports.payout = async (req, res) => {
   const influencer = req.user;
   try {
-    // Fetch the account balance for find available funds.
+    // Fetch the account balance to find available funds.
     const balance = await stripe.balance.retrieve({ stripe_account: influencer.stripeAccountId });
     // This instance only uses USD so we'll just use the first available balance.
     // Note: There are as many balances as currencies used in your application.
@@ -149,6 +149,28 @@ exports.payout = async (req, res) => {
   }
   // Redirect to the pilot dashboard.
   res.redirect('/billing');
+};
+
+exports.getPayoutList = async (req, res) => {
+  const influencer = req.user;
+  const options = {
+    stripe_account: influencer.stripeAccountId
+  };
+  try {
+    const payoutList = await stripe.payouts.list(
+      {
+        limit: 3
+      }, 
+      options, 
+      (err, payout) => {
+        console.log('getPayoutList:', payout);
+        res.send(payout.data);
+      }
+    );
+  } catch (err) {
+    console.log('ERR IN PAYOUT REQ', err);
+    res.status(400).end();
+  }
 };
 
 /**
