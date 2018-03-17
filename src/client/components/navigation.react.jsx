@@ -26,7 +26,7 @@ const Navigation = (props) => {
         <div className="collapse navbar-collapse" id="navbar-header-content">
           <ul className="nav navbar-nav">
             <li className={location.pathname === '/' || location.pathname.includes('account') ? 'active' : ''}>
-              <Link to="/account" data-toggle="collapse" data-target=".navbar-collapse.in">Home <span className="sr-only">(current)</span></Link>
+              <Link to="/home" data-toggle="collapse" data-target=".navbar-collapse.in">Home <span className="sr-only">(current)</span></Link>
             </li>
             <li className={location.pathname.includes('/reports') ? 'active' : ''}>
               <Link to="/reports" data-toggle="collapse" data-target=".navbar-collapse.in" role="button">Reports</Link>

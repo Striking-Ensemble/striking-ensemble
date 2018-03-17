@@ -33,7 +33,7 @@ export default class Influencer extends Component {
     const { location, match } = this.props;
     const rootUrl = store.get('URL').root_url;
 
-    if (match.path == '/account/p/:id') {
+    if (match.path == '/home/p/:id') {
       return axios.get(`${rootUrl}/account/post/${match.params.id}`)
         .then(
           res => {
@@ -74,11 +74,11 @@ export default class Influencer extends Component {
           console.log(err);
         });
       }
-      if (nextProps.location.pathname === `/account/p/${this.state.postLog.instaId}`) {
+      if (nextProps.location.pathname === `/home/p/${this.state.postLog.instaId}`) {
         // set it as the new currentPost
         this.setState({ currentPost: this.state.postLog });
       }
-      if (nextProps.location.pathname === '/account') {
+      if (nextProps.location.pathname === '/home') {
         this.removeCurrentPost();
       }
     }

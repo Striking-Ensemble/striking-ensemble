@@ -19,7 +19,7 @@ export default class PostListItem extends Component {
   render () {
     return (
       <div className="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-        <Link to={`/account/p/${this.props.instaId}`} onClick={this.handleClick}>
+        <Link to={`/home/p/${this.props.instaId}`} onClick={this.handleClick}>
           <img src={this.props.image_thumb.url} className="img-responsive" alt="instagram post" />
         </Link>
       </div>

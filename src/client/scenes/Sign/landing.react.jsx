@@ -100,7 +100,7 @@ export default class Landing extends Component {
       return (
         <div className="col-lg-5 col-md-5 col-sm-5 col-xs-12 col-md-offset-1">
           <h3>Continue to Your Account:</h3>
-          <Link to='/account'>Enter</Link>
+          <Link to='/home'>Enter</Link>
           <p> or </p>
           <Link to='/logout'>Sign Out</Link>
         </div>
@@ -121,7 +121,7 @@ export default class Landing extends Component {
   render() {
     // location.state doesn't work here yet due to page
     // redirect from server when clicking log in instagram
-    const { from } = this.props.location.state || { from: { pathname: '/account' } };
+    const { from } = this.props.location.state || { from: { pathname: '/home' } };
     if (this.state.redirectToReferrer) {
       return <Redirect to={from.pathname} />
     }
