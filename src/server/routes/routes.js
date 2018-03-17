@@ -50,6 +50,7 @@ reqRoutes.get('/account', influencerRequired, (req, res) => {
         res.redirect(404, '/login');
       }
       let temp = user;
+      temp.accessToken = undefined;
       temp.media = undefined;
       res.send(temp);
     }
