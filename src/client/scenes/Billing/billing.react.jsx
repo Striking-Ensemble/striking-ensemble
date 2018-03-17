@@ -2,10 +2,11 @@ import axios from 'axios';
 import store from 'store';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import isAuthenticated from '../../services/isAuthenticated';
 import LoadingSpinner from '../../components/loadingSpinner.react';
 import FourOhFour from '../../components/fourOhFour.react';
 import Navigation from '../../components/navigation.react';
-import isAuthenticated from '../../services/isAuthenticated';
+import PayoutList from './payoutList.react'; 
 
 export default class Billing extends Component {
   constructor(props) {
@@ -14,6 +15,8 @@ export default class Billing extends Component {
     this.state = {
       error: null,
       isLoaded: false,
+      payoutIsLoaded: false,
+      payoutList: [],
       user: {}
     }
 
@@ -21,6 +24,7 @@ export default class Billing extends Component {
     this.renderDashboard = this.renderDashboard.bind(this);
     this.renderStripeOnboarding = this.renderStripeOnboarding.bind(this);
     this.handleStripeDeactivate = this.handleStripeDeactivate.bind(this);
+    this.renderPayoutList = this.renderPayoutList.bind(this);
   }
 
   componentDidMount() {
@@ -37,6 +41,16 @@ export default class Billing extends Component {
           this.setState({ user: store.get('user').data, isLoaded: true });
         })
       }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.user != prevState.user) {
+      axios.get(store.get('URL').root_url + '/billing/stripe/payout-list')
+        .then(res => {
+          console.log('MY PAYOUT LIST res.data', res.data);
+          this.setState({ payoutList: res.data, payoutIsLoaded: true });
+        })
     }
   }
 
@@ -73,6 +87,9 @@ export default class Billing extends Component {
             </div>
             <div className="col-lg-2 col-md-2 col-sm-3 col-xs-5">
               <a href="/billing/stripe/transfers" className="btn btn-default">View Transfers</a>
+            </div>
+            <div className="col-lg-2 col-md-2 col-sm-3 col-xs-5">
+              <h4>$0.00</h4>
               <form method="post" onSubmit={this.handlePayoutNow}>
                 <button className="btn btn-success" type="submit">Pay Out Now</button>
               </form>
@@ -107,6 +124,14 @@ export default class Billing extends Component {
     }
   }
 
+  renderPayoutList() {
+    return (
+      <PayoutList 
+        payoutList={this.state.payoutList}
+      />
+    )
+  }
+
   render() {
     if (this.state.error) {
       return (<FourOhFour />)
@@ -114,7 +139,14 @@ export default class Billing extends Component {
     if (!this.state.isLoaded) {
       return <LoadingSpinner />
     } else {
-      return this.renderStripeOnboarding();
+      return (
+        <div>
+          {this.renderStripeOnboarding()}
+          <div className="row">
+            {this.renderPayoutList()}
+          </div>
+        </div>
+      )
     }
   }
 };
