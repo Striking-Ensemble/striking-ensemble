@@ -27,7 +27,8 @@ const influencerSchema = Schema({
     type: String,
     unique: true
   },
-  stripeAccountId: String
+  stripeAccountId: String,
+  accessToken: String
 });
 
 // Register the schema with Mongoose as the Influencer collection
