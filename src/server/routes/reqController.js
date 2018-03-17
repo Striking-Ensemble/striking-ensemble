@@ -93,6 +93,23 @@ exports.getStripeToken = (req, res) => {
 };
 
 /**
+ * GET /billing/stripe/balance
+ *
+ * Retrieve user account available and pending balances.
+ */
+exports.getBalance = async (req, res) => {
+  const influencer = req.user;
+  try {
+    const balance = await stripe.balance.retrieve({ stripe_account: influencer.stripeAccountId })
+    console.log('User balance object is:', balance);
+    res.send(balance);
+  } catch (err) {
+    console.log('Failed to retrieve balance.', err);
+    return res.redirect('/login');
+  }
+};
+
+/**
  * GET /billing/stripe/transfers
  *
  * Redirect to Stripe to view transfers and edit payment details.
@@ -151,6 +168,11 @@ exports.payout = async (req, res) => {
   res.redirect('/billing');
 };
 
+/**
+ * GET /billing/stripe/payout-list
+ *
+ * Retrieve a list of payout history.
+ */
 exports.getPayoutList = async (req, res) => {
   const influencer = req.user;
   const options = {
