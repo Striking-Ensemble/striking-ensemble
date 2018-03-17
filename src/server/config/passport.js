@@ -7,9 +7,7 @@ module.exports = (passport) => {
     function (accessToken, refreshToken, profile, done) {
       // will be used under req.authInfo
       // only accessible up until passport finishes auth
-      let info = {
-        accessToken: accessToken
-      }
+      let info = {};
 
       Influencer.findOne({
         _id: profile.id 
@@ -27,7 +25,8 @@ module.exports = (passport) => {
             bio: data.bio,
             website: data.website,
             is_business: data.is_business,
-            affiliateLink: `https://strikingensemble.com/${data.username}`
+            affiliateLink: `https://strikingensemble.com/${data.username}`,
+            accessToken: accessToken
           }, { bufferCommands: false });
           info.newUser = true;
           user.save((err) => {
