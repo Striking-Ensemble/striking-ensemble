@@ -16,6 +16,7 @@ export default class Billing extends Component {
       error: null,
       isLoaded: false,
       payoutIsLoaded: false,
+      balance: {},
       payoutList: [],
       user: {}
     }
@@ -45,11 +46,17 @@ export default class Billing extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const rootUrl = store.get('URL').root_url;
     if (this.state.user != prevState.user) {
-      axios.get(store.get('URL').root_url + '/billing/stripe/payout-list')
+      axios.get(rootUrl + '/billing/stripe/payout-list')
         .then(res => {
           console.log('MY PAYOUT LIST res.data', res.data);
           this.setState({ payoutList: res.data, payoutIsLoaded: true });
+        });
+      axios.get(rootUrl + '/billing/stripe/balance')
+        .then(res => {
+          console.log('balance obj is', res.data);
+          this.setState({ balance: res.data });
         })
     }
   }
@@ -89,7 +96,8 @@ export default class Billing extends Component {
               <a href="/billing/stripe/transfers" className="btn btn-default">View Transfers</a>
             </div>
             <div className="col-lg-2 col-md-2 col-sm-3 col-xs-5">
-              <h4>$0.00</h4>
+              <h4><small>Available:</small> {this.state.balance ? `$ ${this.state.balance.available[0].amount.toFixed(2)}` : 'Unavailable'}</h4>
+              <h4><small>Pending:</small> {this.state.balance ? `$ ${this.state.balance.pending[0].amount.toFixed(2)}` : 'Unavailable'}</h4>
               <form method="post" onSubmit={this.handlePayoutNow}>
                 <button className="btn btn-success" type="submit">Pay Out Now</button>
               </form>
