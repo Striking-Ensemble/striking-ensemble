@@ -52,19 +52,19 @@ let sess = {
 };
 
 if (app.get('env') !== 'production') {
-  const store = new MongoDBStore(
-    {
-      uri: `mongodb://localhost:27017/connect_mongodb_session`,
-      databaseName: 'connect_mongodb_session',
-      collection: 'influencerSessions'
-    },
-    function (error) { console.log('Can\'t connect to MongoDB sessions', error) }
-  );
-  // Catch errors
-  store.on('error', (error) => {
-    console.log('Caught error to MongoDB sessions', error);
-  });
-  sess.store = store;
+  // const store = new MongoDBStore(
+  //   {
+  //     uri: `mongodb://localhost:27017/connect_mongodb_session`,
+  //     databaseName: 'connect_mongodb_session',
+  //     collection: 'influencerSessions'
+  //   },
+  //   function (error) { console.log('Can\'t connect to MongoDB sessions', error) }
+  // );
+  // // Catch errors
+  // store.on('error', (error) => {
+  //   console.log('Caught error to MongoDB sessions', error);
+  // });
+  // sess.store = store;
   sess.cookie = {
     path: '/', httpOnly: true, secure: false, maxAge: null
   }
@@ -92,11 +92,11 @@ if (app.get('env') !== 'production') {
       databaseName: 'connect_mongodb_session',
       collection: 'influencerSessions'
     },
-    (error) => console.log('Can\'t connect to MongoDB sessions', error)
+    (error) => console.log('Can\'t connect to MongoDB sessions inside the store', error)
   )
   // Catch errors
   store.on('error', (error) => {
-    console.log('Caught error to MongoDB sessions', error);
+    console.log('Caught error to MongoDB sessions on catch', error);
   });
   sess.store = store;
   sess.cookie = {
