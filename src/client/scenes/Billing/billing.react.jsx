@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import isAuthenticated from '../../services/isAuthenticated';
 import LoadingSpinner from '../../components/loadingSpinner.react';
+import LoadingBars from '../../components/loadingBars.react';
 import FourOhFour from '../../components/fourOhFour.react';
 import Navigation from '../../components/navigation.react';
 import PayoutList from './payoutList.react'; 
@@ -26,6 +27,7 @@ export default class Billing extends Component {
     this.renderStripeOnboarding = this.renderStripeOnboarding.bind(this);
     this.handleStripeDeactivate = this.handleStripeDeactivate.bind(this);
     this.renderPayoutList = this.renderPayoutList.bind(this);
+    this.handleTransfer = this.handleTransfer.bind(this);
   }
 
   componentDidMount() {
@@ -52,13 +54,21 @@ export default class Billing extends Component {
         .then(res => {
           console.log('MY PAYOUT LIST res.data', res.data);
           this.setState({ payoutList: res.data, payoutIsLoaded: true });
-        });
-      axios.get(rootUrl + '/billing/stripe/balance')
+          return axios.get(rootUrl + '/billing/stripe/balance')
+        })
         .then(res => {
           console.log('balance obj is', res.data);
           this.setState({ balance: res.data });
         })
     }
+  }
+
+  handleTransfer(e) {
+    e.preventDefault();
+    axios.get(store.get('URL').root_url + '/billing/stripe/transfer-funds')
+      .then(res => {
+        console.log('TESTY:', res.data);
+      })
   }
 
   handlePayoutNow(e) {
@@ -96,10 +106,15 @@ export default class Billing extends Component {
               <a href="/billing/stripe/transfers" className="btn btn-default">View Transfers</a>
             </div>
             <div className="col-lg-2 col-md-2 col-sm-3 col-xs-5">
-              <h4><small>Available:</small> {this.state.balance ? `$ ${this.state.balance.available[0].amount.toFixed(2)}` : 'Unavailable'}</h4>
-              <h4><small>Pending:</small> {this.state.balance ? `$ ${this.state.balance.pending[0].amount.toFixed(2)}` : 'Unavailable'}</h4>
+              <h4><small>Available:</small> {this.state.balance.available ? `$ ${this.state.balance.available[0].amount.toFixed(2)}` : <LoadingBars />}</h4>
+              <h4><small>Pending:</small> {this.state.balance.pending ? `$ ${this.state.balance.pending[0].amount.toFixed(2)}` : <LoadingBars />}</h4>
               <form method="post" onSubmit={this.handlePayoutNow}>
                 <button className="btn btn-success" type="submit">Pay Out Now</button>
+              </form>
+            </div>
+            <div className="col-lg-2 col-md-2 col-sm-3 col-xs-5">
+             <form method="post" onSubmit={this.handleTransfer}>
+                <button className="btn btn-success" type="submit">Transfer Funds</button>
               </form>
             </div>
             <div className="col-lg-2 col-md-2 col-sm-3 col-xs-7">
