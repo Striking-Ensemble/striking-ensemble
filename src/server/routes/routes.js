@@ -78,6 +78,7 @@ reqRoutes.get('/billing/stripe/authorize', influencerRequired, reqController.set
 reqRoutes.get('/billing/stripe/token', influencerRequired, reqController.getStripeToken);
 reqRoutes.get('/billing/stripe/balance', influencerRequired, reqController.getBalance);
 reqRoutes.get('/billing/stripe/transfers', influencerRequired, reqController.getStripeTransfers);
+reqRoutes.get('/billing/stripe/transfer-funds', influencerRequired, reqController.transferFund);
 reqRoutes.post('/billing/stripe/payout', influencerRequired, reqController.payout);
 reqRoutes.get('/billing/stripe/payout-list', influencerRequired, reqController.getPayoutList);
 reqRoutes.post('/billing/stripe/deactivate', influencerRequired, reqController.deactivate);

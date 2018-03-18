@@ -132,6 +132,62 @@ exports.getStripeTransfers = async (req, res) => {
   }
 };
 
+exports.transferFund = async (req, res) => {
+  // create a charge to send funds to account in order
+  // to resolve insufficient funds
+  // stripe.charges.create({
+  //   amount: 10000,
+  //   currency: "usd",
+  //   source: "tok_amex", // obtained with Stripe.js
+  //   description: "Charge for npatrick.romana@example.com",
+  //   destination: 
+  // })
+  const influencer = req.user;
+  // retrieve influencer earnings from GA Analytics
+  const VIEW_ID = 'ga:168623324';
+  jwtClient.authorize((err, tokens) => {
+    if (err) {
+      console.log('ERROR IN jwtClient auth', err);
+      return;
+    }
+    // utm_campaign = ${ influencer._id }
+    let analytics = google.analytics('v3');
+    analytics.data.ga.get({
+      'auth': jwtClient,
+      'ids': VIEW_ID,
+      'dimensions': 'ga:productName',
+      'metrics': 'ga:calcMetric_Commisions',
+      'filters': `ga:productCouponCode=@1163789244`,
+      "start-date": '7daysAgo',
+      "end-date": 'yesterday'
+    }, (err, response) => {
+      if (err) {
+        console.log('ERROR in get analytics', err);
+        return;
+      }
+      console.log('My ANAL REPORT:', response.data.rows);
+      // NEED TO CHECK IF ALL RESPONSE IS PAGINATED
+      let totalCommision = 0;
+      response.data.rows.forEach(product => {
+        // amount in cents
+        totalCommision += Math.floor(Number(product[1]) * 100);
+      });
+      stripe.transfers.create({
+        amount: totalCommision,
+        currency: 'usd',
+        destination: influencer.stripeAccountId
+      }, (err, transfer) => {
+        if (err) {
+          console.log('ERROR IN TRANSFER', err);
+          res.send('Error occured upon transfering funds. Please contact customer support');
+        } else {
+          res.send(`Success! Transfered the amount of $${totalCommision}`);
+        }
+      })
+    })
+  });
+}
+
 /**
  * POST /billing/stripe/payout
  *
@@ -422,7 +478,6 @@ exports.getPostCatalog = (req, res) => {
  *
  * Get Google Analytics Reports
  */
-
 exports.getReports = (req, res) => {
   console.log('getting REPORTS with BODY:', req.body);
   const { influencerId, dimensions, metrics } = req.body;
