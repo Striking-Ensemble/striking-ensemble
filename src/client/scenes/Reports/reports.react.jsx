@@ -33,7 +33,7 @@ export default class Reports extends Component {
     */
 
     let queryTable = this.queryReportBuilder(
-      this.props.user._id,
+      `utm_campaign=${this.props.user._id}`,
       "ga:productBrand,ga:productName",
       "ga:itemQuantity,ga:itemRevenue,ga:calcMetric_Commisions",
       "30daysAgo",
@@ -52,8 +52,10 @@ export default class Reports extends Component {
 
   /**
    * @method queryReportBuilder
-   * 
-   * @param {String} influencerId 
+   * the GA Reporting API deeply matches our param to the coupon
+   * ex: param: utm_campaign=influencerId is matched with 
+   * https://perryellis.com/...?&utm_source=strikingensemble.com...&utm_campaign=329031719
+   * @param {String} influencerId
    * @param {String} dimensions 
    * @param {String} metrics 
    * @param {String} startDate 
