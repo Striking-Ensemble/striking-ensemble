@@ -35,6 +35,6 @@ module.exports = {
   },
   googleService: {
     client_email: process.env.GoogleService_clientEmail,
-    private_key: process.env.GoogleService_privateKey
+    private_key: googleService_privateKey
   }
 };
