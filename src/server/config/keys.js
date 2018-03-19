@@ -6,11 +6,7 @@ if (process.env.NODE_ENV !== 'production') {
   hostUri = 'https://sleepy-citadel-40559.herokuapp.com/auth/instagram/callback';
 }
 
-let googleService_privateKey;
-console.log('are we live?', process.env.GoogleService_privateKey);
-if (process.env.GoogleService_privateKey) {
-  googleService_privateKey = process.env.GoogleService_privateKey.split('\n').join('\n');
-}
+console.log('SANITY CHECK:', process.env.GoogleService_privateKey);
 
 module.exports = {
   secret: 'sessionSecret',
