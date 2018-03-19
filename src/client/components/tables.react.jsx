@@ -7,6 +7,7 @@ export function Table(props) {
       className={className}
       style={style}
       ref={(node) => {
+          console.log('THIS ON TABLE', this);
           this.tableNode = node;
           return this.tableNode;
         }
@@ -24,6 +25,7 @@ export function TableRow(props) {
       className={className}
       style={style}
       ref={(node) => {
+          console.log('inside row node this is:', this);
           this.tableRowNode = node;
           return this.tableRowNode;
         }
