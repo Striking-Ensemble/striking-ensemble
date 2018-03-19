@@ -6,8 +6,6 @@ if (process.env.NODE_ENV !== 'production') {
   hostUri = 'https://sleepy-citadel-40559.herokuapp.com/auth/instagram/callback';
 }
 
-console.log('SANITY CHECK:', process.env.GoogleService_privateKey);
-
 module.exports = {
   secret: 'sessionSecret',
   // Configuration for Instagram Passport

@@ -42,6 +42,7 @@ export default class Reports extends Component {
 
     axios.post(`${rootUrl}/reports/affiliate`, queryTable)
       .then(res => {
+        console.log('SANITY CHECK:', res.data);
         const { columnHeaders, rows, totalsForAllResults } = res.data;
         this.setState({ ready: true, productData: {columnHeaders, rows, totalsForAllResults} });
       })
@@ -127,6 +128,7 @@ export default class Reports extends Component {
 
   renderTCell() {
     if (this.state.productData.rows) {
+      console.log('DATA RETRIEVED... RENDERING TABLE');
       return this.state.productData.rows.map((item, index) => {
           return (
             <TableRow key={`row_${index}`}>
@@ -135,6 +137,7 @@ export default class Reports extends Component {
           )
         })
     } else {
+      console.log('NO REPORTS... RENDERING GENERAL RESPONSE!');
       return (
         <TableRow>
           <td>*No activity history available for the past 30 days</td>
