@@ -478,17 +478,17 @@ exports.getPostCatalog = (req, res) => {
  *
  * Get Google Analytics Reports
  */
-exports.getReports = (req, res) => {
+exports.getReports = async (req, res) => {
   console.log('getting REPORTS with BODY:', req.body);
   const { influencerId, dimensions, metrics } = req.body;
   const VIEW_ID = 'ga:168623324';
-  jwtClient.authorize((err, tokens) => {
+  await jwtClient.authorize((err, tokens) => {
     if (err) {
       console.log('ERROR IN jwtClient auth', err);
       return;
     }
     let analytics = google.analytics('v3');
-    analytics.data.ga.get({
+    await analytics.data.ga.get({
       'auth': jwtClient,
       'ids': VIEW_ID,
       'dimensions': dimensions,

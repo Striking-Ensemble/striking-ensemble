@@ -7,6 +7,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 let googleService_privateKey;
+console.log('are we live?', process.env.GoogleService_privateKey);
 if (process.env.GoogleService_privateKey) {
   googleService_privateKey = process.env.GoogleService_privateKey.split('\n').join('\n');
 }
