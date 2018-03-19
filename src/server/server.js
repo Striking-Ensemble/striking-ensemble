@@ -89,7 +89,7 @@ if (app.get('env') !== 'production') {
   const store = new MongoDBStore(
     {
       uri: `mongodb://${process.env.DBUser}:${process.env.DBPass}@ds249707.mlab.com:49707/striking-ensemble-sandbox-db`,
-      databaseName: 'striking-ensemble-sandbox-db',
+      databaseName: 'striking-ensemble-sandbox-db', // must match with the uri name above
       collection: 'influencerSessions'
     },
     (error) => console.log('Can\'t connect to MongoDB sessions inside the store', error)
