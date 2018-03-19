@@ -488,7 +488,7 @@ exports.getReports = async (req, res) => {
       return;
     }
     let analytics = google.analytics('v3');
-    await analytics.data.ga.get({
+    analytics.data.ga.get({
       'auth': jwtClient,
       'ids': VIEW_ID,
       'dimensions': dimensions,
