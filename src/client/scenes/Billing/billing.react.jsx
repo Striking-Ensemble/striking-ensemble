@@ -19,6 +19,7 @@ export default class Billing extends Component {
       payoutIsLoaded: false,
       balance: {},
       payoutList: [],
+      commisions: 0,
       user: {}
     }
 
@@ -59,6 +60,11 @@ export default class Billing extends Component {
         .then(res => {
           console.log('balance obj is', res.data);
           this.setState({ balance: res.data });
+          return axios.get('/billing/stripe/commision-info')
+        })
+        .then(res => {
+          console.log('commision amount is:', res.data);
+          this.setState({ commisions: res.data })
         })
     }
   }
@@ -109,10 +115,11 @@ export default class Billing extends Component {
               <h4><small>Available:</small> {this.state.balance.available ? `$ ${this.state.balance.available[0].amount.toFixed(2)}` : <LoadingBars />}</h4>
               <h4><small>Pending:</small> {this.state.balance.pending ? `$ ${this.state.balance.pending[0].amount.toFixed(2)}` : <LoadingBars />}</h4>
               <form method="post" onSubmit={this.handlePayoutNow}>
-                <button className="btn btn-success" type="submit">Pay Out Now</button>
+                <button className="btn btn-success" type="submit">Pay Out to Bank</button>
               </form>
             </div>
             <div className="col-lg-2 col-md-2 col-sm-3 col-xs-5">
+              <h4><small>Commisions:</small> {this.state.commisions ? `${this.state.commisions}` : <LoadingBars />}</h4>
              <form method="post" onSubmit={this.handleTransfer}>
                 <button className="btn btn-success" type="submit">Transfer Funds</button>
               </form>
