@@ -77,6 +77,7 @@ reqRoutes.post('/purchase_updated_callback', integrations.purchaseUpdatedCallbac
 reqRoutes.get('/billing/stripe/authorize', influencerRequired, reqController.setupPayment);
 reqRoutes.get('/billing/stripe/token', influencerRequired, reqController.getStripeToken);
 reqRoutes.get('/billing/stripe/balance', influencerRequired, reqController.getBalance);
+reqRoutes.get('/billing/stripe/commision-info', influencerRequired, reqController.getCommisionInfo);
 reqRoutes.get('/billing/stripe/transfers', influencerRequired, reqController.getStripeTransfers);
 reqRoutes.get('/billing/stripe/transfer-funds', influencerRequired, reqController.transferFund);
 reqRoutes.post('/billing/stripe/payout', influencerRequired, reqController.payout);

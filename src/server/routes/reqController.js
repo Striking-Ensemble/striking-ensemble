@@ -108,6 +108,45 @@ exports.getBalance = async (req, res) => {
     return res.redirect('/login');
   }
 };
+/**
+ * GET /billing/stripe/commision-info
+ *
+ * Retrieve user's past 14-day available commisions.
+ */
+exports.getCommisionInfo = async (req, res) => {
+  const influencer = req.user;
+  // retrieve influencer earnings from GA Analytics
+  const VIEW_ID = 'ga:168623324';
+  await jwtClient.authorize((err, tokens) => {
+    if (err) {
+      console.log('ERROR IN jwtClient auth', err);
+      return;
+    }
+    // utm_campaign = ${ influencer._id }
+    let analytics = google.analytics('v3');
+    analytics.data.ga.get({
+      'auth': jwtClient,
+      'ids': VIEW_ID,
+      'dimensions': 'ga:productName',
+      'metrics': 'ga:calcMetric_Commisions',
+      'filters': `ga:productCouponCode=@1163789244`,
+      "start-date": '14daysAgo',
+      "end-date": 'yesterday'
+    }, (err, response) => {
+      if (err) {
+        console.log('ERROR in get analytics', err);
+        return;
+      }
+      console.log('My ANAL REPORT:', response.data.rows);
+      // NEED TO CHECK IF ALL RESPONSE IS PAGINATED
+      let totalCommision = 0;
+      response.data.rows.forEach(product => {
+        totalCommision += Number(product[1]);
+      });
+      res.json(totalCommision);
+    })
+  });
+};
 
 /**
  * GET /billing/stripe/transfers
@@ -135,17 +174,25 @@ exports.getStripeTransfers = async (req, res) => {
 exports.transferFund = async (req, res) => {
   // create a charge to send funds to account in order
   // to resolve insufficient funds
-  // stripe.charges.create({
-  //   amount: 10000,
-  //   currency: "usd",
-  //   source: "tok_amex", // obtained with Stripe.js
-  //   description: "Charge for npatrick.romana@example.com",
-  //   destination: 
-  // })
+  await stripe.charges.create({
+    amount: 10000,
+    currency: "usd",
+    // obtained with Stripe.js that returns a token
+    // Or an object containing a user's credit card details
+    // the more card details given the more it helps fraud prevention
+    source: 'tok_bypassPending',
+    description: "Charge for npatrick.romana@example.com"
+  }, (err, charge) => {
+    if (err) {
+      console.log('ERROR ON CHARGE:', err);
+    } else {
+      console.log('SUCCESS CHARGE IS!!!!!!!!!!!!!!!!!!!!!!!!:', charge);
+    }
+  });
   const influencer = req.user;
   // retrieve influencer earnings from GA Analytics
   const VIEW_ID = 'ga:168623324';
-  jwtClient.authorize((err, tokens) => {
+  await jwtClient.authorize((err, tokens) => {
     if (err) {
       console.log('ERROR IN jwtClient auth', err);
       return;
@@ -181,7 +228,7 @@ exports.transferFund = async (req, res) => {
           console.log('ERROR IN TRANSFER', err);
           res.send('Error occured upon transfering funds. Please contact customer support');
         } else {
-          res.send(`Success! Transfered the amount of $${totalCommision}`);
+          res.send(`Success! Transfered the amount of $${totalCommision.toFixed(2)}`);
         }
       })
     })
