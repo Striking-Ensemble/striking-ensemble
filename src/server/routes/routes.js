@@ -17,7 +17,7 @@ reqRoutes.use(function timeLog(req, res, next) {
 
 // ================= Passport Instagram Endpoints ================= //
 reqRoutes.post('/logout', (req, res) => {
-  console.log('LOGGING OUT USER:', req.body.username);
+  console.log('LOGGING OUT USER:', req.user.username);
   req.logOut();
   // attaches a new expiration date on the header
   // so that cookie in browser will be delete since
@@ -26,13 +26,15 @@ reqRoutes.post('/logout', (req, res) => {
   res.redirect(200, '/');
 });
 
+// The request will be redirected to Instagram for authentication
+// so a callback fn will not be called, ie. (req, res) => ()
 reqRoutes.get('/auth/instagram', passport.authenticate('instagram'));
 
 reqRoutes.get('/auth/instagram/callback', 
   passport.authenticate('instagram', { failureRedirect: '/login' }), 
   (req, res) => {
     req.app.settings.authInfo = req.authInfo;
-    res.redirect('/');
+    res.redirect('/home');
   }
 );
 
@@ -55,7 +57,8 @@ reqRoutes.get('/account', influencerRequired, (req, res) => {
   });
 });
 // =================================================================== //
-
+reqRoutes.get('/home', influencerRequired, reqController.getFrontEnd);
+reqRoutes.get('/auth-check', (req, res) => res.send(req.isAuthenticated()));
 // ======================= Instagram Endpoints ======================== //
 // Account route handlers
 reqRoutes.get('/account/post/:id', influencerRequired, reqController.getInstaPost);
