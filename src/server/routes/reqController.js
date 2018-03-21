@@ -108,6 +108,7 @@ exports.getBalance = async (req, res) => {
     return res.redirect('/login');
   }
 };
+
 /**
  * GET /billing/stripe/commision-info
  *
@@ -494,8 +495,7 @@ exports.getInfluencerPosts = (req, res) => {
 // Let the front-end handle the rendering
 exports.getFrontEnd = (req, res) => {
   console.log('get Front End route');
-  req.app.use(express.static(path.join(__dirname, '../../../public')));
-  res.end();
+  res.sendFile(path.join(__dirname, '../../../public/index.html'));
 };
 
 /**
