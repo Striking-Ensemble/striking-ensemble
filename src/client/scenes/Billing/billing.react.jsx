@@ -173,7 +173,9 @@ export default class Billing extends Component {
         <div>
           {this.renderStripeOnboarding()}
           <div className="row">
-            {this.renderPayoutList()}
+            <div className="table-responsive">
+              {this.renderPayoutList()}
+            </div>
           </div>
         </div>
       )
