@@ -66,7 +66,7 @@ if (app.get('env') !== 'production') {
   });
   sess.store = store;
   sess.cookie = {
-    path: '/', httpOnly: true, secure: false, maxAge: null
+    path: '/', httpOnly: true, secure: false, maxAge: 1000 * 60 * 60 * 24 * 1 // 1 day
   }
   app.use(session(sess));
   const webpack = require('webpack');
@@ -128,20 +128,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parses the text as JSON and set to req.body
 app.use(bodyParser.json());
 app.use('/', express.static(path.join(__dirname, '../../public')));
-
-// serialize and deserialize
-passport.serializeUser((user, done) => {
-  console.log('serializeUser by obj id:', user._id);
-  done(null, user._id);
-});
-passport.deserializeUser((id, done) => {
-  console.log('DESERIALIZE, should be obj id:', id);
-  Influencer.findById(id, (err, user) => {
-    // (!err) ? done(null, user) : done(err, null);
-    done(err, user);
-  })
-});
-
 // set up API routes
 app.use('/', reqRoutes);
 app.use('/api/*', router);
