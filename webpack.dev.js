@@ -6,6 +6,7 @@ const common = require('./webpack.common.js');
 module.exports = merge(common, {
   devtool: 'eval',
   entry: [
+    'babel-polyfill',
     'react-hot-loader/patch', 
     'webpack-hot-middleware/client', 
     './src/client/index.js'

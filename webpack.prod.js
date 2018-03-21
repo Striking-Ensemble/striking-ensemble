@@ -8,6 +8,7 @@ const BabelEnginePlugin = require('babel-engine-plugin');
 module.exports = merge(common, {
   devtool: 'source-map',
   entry: [
+    'babel-polyfill',
     './src/client/index.js'
   ],
   output: {
