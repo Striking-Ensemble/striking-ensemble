@@ -1,3 +1,5 @@
 import store from 'store';
 
-export default () => !!store.get('isAuthenticated');
+export default function isAuthenticated() {
+  return !!store.get('isAuthenticated');
+};

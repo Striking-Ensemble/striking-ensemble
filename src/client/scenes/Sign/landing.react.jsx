@@ -3,6 +3,7 @@ import store from 'store';
 import { get as GET, post as POST } from 'axios';
 import isAuthenticated from '../../services/isAuthenticated';
 import { Link } from 'react-router-dom';
+import LoadingSpinner from '../../components/loadingSpinner.react';
 import LoadingBars from '../../components/loadingBars.react';
 import Footer from '../../components/footer.react';
 import Redirect from 'react-router-dom/Redirect';
@@ -15,6 +16,7 @@ export default class Landing extends Component {
       logClicked: false,
       authenticated: false,
       redirectToReferrer: false,
+      isLoaded: false
     }
 
     this.authenticating = this.authenticating.bind(this);
@@ -29,19 +31,21 @@ export default class Landing extends Component {
           res => {
             store.remove('user');
             store.remove('isAuthenticated');
-            this.setState({ authenticated: false });
+            this.setState({ isLoaded: true, authenticated: false });
             this.props.history.push('/login');
           }
         )
         .catch(err => {
           console.log(err);
         });
+    } else {
+      this.authenticating(this.props);
     }
-    this.authenticating(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
     // location changed
+    console.log('WILLL RECEIVE IN LANDING');
     if (nextProps.location !== this.props.location) {
       if (nextProps.location.pathname === '/logout') {
         POST(store.get('URL').root_url + '/logout')
@@ -49,7 +53,7 @@ export default class Landing extends Component {
             res => {
               store.remove('user');
               store.remove('isAuthenticated');
-              this.setState({ authenticated: false });
+              this.setState({ isLoaded: true, authenticated: false });
               this.props.history.push('/login');
             }
           )
@@ -64,67 +68,58 @@ export default class Landing extends Component {
     const { history } = params;
     const rootUrl = store.get('URL').root_url;
     if (isAuthenticated()) {
-      this.setState({ authenticated: true });
+      console.log('AM I TRIGGERED?', isAuthenticated());
+      this.setState({ isLoaded: true, authenticated: true, redirectToReferrer: true });
     } else {
-      GET(`${rootUrl}/account`)
-        .then(
-          res => {
-            if (res.data.username) {
-              console.log('LOG IN SUCCESS, Retrieving user info...');
-              store.set('user', { data: res.data });
-              store.set('isAuthenticated', true); // app wide checking
-              this.setState({ authenticated: true, redirectToReferrer: true });
-            } else {
-              store.remove('user');
-              store.remove('isAuthenticated');
-              console.log('PLEASE LOG IN 1st');
-            }
-          })
-        .catch(err => {
-          console.log('ERROR IN CHECK checkAuth', err);
-          store.remove('user');
-          store.remove('isAuthenticated');
-          store.each((value, key) => {
-            console.log('WHATs IN STORE:', key, '==', value);
-          });
-        });
+      console.log('so what am I..... UN-Authenticated?');
+      this.setState({ isLoaded: true, authenticated: false });
+      store.remove('user');
+      store.remove('isAuthenticated');
+      console.log('PLEASE LOG IN 1st cuz AUTH landing');
     }
   };
 
   handleLogClicked() {
+    console.log('tickle me:', this.props.location.state);
+    store.set('from', this.props.location.state);
     this.setState({ logClicked: true });
   }
 
   renderLogOrContinue() {
-    if (this.state.authenticated) {
-      return (
-        <div className="col-lg-5 col-md-5 col-sm-5 col-xs-12 col-md-offset-1">
-          <h3>Continue to Your Account:</h3>
-          <Link to='/home'>Enter</Link>
-          <p> or </p>
-          <Link to='/logout'>Sign Out</Link>
-        </div>
-      ) 
+    if (this.state.isLoaded) {
+      if (this.state.authenticated) {
+        return (
+          <div className="col-lg-5 col-md-5 col-sm-5 col-xs-12 col-md-offset-1">
+            <h3>Continue to Your Account:</h3>
+            <Link to='/home'>Enter</Link>
+            <p> or </p>
+            <Link to='/logout'>Sign Out</Link>
+          </div>
+        ) 
+      } else {
+        return (
+          <div className="col-lg-5 col-md-5 col-sm-5 col-xs-12 col-md-offset-1">
+            <h3>Synchronize your Instagram posts here:</h3>
+            <a href="/auth/instagram" onClick={this.handleLogClicked} className="btn btn-block btn-lg btn-social btn-instagram">
+              <span className="fa fa-instagram"></span>
+              {this.state.logClicked ? <LoadingBars /> : `Sign in with Instagram`}
+            </a>
+          </div>
+        )
+      }
     } else {
-      return (
-        <div className="col-lg-5 col-md-5 col-sm-5 col-xs-12 col-md-offset-1">
-          <h3>Synchronize your Instagram posts here:</h3>
-          <a href="/auth/instagram" onClick={this.handleLogClicked} className="btn btn-block btn-lg btn-social btn-instagram">
-            <span className="fa fa-instagram"></span>
-            {this.state.logClicked ? <LoadingBars /> : `Sign in with Instagram`}
-          </a>
-        </div>
-      )
+      return <LoadingSpinner />
     }
   }
 
   render() {
     // location.state doesn't work here yet due to page
     // redirect from server when clicking log in instagram
-    const { from } = this.props.location.state || { from: { pathname: '/home' } };
-    if (this.state.redirectToReferrer) {
-      return <Redirect to={from.pathname} />
-    }
+    // const { from } = this.props.location.state || { from: { pathname: '/home' } };
+    // if (this.state.redirectToReferrer) {
+    //   console.log('whats my from path?', from.pathname);
+    //   return <Redirect to={from.pathname} />
+    // }
 
     return (
       <div id="wrap">
