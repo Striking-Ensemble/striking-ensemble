@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { get as GET, post as POST } from 'axios';
 import store from 'store';
 import React, { Component } from 'react'; 
 import { Redirect } from 'react-router-dom';
@@ -34,7 +34,7 @@ export default class Influencer extends Component {
     const rootUrl = store.get('URL').root_url;
 
     if (match.path == '/home/p/:id') {
-      return axios.get(`${rootUrl}/account/post/${match.params.id}`)
+      return GET(`${rootUrl}/account/post/${match.params.id}`)
         .then(
           res => {
             console.log('res INFLUENCER DATA', res.data);
@@ -62,7 +62,7 @@ export default class Influencer extends Component {
     // location changed
     if (nextProps.location !== this.props.location) {
       if (nextProps.location.pathname === '/logout') {
-        axios.post(store.get('URL').root_url + '/logout')
+        POST(store.get('URL').root_url + '/logout')
         .then(
           res => {
             store.remove('user');
@@ -145,7 +145,6 @@ export default class Influencer extends Component {
       return (
         <div id="wrap">
           <Navigation 
-            user={store.get('user').data}
             removeCurrentPost={this.removeCurrentPost}
             currentPost={this.state.currentPost}
             {...this.props} 

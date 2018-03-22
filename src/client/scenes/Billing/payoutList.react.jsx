@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tables, TableRow } from '../../components/tables.react';
+import { Table, TableRow } from '../../components/tables.react';
 
 const PayoutList = (props) => {
   const { payoutList } = props;
