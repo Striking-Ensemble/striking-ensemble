@@ -43,6 +43,11 @@ export default class Consumer extends Component {
   componentDidMount() {
     const rootUrl = store.get('URL').root_url;
     const { match } = this.props;
+    // cart items utilizes the store module for data persistence
+    // upon browser/app exit
+    let storeCart = store.get('cart') || [];
+    this.setState({ localCart: storeCart });
+
     // fetch influencer profile
     axios.get(`${rootUrl}/user/${match.params.username}`)
       .then(
@@ -65,6 +70,7 @@ export default class Consumer extends Component {
       .catch(err => {
         console.log(err);
       });
+    // check requested page is a specific influencer post
     if (match.path == '/:username/p/:id') {
       return axios.get(`${rootUrl}/u/${match.params.username}/post/${match.params.id}`)
         .then(res => {
@@ -79,6 +85,7 @@ export default class Consumer extends Component {
           this.setState({ error: true });
         })
     }
+    // check requested page is a specific influencer
     if (match.path == '/:username') {
       this.fetchMediaProducts();
     }
@@ -144,6 +151,7 @@ export default class Consumer extends Component {
             productLinksToUpdate.push({url: productId.url, affiliate_link: productId.affiliate_link})
           }
         }
+        store.set('cart', productLinksToUpdate);
         this.setState({ localCart: productLinksToUpdate });
       }
       // order is completed, update Influencer's db to track purchases
@@ -207,7 +215,7 @@ export default class Consumer extends Component {
               quantity: productFields.fields_input.quantity,
               coupon: couponId
             };
-            console.log('HELP ME OUT:', gaQuery)
+            console.log('GA eCommerce data:', gaQuery);
             ReactGA.plugin.execute('ec', 'addProduct', gaQuery);
           }
         }
@@ -220,6 +228,7 @@ export default class Consumer extends Component {
         ReactGA.pageview(this.props.location.pathname + '/checkout/success');
 
         console.log('revenue so far...', revenueSoFar);
+        store.set('cart', []);
         this.setState({ localCart: [] });
       }
     }
@@ -271,6 +280,7 @@ export default class Consumer extends Component {
     // might need to use store instead so that users can switch to different influencers
     // as well as reopening the web app to come back to the cart
     let itemsToAdd = [...this.state.localCart, { url: productLink, affiliate_link: affiliateLink }];
+    store.set('cart', itemsToAdd);
     this.setState({ localCart: itemsToAdd });
   }
 

@@ -6,11 +6,6 @@ if (process.env.NODE_ENV !== 'production') {
   hostUri = 'https://sleepy-citadel-40559.herokuapp.com/auth/instagram/callback';
 }
 
-let googleService_privateKey;
-if (process.env.GoogleService_privateKey) {
-  googleService_privateKey = process.env.GoogleService_privateKey.split('\n').join('\n');
-}
-
 module.exports = {
   secret: 'sessionSecret',
   // Configuration for Instagram Passport
@@ -35,6 +30,6 @@ module.exports = {
   },
   googleService: {
     client_email: process.env.GoogleService_clientEmail,
-    private_key: googleService_privateKey
+    private_key: process.env.GoogleService_privateKey
   }
 };

@@ -17,7 +17,7 @@ reqRoutes.use(function timeLog(req, res, next) {
 
 // ================= Passport Instagram Endpoints ================= //
 reqRoutes.post('/logout', (req, res) => {
-  console.log('LOGGING OUT USER:', req.body.username);
+  console.log('LOGGING OUT USER:', req.user.username);
   req.logOut();
   // attaches a new expiration date on the header
   // so that cookie in browser will be delete since
@@ -26,9 +26,9 @@ reqRoutes.post('/logout', (req, res) => {
   res.redirect(200, '/');
 });
 
-reqRoutes.get('/auth/instagram', passport.authenticate('instagram'), 
-  (req, res) => {}
-);
+// The request will be redirected to Instagram for authentication
+// so a callback fn will not be called, ie. (req, res) => ()
+reqRoutes.get('/auth/instagram', passport.authenticate('instagram'));
 
 reqRoutes.get('/auth/instagram/callback', 
   passport.authenticate('instagram', { failureRedirect: '/login' }), 
@@ -50,13 +50,15 @@ reqRoutes.get('/account', influencerRequired, (req, res) => {
         res.redirect(404, '/login');
       }
       let temp = user;
+      temp.accessToken = undefined;
       temp.media = undefined;
       res.send(temp);
     }
   });
 });
 // =================================================================== //
-
+reqRoutes.get('/home', influencerRequired, reqController.getFrontEnd);
+reqRoutes.get('/auth-check', (req, res) => res.send(req.isAuthenticated()));
 // ======================= Instagram Endpoints ======================== //
 // Account route handlers
 reqRoutes.get('/account/post/:id', influencerRequired, reqController.getInstaPost);
@@ -77,8 +79,12 @@ reqRoutes.post('/purchase_updated_callback', integrations.purchaseUpdatedCallbac
 // ========================= Stripe Endpoints ======================== //
 reqRoutes.get('/billing/stripe/authorize', influencerRequired, reqController.setupPayment);
 reqRoutes.get('/billing/stripe/token', influencerRequired, reqController.getStripeToken);
+reqRoutes.get('/billing/stripe/balance', influencerRequired, reqController.getBalance);
+reqRoutes.get('/billing/stripe/commision-info', influencerRequired, reqController.getCommisionInfo);
 reqRoutes.get('/billing/stripe/transfers', influencerRequired, reqController.getStripeTransfers);
+reqRoutes.get('/billing/stripe/transfer-funds', influencerRequired, reqController.transferFund);
 reqRoutes.post('/billing/stripe/payout', influencerRequired, reqController.payout);
+reqRoutes.get('/billing/stripe/payout-list', influencerRequired, reqController.getPayoutList);
 reqRoutes.post('/billing/stripe/deactivate', influencerRequired, reqController.deactivate);
     
 // Public route handlers here due to paths can be loosely associated with other paths

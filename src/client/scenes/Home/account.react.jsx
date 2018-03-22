@@ -23,17 +23,17 @@ export default class Account extends Component {
 
   componentDidMount() {
     const { match } = this.props;
-    if (match.path == '/account' || match.path == '/') {
+    if (match.path == '/home' || match.path == '/') {
       this.fetchInstaPosts();
     }
   }
 
   componentWillReceiveProps(nextProps) {
     const { match } = nextProps;
-    // fetch insta posts when on '/account' or '/' and 
+    // fetch insta posts when on '/home' or '/' and 
     // not coming from '/' and 
     // no media on state yet to avoid duplication
-    const toFetchData = (match.path == '/account' || match.path == '/') && 
+    const toFetchData = (match.path == '/home' || match.path == '/') && 
                         this.props.location.pathname !== '/' && 
                         this.state.data.length == 0;
     if (toFetchData) {

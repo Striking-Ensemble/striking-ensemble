@@ -93,6 +93,63 @@ exports.getStripeToken = (req, res) => {
 };
 
 /**
+ * GET /billing/stripe/balance
+ *
+ * Retrieve user account available and pending balances.
+ */
+exports.getBalance = async (req, res) => {
+  const influencer = req.user;
+  try {
+    const balance = await stripe.balance.retrieve({ stripe_account: influencer.stripeAccountId })
+    console.log('User balance object is:', balance);
+    res.send(balance);
+  } catch (err) {
+    console.log('Failed to retrieve balance.', err);
+    return res.redirect('/login');
+  }
+};
+
+/**
+ * GET /billing/stripe/commision-info
+ *
+ * Retrieve user's past 14-day available commisions.
+ */
+exports.getCommisionInfo = async (req, res) => {
+  const influencer = req.user;
+  // retrieve influencer earnings from GA Analytics
+  const VIEW_ID = 'ga:168623324';
+  await jwtClient.authorize((err, tokens) => {
+    if (err) {
+      console.log('ERROR IN jwtClient auth', err);
+      return;
+    }
+    // utm_campaign = ${ influencer._id }
+    let analytics = google.analytics('v3');
+    analytics.data.ga.get({
+      'auth': jwtClient,
+      'ids': VIEW_ID,
+      'dimensions': 'ga:productName',
+      'metrics': 'ga:calcMetric_Commisions',
+      'filters': `ga:productCouponCode=@1163789244`,
+      "start-date": '14daysAgo',
+      "end-date": 'yesterday'
+    }, (err, response) => {
+      if (err) {
+        console.log('ERROR in get analytics', err);
+        return;
+      }
+      console.log('My ANAL REPORT:', response.data.rows);
+      // NEED TO CHECK IF ALL RESPONSE IS PAGINATED
+      let totalCommision = 0;
+      response.data.rows.forEach(product => {
+        totalCommision += Number(product[1]);
+      });
+      res.json(totalCommision);
+    })
+  });
+};
+
+/**
  * GET /billing/stripe/transfers
  *
  * Redirect to Stripe to view transfers and edit payment details.
@@ -115,6 +172,70 @@ exports.getStripeTransfers = async (req, res) => {
   }
 };
 
+exports.transferFund = async (req, res) => {
+  // create a charge to send funds to account in order
+  // to resolve insufficient funds
+  await stripe.charges.create({
+    amount: 10000,
+    currency: "usd",
+    // obtained with Stripe.js that returns a token
+    // Or an object containing a user's credit card details
+    // the more card details given the more it helps fraud prevention
+    source: 'tok_bypassPending',
+    description: "Charge for npatrick.romana@example.com"
+  }, (err, charge) => {
+    if (err) {
+      console.log('ERROR ON CHARGE:', err);
+    } else {
+      console.log('SUCCESS CHARGE IS!!!!!!!!!!!!!!!!!!!!!!!!:', charge);
+    }
+  });
+  const influencer = req.user;
+  // retrieve influencer earnings from GA Analytics
+  const VIEW_ID = 'ga:168623324';
+  await jwtClient.authorize((err, tokens) => {
+    if (err) {
+      console.log('ERROR IN jwtClient auth', err);
+      return;
+    }
+    // utm_campaign = ${ influencer._id }
+    let analytics = google.analytics('v3');
+    analytics.data.ga.get({
+      'auth': jwtClient,
+      'ids': VIEW_ID,
+      'dimensions': 'ga:productName',
+      'metrics': 'ga:calcMetric_Commisions',
+      'filters': `ga:productCouponCode=@1163789244`,
+      "start-date": '7daysAgo',
+      "end-date": 'yesterday'
+    }, (err, response) => {
+      if (err) {
+        console.log('ERROR in get analytics', err);
+        return;
+      }
+      console.log('My ANAL REPORT:', response.data.rows);
+      // NEED TO CHECK IF ALL RESPONSE IS PAGINATED
+      let totalCommision = 0;
+      response.data.rows.forEach(product => {
+        // amount in cents
+        totalCommision += Math.floor(Number(product[1]) * 100);
+      });
+      stripe.transfers.create({
+        amount: totalCommision,
+        currency: 'usd',
+        destination: influencer.stripeAccountId
+      }, (err, transfer) => {
+        if (err) {
+          console.log('ERROR IN TRANSFER', err);
+          res.send('Error occured upon transfering funds. Please contact customer support');
+        } else {
+          res.send(`Success! Transfered the amount of $${totalCommision.toFixed(2)}`);
+        }
+      })
+    })
+  });
+}
+
 /**
  * POST /billing/stripe/payout
  *
@@ -123,7 +244,7 @@ exports.getStripeTransfers = async (req, res) => {
 exports.payout = async (req, res) => {
   const influencer = req.user;
   try {
-    // Fetch the account balance for find available funds.
+    // Fetch the account balance to find available funds.
     const balance = await stripe.balance.retrieve({ stripe_account: influencer.stripeAccountId });
     // This instance only uses USD so we'll just use the first available balance.
     // Note: There are as many balances as currencies used in your application.
@@ -152,6 +273,33 @@ exports.payout = async (req, res) => {
 };
 
 /**
+ * GET /billing/stripe/payout-list
+ *
+ * Retrieve a list of payout history.
+ */
+exports.getPayoutList = async (req, res) => {
+  const influencer = req.user;
+  const options = {
+    stripe_account: influencer.stripeAccountId
+  };
+  try {
+    const payoutList = await stripe.payouts.list(
+      {
+        limit: 3
+      }, 
+      options, 
+      (err, payout) => {
+        console.log('getPayoutList:', payout);
+        res.send(payout.data);
+      }
+    );
+  } catch (err) {
+    console.log('ERR IN PAYOUT REQ', err);
+    res.status(400).end();
+  }
+};
+
+/**
  * POST /billing/stripe/deactivate
  *
  * This endpoint is used for revoking access of an app to an account.
@@ -175,8 +323,10 @@ exports.deactivate = (req, res) => {
       let query = { username: req.user.username };
       Influencer.update(query, { $unset: { stripeAccountId: 1 } }).exec();
       req.user.stripeAccountId = '';
+      let cleanUser = req.user;
+      cleanUser.accessToken = undefined;
       console.log('Deactivated Acct:', body);
-      res.send(req.user);
+      res.send(cleanUser);
     }
   })
 };
@@ -191,13 +341,9 @@ exports.deactivate = (req, res) => {
  * Get media from insta for logged in users & send to client
 **/
 exports.getMedia = (req, res) => {
-  if (!req.app.settings.authInfo) {
-    console.log('Missing authInfo... please log in 1st');
-    res.redirect(303, '/login');
-  }
   // set options to insta api path for request use
   let options = {
-    url: instaApiURL + '/?access_token=' + req.app.settings.authInfo.accessToken
+    url: instaApiURL + '/?access_token=' + req.user.accessToken
   };
   if (req.params.count) {
     // set options.url with post count returned to also receive pagination url
@@ -213,97 +359,103 @@ exports.getMedia = (req, res) => {
       throw err;
     }
     let parsedBody = JSON.parse(body);
-    if (req.app.settings.authInfo.newUser) {
-      console.log('NEW USER DETECTED IN SAVING MEDIA');
-      // create an array of posts from insta query results to save in db
-      let mediaArr = parsedBody.data.map(obj => {
-        let tempImages = obj.images;
-        for (let key in obj.images) {
-          // remove the signatures on url images
-          tempImages[key].url = obj.images[key].url.replace(/vp.*\/.{32}\/.{8}\//, '');
-        }
-
-        let tempVideos = obj.type == 'video' ? obj.videos : null;
-        if (tempVideos) {
-          for (let prop in obj.videos) {
-            // remove the signatures on url videos
-            tempVideos[prop].url = obj.videos[prop].url.replace(/vp.*\/.{32}\/.{8}\//, '');
+    // check media posts count of user
+    Media.count({ username: req.user.username }).then((count) => {
+      // if none, we have a new user
+      if (count < 1) {
+        console.log('NEW USER DETECTED IN SAVING MEDIA');
+        // create an array of posts from insta query results to save in db
+        let mediaArr = parsedBody.data.map(obj => {
+          let tempImages = obj.images;
+          for (let key in obj.images) {
+            // remove the signatures on url images
+            tempImages[key].url = obj.images[key].url.replace(/vp.*\/.{32}\/.{8}\//, '');
           }
-        }
 
-        return {
-          _id: obj.id,
-          _creator: req.user.id,
-          username: req.user.username,
-          caption: obj.caption,
-          created_time: obj.created_time,
-          images: tempImages,
-          link: obj.link,
-          tags: obj.tags,
-          post_type: obj.type,
-          videos: tempVideos
-        }
-      });
-
-      Media.insertMany(mediaArr)
-        .then((response) => console.log('INSERTED MANY #228'))
-        .catch(err => console.log('ERROR IN INSERTING MEDIA #229!', err));
-      req.app.settings.authInfo.newUser = false;
-      res.send(mediaArr);
-    } else {
-      // do returning user logic
-      console.log('USER EXISTS in getMedia. Now saving in a special way...');
-      let newMediaList = [];
-      let oldMediaList = [];
-      // add post to media list after mediaCount fn resolves the queries
-      function mediaCount(arr) {
-        return arr.reduce((promise, item) =>
-          promise.then(() => Media.count({ _id: item.id })
-            .then((count) => {
-              console.log('CAN I EVEN SEE??', count);
-              // if item does not exists in Media db
-              if (count <= 0) {
-                let tempItem = item;
-                let tempImages = item.images;
-                for (let key in item.images) {
-                  // remove the signatures on url images
-                  tempImages[key].url = item.images[key].url.replace(/vp.*\/.{32}\/.{8}\//, '');
-                }
-
-                let tempVideos = item.type == 'video' ? item.videos : null;
-                if (tempVideos) {
-                  for (let prop in item.videos) {
-                    // remove the signatures on url videos
-                    tempVideos[prop].url = item.videos[prop].url.replace(/vp.*\/.{32}\/.{8}\//, '');
-                  }
-                }
-                tempItem.images = tempImages;
-                tempItem.videos = tempVideos;
-                newMediaList.push(tempItem);
-              } else {
-                oldMediaList.push(item);
-              }
-            })), Promise.resolve())
-      }
-      mediaCount(parsedBody.data).then(() => {
-        if (newMediaList.length == 0) {
-          Media.find({ _creator: req.user._id }, (err, response) => {
-            if (err) {
-              console.log('IN MEDIA COUNT #78', err);
+          let tempVideos = obj.type == 'video' ? obj.videos : null;
+          if (tempVideos) {
+            for (let prop in obj.videos) {
+              // remove the signatures on url videos
+              tempVideos[prop].url = obj.videos[prop].url.replace(/vp.*\/.{32}\/.{8}\//, '');
             }
-            console.log('NO NEW MEDIA TO ADD FOR USER... sending oldies');
-            res.send(response);
-          })
-        } else {
-          let arrToSend = [...newMediaList, ...oldMediaList];
-          Media
-            .insertMany(newMediaList)
-            .then(response => console.log('GOT THEM UPDATED!'))
-            .catch(err => console.log('ERR in reqController #89', err));
-          res.send(arrToSend);
+          }
+
+          return {
+            _id: obj.id,
+            _creator: req.user.id,
+            username: req.user.username,
+            caption: obj.caption,
+            created_time: obj.created_time,
+            images: tempImages,
+            link: obj.link,
+            tags: obj.tags,
+            post_type: obj.type,
+            videos: tempVideos
+          }
+        });
+
+        Media.insertMany(mediaArr)
+          .then((response) => console.log('INSERTED MANY #228'))
+          .catch(err => console.log('ERROR IN INSERTING MEDIA #229!', err));
+        req.app.settings.authInfo.newUser = false;
+        res.send(mediaArr);
+      } else {
+        // do returning user logic
+        console.log('USER EXISTS in getMedia. Now saving in a special way...');
+        let newMediaList = [];
+        let oldMediaList = [];
+        // add post to media list after mediaCount fn resolves the queries
+        function mediaCount(arr) {
+          return arr.reduce((promise, item) =>
+            promise.then(() => Media.count({ _id: item.id })
+              .then((count) => {
+                console.log('CAN I EVEN SEE??', count);
+                // if item does not exists in Media db
+                if (count <= 0) {
+                  let tempItem = item;
+                  let tempImages = item.images;
+                  for (let key in item.images) {
+                    // remove the signatures on url images
+                    tempImages[key].url = item.images[key].url.replace(/vp.*\/.{32}\/.{8}\//, '');
+                  }
+
+                  let tempVideos = item.type == 'video' ? item.videos : null;
+                  if (tempVideos) {
+                    for (let prop in item.videos) {
+                      // remove the signatures on url videos
+                      tempVideos[prop].url = item.videos[prop].url.replace(/vp.*\/.{32}\/.{8}\//, '');
+                    }
+                  }
+                  tempItem.images = tempImages;
+                  tempItem.videos = tempVideos;
+                  newMediaList.push(tempItem);
+                } else {
+                  oldMediaList.push(item);
+                }
+              })), Promise.resolve())
         }
-      })
-    }
+        // parsedBody from instagram media query
+        mediaCount(parsedBody.data).then(() => {
+          // check if user has new post(s) that has compared to our own media db
+          if (newMediaList.length == 0) {
+            Media.find({ _creator: req.user._id }, (err, response) => {
+              if (err) {
+                console.log('IN MEDIA COUNT #78', err);
+              }
+              console.log('NO NEW MEDIA TO ADD FOR USER... sending oldies');
+              res.send(response);
+            })
+          } else {
+            let arrToSend = [...newMediaList, ...oldMediaList];
+            Media
+              .insertMany(newMediaList)
+              .then(response => console.log('GOT THEM UPDATED!'))
+              .catch(err => console.log('ERR in reqController #89', err));
+            res.send(arrToSend);
+          }
+        })
+      }
+    })
   });
 };
 
@@ -343,8 +495,7 @@ exports.getInfluencerPosts = (req, res) => {
 // Let the front-end handle the rendering
 exports.getFrontEnd = (req, res) => {
   console.log('get Front End route');
-  req.app.use(express.static(path.join(__dirname, '../../../public')));
-  res.end();
+  res.sendFile(path.join(__dirname, '../../../public/index.html'));
 };
 
 /**
@@ -374,12 +525,11 @@ exports.getPostCatalog = (req, res) => {
  *
  * Get Google Analytics Reports
  */
-
-exports.getReports = (req, res) => {
+exports.getReports = async (req, res) => {
   console.log('getting REPORTS with BODY:', req.body);
   const { influencerId, dimensions, metrics } = req.body;
   const VIEW_ID = 'ga:168623324';
-  jwtClient.authorize((err, tokens) => {
+  await jwtClient.authorize((err, tokens) => {
     if (err) {
       console.log('ERROR IN jwtClient auth', err);
       return;

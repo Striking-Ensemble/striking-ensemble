@@ -3,13 +3,26 @@ const instagramAuth = require('./keys').instagram;
 const Influencer = require('../db/Influencer');
 
 module.exports = (passport) => {
+  // serialized to the session
+  passport.serializeUser((user, done) => {
+    console.log('serializeUser by obj id:', user._id);
+    done(null, user._id);
+  });
+  // deserialize by finding the user by ID
+  // when subsequent requests are made.
+  passport.deserializeUser((id, done) => {
+    console.log('DESERIALIZE, should be obj id:', id);
+    Influencer.findById(id, (err, user) => {
+      // (!err) ? done(null, user) : done(err, null);
+      done(err, user);
+    })
+  });
+
   passport.use(new InstagramStrategy( instagramAuth,
     function (accessToken, refreshToken, profile, done) {
       // will be used under req.authInfo
       // only accessible up until passport finishes auth
-      let info = {
-        accessToken: accessToken
-      }
+      let info = {};
 
       Influencer.findOne({
         _id: profile.id 
@@ -27,7 +40,8 @@ module.exports = (passport) => {
             bio: data.bio,
             website: data.website,
             is_business: data.is_business,
-            affiliateLink: `https://strikingensemble.com/${data.username}`
+            affiliateLink: `https://strikingensemble.com/${data.username}`,
+            accessToken: accessToken
           }, { bufferCommands: false });
           info.newUser = true;
           user.save((err) => {

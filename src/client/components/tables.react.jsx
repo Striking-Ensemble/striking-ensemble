@@ -6,11 +6,6 @@ export function Table(props) {
     <table
       className={className}
       style={style}
-      ref={(node) => {
-          this.tableNode = node;
-          return this.tableNode;
-        }
-      }
     >
       {children}
     </table>
@@ -23,11 +18,6 @@ export function TableRow(props) {
     <tr
       className={className}
       style={style}
-      ref={(node) => {
-          this.tableRowNode = node;
-          return this.tableRowNode;
-        }
-      }
     >
       {children}
     </tr>

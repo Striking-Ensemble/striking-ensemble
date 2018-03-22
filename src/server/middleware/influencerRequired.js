@@ -4,6 +4,6 @@ const influencerRequired = (req, res, next) => {
     return res.redirect(303, '/login');
   }
   next();
-}
+};
 
 module.exports = influencerRequired;
