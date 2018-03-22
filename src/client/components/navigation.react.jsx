@@ -21,7 +21,7 @@ const Navigation = (props) => {
             <span className="icon-bar" />
             <span className="icon-bar" />
           </button>
-          <Link className="navbar-brand" to="/">Striking Ensemble</Link>
+          <Link className="navbar-brand" to="/index">Striking Ensemble</Link>
         </div>
         <div className="collapse navbar-collapse" id="navbar-header-content">
           <ul className="nav navbar-nav">
