@@ -6,8 +6,7 @@ import isAuthenticated from '../../services/isAuthenticated';
 import LoadingSpinner from '../../components/loadingSpinner.react';
 import LoadingBars from '../../components/loadingBars.react';
 import FourOhFour from '../../components/fourOhFour.react';
-import Navigation from '../../components/navigation.react';
-import PayoutList from './payoutList.react'; 
+import PayoutList from './payoutList.react';
 
 export default class Billing extends Component {
   constructor(props) {
@@ -20,8 +19,8 @@ export default class Billing extends Component {
       balance: {},
       payoutList: [],
       commisions: 0,
-      user: {}
-    }
+      user: {},
+    };
 
     this.handlePayoutNow = this.handlePayoutNow.bind(this);
     this.renderDashboard = this.renderDashboard.bind(this);
@@ -33,14 +32,17 @@ export default class Billing extends Component {
 
   componentDidMount() {
     if (!isAuthenticated()) {
-      return (<Redirect to={{
-        pathname: '/login',
-        state: { from: this.props.location }
-      }} />)
+      return (
+        <Redirect to={{
+          pathname: '/login',
+          state: { from: this.props.location },
+          }}
+        />
+      );
     } else {
       if (!this.state.user.stripeAccountId) {
         axios.get(store.get('URL').root_url + '/account')
-        .then(res => {
+        .then((res) => {
           store.set('user', { data: res.data })
           this.setState({ user: store.get('user').data, isLoaded: true });
         })
@@ -52,35 +54,35 @@ export default class Billing extends Component {
     const rootUrl = store.get('URL').root_url;
     if (this.state.user != prevState.user) {
       axios.get(rootUrl + '/billing/stripe/payout-list')
-        .then(res => {
+        .then((res) => {
           console.log('MY PAYOUT LIST res.data', res.data);
           this.setState({ payoutList: res.data, payoutIsLoaded: true });
           return axios.get(rootUrl + '/billing/stripe/balance')
         })
-        .then(res => {
+        .then((res) => {
           console.log('balance obj is', res.data);
           this.setState({ balance: res.data });
           return axios.get('/billing/stripe/commision-info')
         })
-        .then(res => {
+        .then((res) => {
           console.log('commision amount is:', res.data);
-          this.setState({ commisions: res.data })
-        })
+          this.setState({ commisions: res.data });
+        });
     }
   }
 
   handleTransfer(e) {
     e.preventDefault();
     axios.get(store.get('URL').root_url + '/billing/stripe/transfer-funds')
-      .then(res => {
+      .then((res) => {
         console.log('TESTY:', res.data);
-      })
+      });
   }
 
   handlePayoutNow(e) {
     e.preventDefault();
     axios.post('/billing/stripe/payout')
-      .then(response => {
+      .then((response) => {
         console.log('billing payout:', response)
       })
       .catch(err => console.log(err))
@@ -89,12 +91,12 @@ export default class Billing extends Component {
   handleStripeDeactivate(e) {
     e.preventDefault();
     axios.post('/billing/stripe/deactivate')
-      .then(response => {
+      .then((response) => {
         console.log('billing deactivate Stripe:', response);
         store.set('user', response);
         this.setState({ user: response.data });
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
 
   renderDashboard() {
@@ -103,7 +105,7 @@ export default class Billing extends Component {
         <div>
           <div className="row">
             <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
-              <img src={this.state.user.profile_picture} className="img-responsive img-circle" />
+              <img src={this.state.user.profile_picture} className="img-responsive img-circle" alt="Profile" />
             </div>
             <div className="col-lg-2 col-md-2 col-sm-2 col-xs-4">
               <h4>{this.state.user.username}</h4>
@@ -120,7 +122,7 @@ export default class Billing extends Component {
             </div>
             <div className="col-lg-2 col-md-2 col-sm-3 col-xs-5">
               <h4><small>Commisions:</small> {this.state.commisions ? `${this.state.commisions}` : <LoadingBars />}</h4>
-             <form method="post" onSubmit={this.handleTransfer}>
+              <form method="post" onSubmit={this.handleTransfer}>
                 <button className="btn btn-success" type="submit">Transfer Funds</button>
               </form>
             </div>
@@ -140,7 +142,7 @@ export default class Billing extends Component {
         <header>
           <div className="row">
             <div className="col-lg-1 col-md-1 col-sm-2 col-xs-3">
-              <img src={this.state.user.profile_picture} className="img-responsive img-circle" />
+              <img src={this.state.user.profile_picture} className="img-responsive img-circle" alt="Profile" />
             </div>
             <div className="col-lg-2 col-md-2 col-sm-2 col-xs-5">
               <h4>{this.state.user.username}</h4>
@@ -156,18 +158,18 @@ export default class Billing extends Component {
 
   renderPayoutList() {
     return (
-      <PayoutList 
+      <PayoutList
         payoutList={this.state.payoutList}
       />
-    )
+    );
   }
 
   render() {
     if (this.state.error) {
-      return (<FourOhFour />)
+      return (<FourOhFour />);
     }
     if (!this.state.isLoaded) {
-      return <LoadingSpinner />
+      return <LoadingSpinner />;
     } else {
       return (
         <div>
@@ -178,7 +180,7 @@ export default class Billing extends Component {
             </div>
           </div>
         </div>
-      )
+      );
     }
   }
-};
+}
