@@ -3,7 +3,7 @@ import { Table, TableRow } from '../../components/tables.react';
 
 const PayoutList = (props) => {
   const { payoutList } = props;
-  if (payoutList.length == 0) {
+  if (payoutList.length === 0) {
     return <h3 className="col-md-6 col-md-offset-1 col-sm-12">No Payout History Available</h3>
   } else {
     return (
@@ -18,7 +18,7 @@ const PayoutList = (props) => {
           </tr>
         </thead>
         <tbody className="table-striped">
-          {payoutList.map(record => {
+          {payoutList.map((record) => {
             return (
               <TableRow key={record.id}>
                 <td>{record.balance_transaction}</td>
@@ -31,7 +31,7 @@ const PayoutList = (props) => {
           })}
         </tbody>
       </Table>
-    )
+    );
   }
 };
 
