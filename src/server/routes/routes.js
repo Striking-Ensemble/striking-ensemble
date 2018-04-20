@@ -58,7 +58,6 @@ reqRoutes.get('/account', influencerRequired, (req, res) => {
 });
 // =================================================================== //
 reqRoutes.get('/home', influencerRequired, reqController.getFrontEnd);
-reqRoutes.get('/auth-check', (req, res) => res.send(req.isAuthenticated()));
 // ======================= Instagram Endpoints ======================== //
 // Account route handlers
 reqRoutes.get('/account/post/:id', influencerRequired, reqController.getInstaPost);
